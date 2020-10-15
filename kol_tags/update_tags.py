@@ -8,21 +8,23 @@ import logging
 def process_channel(channel_id, channel_data=None):
     succ = False
     logging.info('process##channel, channel id: %s' % (channel_id))
-    #time.sleep(0.1)
-    #return True
+
     channel_info = ChannelInfo.Load(channel_id, channel_data)
     if channel_info:
         channel_info.process_tags()
         pre_tag_info_list = channel_info.channel_tag_detail
+        pre_all_tag_name_list = channel_info.channel_tag_list
         tag_info_list = channel_info.channel_structure_tag_list
-        if tag_info_list and len(tag_info_list) > 0:
-            succ = write_tag_info(channel_id, tag_info_list)
-            logging.info('Process channel. Update channel succ? %s, channel id: %s' % (str(succ), channel_id))
-            logging.info('Process channel. Tags before: %s' % pre_tag_info_list)
-            logging.info('Process channel. Tags after: %s' % tag_info_list)
-            logging.info('Process channel. All predict channel tags: %s' % channel_info.channel_tag_score_list)
-        else:
-            logging.info('Process channel. No tags to update. channel id: %s' % channel_id)
+        all_tag_name_list = channel_info.channel_all_tag_name_list
+        succ = write_tag_info(channel_id, tag_info_list, all_tag_name_list)
+        #logging.info('Process channel. All channel tags: %s' % channel_info.channel_tag_score_list)
+        logging.info('Process channel. Channel video tags: %s' % channel_info.get_channel_video_tags())
+        logging.info('Process channel. Update channel succ? %s, channel id: %s' % (str(succ), channel_id))
+        logging.info('Structure tags before: %s' % pre_tag_info_list)
+        logging.info('Structure tags after: %s' % tag_info_list)
+        logging.info('Unstructure tags before: %s' % pre_all_tag_name_list)
+        logging.info('Unstructure tags after: %s' % all_tag_name_list)
+
     return succ
 
 
@@ -35,7 +37,7 @@ def get_channel_id_from_redis():
             yield str(channel_id, encoding='utf-8')
 
 
-def update_channel_tags():
+def update_channel_tags_from_redis():
     batch_size = 100
     total_num = 0
     succ_num = 0
@@ -68,30 +70,44 @@ def update_channel_tags():
     #logging.info('Unknown topic ids: %s' % (unknown_topic_id_set))
 
 
-def test_process_channel():
-    #channel_id = 'UCO6SoJNF3VY2tnlzypHl-4w'
-    #channel_id = 'UCLq6O9U5IJIOENn7WCaj6CA'   
+def clear_channel_tags(channel_id):
+    channel_contents = get_channel_contents(channel_id)
+    tag_detail = channel_contents.get('tag_detail', [])
+    tag_list = channel_contents.get('tag_list', [])
+    logging.info('clear channel tags. prev tag detail: %s, prev tag list: %s', tag_detail, tag_list)
+    succ = write_tag_info(channel_id, [], [])
+    channel_contents = get_channel_contents(channel_id)
+    tag_detail = channel_contents.get('tag_detail', [])
+    tag_list = channel_contents.get('tag_list', [])
+    logging.info('clear channel tags. after tag detail: %s, after tag list: %s', tag_detail, tag_list)
+    return succ
+    
 
-    channel_id = 'UCNzsYU0aWwjERj-9Y9HUEng'
-    #channel_id = 'UCuN4A3GCUq5-0wJDSiJoxRQ'
-    #channel_id = 'UCvj8vNOUbLgPrBTuAqjew6A'
-    #channel_id = 'UCCgLoMYIyP0U56dEhEL1wXQ'
-    #channel_id = 'UCmRY4NSGK52lP_Lz11CjdYw'
-    #channel_id = 'UCpB959t8iPrxQWj7G6n0ctQ'
-    #channel_id = 'UCucot-Zp428OwkyRm2I7v2Q'
-    #channel_id = 'UCgEHcR9LooxZ-rLTNJPMLkQ'
+def test_clear_channel_tags():
+    #channel_id = 'UCi7uAKezhxT0q7y4_Z6SgIA'
+    #channel_id = 'UC3l6ZCIGr-7T1ALIMMAnyTg'
+    channel_id = 'UCk-Dau8JTXg6slA-0X0ye4w'
+    clear_channel_tags(channel_id)
+    
+
+def test_process_channel():
+    #channel_id = 'UC6E2mP01ZLH_kbAyeazCNdg'
+    channel_id = 'UCQ3i4wFECsKSLp8_9y-BkgA'
+    #channel_id = ''
+
 
     channel_contents = get_channel_contents(channel_id)
     prev_tag_detail = channel_contents.get('tag_detail', None)
     succ = process_channel(channel_id, channel_contents)
     channel_contents = get_channel_contents(channel_id)
     after_tag_detail = channel_contents.get('tag_detail', None)
-    print('success? ', succ)
-    print('before: ', prev_tag_detail)
-    print('after: ', after_tag_detail)
+    #print('success? ', succ)
+    #print('before: ', prev_tag_detail)
+    #print('after: ', after_tag_detail)
 
 if __name__ == '__main__':
-    #test_process_channel()
-    update_channel_tags()
+    #clear_channel_tags()
+    test_process_channel()
+    #update_channel_tags_from_redis()
 
 

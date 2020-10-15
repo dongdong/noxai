@@ -23,6 +23,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB, ComplementNB
 
 
+FEATURE_WORD_LENGTH_MIN_THRESHOLD = 10
+
 def _get_video_list_dict(language, cache={}):
     tag_video_list_dict = {}
     tag_search_keywords_list = tag_search_keywords_config[language]
@@ -306,9 +308,16 @@ def get_feature_data_from_video_info_iter(video_info_iter, tfidf_model, is_train
     row = []
     col = []
     tag_list = []
+    valid_video_id_list = []
 
     for video_info in video_info_iter:
         feature_words = video_info.video_data.get_feature_words()
+        if len(feature_words) < FEATURE_WORD_LENGTH_MIN_THRESHOLD:
+            logging.info('drop data, feature too small. %s' % (feature_words))
+            continue
+        else:
+            valid_video_id_list.append(video_info.video_data.video_id)
+
         tfidf_vec = tfidf_model.get_vector(feature_words)
         for pos, score in tfidf_vec:
             data.append(score)
@@ -319,13 +328,12 @@ def get_feature_data_from_video_info_iter(video_info_iter, tfidf_model, is_train
             level_1 = video_info.level_1_tag
             level_2 = video_info.level_2_tag
             tag_list.append((level_1, level_2))
-
         i += 1
 
     logging.info("process feature data finish. X data size: %d, X data shape: (%d, %d), y data size: %d" % 
             (len(data), i, num_pos, len(tag_list)))
     feature_data = FeatureData(data, row, col, i, num_pos, tag_list)
-    return feature_data
+    return feature_data, valid_video_id_list
 
 
 def _get_video_info_iter_from_processed_video_data_dir(processed_video_data_dir, model_tag_config):
@@ -351,7 +359,7 @@ def _get_feature_data_from_processed_video(processed_video_data_dir, tfidf_model
     logging.info("process train data, from dir: %s." % processed_video_data_dir)
     
     video_info_iter = _get_video_info_iter_from_processed_video_data_dir(processed_video_data_dir, model_tag_config)
-    feature_data = get_feature_data_from_video_info_iter(video_info_iter, tfidf_model, True)
+    feature_data, _ = get_feature_data_from_video_info_iter(video_info_iter, tfidf_model, True)
     return feature_data
 
 

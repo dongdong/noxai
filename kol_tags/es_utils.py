@@ -144,9 +144,12 @@ def get_channel_list_by_category_language(category, language, size):
         logging.error(traceback.format_exc())
 
 
-def write_tag_info(channel_id, tag_info_list):
+def write_tag_info(channel_id, tag_info_list, all_tag_name_list):
     succ = False
-    es_dic = {"tag_detail": tag_info_list}
+    es_dic = {
+        "tag_detail": tag_info_list,
+        "tag_list": all_tag_name_list,
+    }
     try:
         #es.update(index=channel_index, doc_type='doc_profiles', id=channel_id, 
         es.update(index=channel_index, id=channel_id, body={"doc": es_dic}, 

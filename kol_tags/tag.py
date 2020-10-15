@@ -57,7 +57,7 @@ def get_structure_tag_info():
     rows = get_tag_info_rows()
     structure_tag_info_map = {}
     for row in rows:
-        tag_id, parent_id, en_name, zh_name, _, ko_name = row
+        tag_id, parent_id, en_name, zh_name, _, ko_name, _ = row
         if parent_id is None:
             level = 1
         else:

@@ -49,10 +49,10 @@ tag_name_config_list = [
         #56 Dress
         {'zh-Hans': '鞋子', 'zh-Hant': '鞋子', 'en': 'Shoes', 'id': 57},
         {'zh-Hans': '首饰', 'zh-Hant': '首飾', 'en': 'Jewelry', 'id': 58},
-        #{'zh-Hans': '包包', 'zh-Hant': '包包', 'en': 'Bags', 'id': 0}, #TODO
-        #{'zh-Hans': '帽子', 'zh-Hant': '帽子', 'en': 'Hats', 'id': 0}, #TODO
-        #{'zh-Hans': '流行配饰', 'zh-Hant': '流行配飾', 'en': 'Popular accessories', 'id': 0}, #TODO
-        #{'zh-Hans': '男装', 'zh-Hant': '男裝', 'en': 'Men fashion', 'id': 0},
+        {'zh-Hans': '包包', 'zh-Hant': '包包', 'en': 'Bags', 'id': 299}, 
+        {'zh-Hans': '帽子', 'zh-Hant': '帽子', 'en': 'Hats', 'id': 300},
+        {'zh-Hans': '流行配饰', 'zh-Hant': '流行配飾', 'en': 'Popular accessories', 'id': 298},
+        #{'zh-Hans': '男装', 'zh-Hant': '男裝', 'en': 'Men fashion'},
 
         {'zh-Hans': '美食', 'zh-Hant': '美食', 'en': 'Food', 'id': 60 },
         {'zh-Hans': '食谱', 'zh-Hant': '食譜', 'en': 'Recipe', 'id': 61 },
@@ -63,15 +63,16 @@ tag_name_config_list = [
         #79 Diet
         {'zh-Hans': '瑜伽', 'zh-Hant': '瑜伽', 'en': 'Yoga', 'id': 80},
 
-        #82 DIY/Craft
+        #82 DIY
         {'zh-Hans': 'DIY', 'zh-Hant': 'DIY', 'en': 'DIY', 'id': 83},
-        {'zh-Hans': '手工', 'zh-Hant': '手工', 'en': 'Craft', 'id': 84},
+        {'zh-Hans': '手工', 'zh-Hant': '手工', 'en': 'DIY', 'id': 83}, #TODO 2 names maps to 1 id
+        #{'zh-Hans': '手工', 'zh-Hant': '手工', 'en': 'Craft', 'id': 84},
 
         {'zh-Hans': '生活', 'zh-Hant': '生活', 'en': 'Life Style', 'id': 86},
         #87 Embroidery, 88 Stitching, 89 Crochet, 90 Decorating, 91 Gardening, 92 Design, 93 Origami
         #94 Fashion
         {'zh-Hans': '爱好', 'zh-Hant': '愛好', 'en': 'Hobby', 'id': 95},
-        #{'zh-Hans': '宠物', 'zh-Hant': '寵物', 'en': 'Pet', 'id': 96}, #139
+        {'zh-Hans': '宠物', 'zh-Hant': '寵物', 'en': 'Pets', 'id': 96},
         #{'zh-Hans': '汽车', 'zh-Hant': '汽車', 'en': 'Vehicles', 'id': 99},
         {'zh-Hans': '车辆', 'zh-Hant': '車輛', 'en': 'Vehicles', 'id': 99},
         #100 Art, 101 painting, 102 Drawing
@@ -80,8 +81,8 @@ tag_name_config_list = [
         {'zh-Hans': '足球', 'zh-Hant': '足球', 'en': 'Football', 'id': 105},
         {'zh-Hans': '篮球', 'zh-Hant': '籃球', 'en': 'Basketball', 'id': 106},
         {'zh-Hans': '高尔夫球', 'zh-Hant': '高爾夫球', 'en': 'Golf', 'id': 107},
-        {'zh-Hans': '', 'zh-Hant': '', 'en': 'Cycling', 'id': 110},
-        {'zh-Hans': '', 'zh-Hant': '', 'en': 'Fishing', 'id': 111},
+        #{'zh-Hans': '', 'zh-Hant': '', 'en': 'Cycling', 'id': 110},
+        #{'zh-Hans': '', 'zh-Hant': '', 'en': 'Fishing', 'id': 111},
         {'zh-Hans': '橄榄球', 'zh-Hant': '橄欖球', 'en': 'American football', 'id': 116},
         {'zh-Hans': '棒球', 'zh-Hant': '棒球', 'en': 'Baseball', 'id': 117},
         {'zh-Hans': '拳击', 'zh-Hant': '拳擊', 'en': 'Boxing', 'id': 118},
@@ -105,25 +106,25 @@ tag_name_config_list = [
         #131 Professional wrestling * 
         {'zh-Hans': '电视节目', 'zh-Hant': '電視節目', 'en': 'TV shows', 'id': 132},
         #{'zh-Hans': '舞蹈', 'zh-Hant': '舞蹈', 'en': 'Dance', 'id':},
-        #{'zh-Hans': '纪录片', 'zh-Hant': '紀錄片', 'en': 'Documentary', 'id'=},
+        {'zh-Hans': '纪录片', 'zh-Hant': '紀錄片', 'en': 'Documentary', 'id': 304},
  
         {'zh-Hans': '旅行', 'zh-Hant': '旅行', 'en': 'Travel', 'id': 133},
         #135 Disneyland, 136 Universal studio
 
-        {'zh-Hans': '动物', 'zh-Hant': '動物', 'en': 'Pets &Animals', 'id': 138},
-        {'zh-Hans': '宠物', 'zh-Hant': '寵物', 'en': 'Pet', 'id': 139}, #139
-        {'zh-Hans': '狗狗', 'zh-Hant': '狗狗', 'en': 'Dog', 'id': 140},
-        {'zh-Hans': '猫猫', 'zh-Hant': '貓貓', 'en': 'Cat', 'id': 141},
+        #{'zh-Hans': '动物', 'zh-Hant': '動物', 'en': 'Pets &Animals', 'id': 138},
+        #{'zh-Hans': '宠物', 'zh-Hant': '寵物', 'en': 'Pet', 'id': 139}, #use Pets 96
+        #{'zh-Hans': '狗狗', 'zh-Hant': '狗狗', 'en': 'Dog', 'id': 140},
+        #{'zh-Hans': '猫猫', 'zh-Hant': '貓貓', 'en': 'Cat', 'id': 141},
         #143 Aquarium, 144 Bird, 145 Cow, 146 Monkey, 147 Snake, 148 Goat,  
         
-        {'zh-Hans': '数码产品', 'zh-Hant': '數碼產品', 'en': 'Consumer Electronic', 'id': 149}, #Electronic Devices
+        {'zh-Hans': '数码产品', 'zh-Hant': '數碼產品', 'en': 'Consumer Electronic', 'id': 301}, #Electronic Devices
         {'zh-Hans': '智能手机', 'zh-Hant': '智能手機', 'en': 'Smartphone', 'id': 150},
         #151 Iphone, 152 Huawei, 153 Samsung, 154 Xiaomi
         {'zh-Hans': '相机', 'zh-Hant': '相機', 'en': 'Camera', 'id': 155},
         {'zh-Hans': '电脑', 'zh-Hant': '電腦', 'en': 'Computer', 'id': 157},
-        {'zh-Hans': '耳机', 'zh-Hant': '耳機', 'en': 'Headset', 'id': 158}, #Earbuds
+        {'zh-Hans': '耳机', 'zh-Hant': '耳機', 'en': 'Headset', 'id': 311}, #Earbuds
         #{'zh-Hans': '手机配件', 'zh-Hant': '手機配件', 'en': 'Smartphone accessories', 'id'=}, #TODO
-        #{'zh-Hans': '游戏机', 'zh-Hant': '遊戲機', 'en': 'Game console', 'id'=}, #TODO
+        {'zh-Hans': '游戏机', 'zh-Hant': '遊戲機', 'en': 'Game console', 'id': 309}, #TODO
         #{'zh-Hans': '电视机', 'zh-Hant': '電視機', 'en': 'TV set', 'id'=}, #TODO
 
         {'zh-Hans': '儿童', 'zh-Hant': '兒童', 'en': 'Kids', 'id': 162},
@@ -135,18 +136,18 @@ tag_name_config_list = [
         #TODO
         #{'zh-Hans': '汽车', 'zh-Hant': '汽車', 'en': 'Cars', 'id'=},
         #{'zh-Hans': '旅游', 'zh-Hant': '旅遊', 'en': 'Tourism'},
-        #{'zh-Hans': '新闻', 'zh-Hant': '新聞', 'en': 'News', 'id'=},
-        #{'zh-Hans': '', 'zh-Hant': '', 'en': 'News & Politics'},
-        {'zh-Hans': '政治', 'zh-Hant': '政治', 'en': 'Politics'},
-        {'zh-Hans': '科技', 'zh-Hant': '科技', 'en': 'Science & Technology'},
+        {'zh-Hans': '', 'zh-Hant': '', 'en': 'News & Politics', 'id': 313},
+        {'zh-Hans': '新闻', 'zh-Hant': '新聞', 'en': 'News', 'id': 313},
+        {'zh-Hans': '政治', 'zh-Hant': '政治', 'en': 'Politics', 'id': 313},
+        {'zh-Hans': '科技', 'zh-Hant': '科技', 'en': 'Science & Technology', 'id': 312},
         {'zh-Hans': '军事', 'zh-Hant': '軍事', 'en': 'Military'},
         {'zh-Hans': '社会', 'zh-Hant': '社會', 'en': 'Society'},
         {'zh-Hans': '宗教', 'zh-Hant': '宗教', 'en': 'Religion'},
         {'zh-Hans': '儿童音乐', 'zh-Hant': '兒童音樂', 'en': "Children's music"}, 
 
-        {'zh-Hans': 'VLOG', 'zh-Hant': 'VLOG', 'en': 'VLOG'},
-        {'zh-Hans': '开箱', 'zh-Hant': '開箱', 'en': 'Unboxing'},
-        {'zh-Hans': 'ASMR', 'zh-Hant': 'ASMR', 'en': 'ASMR'},
+        {'zh-Hans': 'VLOG', 'zh-Hant': 'VLOG', 'en': 'VLOG', 'id': 307},
+        {'zh-Hans': '开箱', 'zh-Hant': '開箱', 'en': 'Unboxing', 'id': 305},
+        {'zh-Hans': 'ASMR', 'zh-Hant': 'ASMR', 'en': 'ASMR', 'id': 306},
 ]
 
 youtube_topic_id_en_name_map = {
@@ -204,7 +205,7 @@ youtube_topic_id_en_name_map = {
     '/m/02wbm': 'Food',
     '/m/0kt51': 'Health',
     '/m/03glg': 'Hobby',
-    '/m/068hy': 'Pet',
+    '/m/068hy': 'Pets',
     '/m/041xxh': 'Beauty',
     #'/m/07c1v': 'Technology',
     '/m/07c1v': 'Science & Technology',
@@ -216,7 +217,6 @@ youtube_topic_id_en_name_map = {
     '/m/098wr': 'Society',
     '/m/01h6rj': 'Military',
     '/m/05qt0': 'Politics',            
-    #'/m/05qt0': 'News & Politics',            
     '/m/06bvp': 'Religion',
 }
 
@@ -224,6 +224,70 @@ tag_search_keywords_config = {
     'zh-Hans': zhHans_search_keywords_list,
     'zh-Hant': zhHant_search_keywords_list,
     'en': en_search_keywords_list,
+}
+
+structured_tag_config_en = {
+    'Gaming': [
+        'Action', 
+        'Casual', 
+        'Music game', 
+        'Role-playing game',
+        'Sports game', 
+        'Strategy game', 
+        'RTS',
+    ],
+    'Beauty': [
+        'Makeup',
+        'Skincare',
+        'Hairstyle',
+        'Manicure',
+    ],
+    'Fashion': [
+        'Clothing',
+        'Jewelry',
+        'Shoes',
+        'Popular accessories',
+        'Bags',
+        'Hats',
+    ],
+    'Consumer Electronic': [
+        'Smartphone',
+        'Camera',
+        'Computer',
+        'Game console',
+        'Headset',
+    ],
+    'Life Style': [
+        'Travel',
+        'Food',
+        'Fitness',
+        'Health',
+        'Sports',
+        'Pets',
+        'Kids',
+        'Toys',
+        'DIY',
+    ],
+    'Unboxing': [],
+    'ASMR': [],
+    'Vlog': [],
+    'Science & Technology': [],
+    'Education': [],
+    'News & Politics': [],
+    'Music': [
+        'Rock',
+        'Classical',
+        'Electronic',
+        'Hip Hop',
+        'Pop music',
+    ],
+    'Entertainment': [
+        'Movie',
+        'Cartoon',
+        'Humor',
+        'TV shows',
+        'Documentary'
+    ],
 }
 
 

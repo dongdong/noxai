@@ -168,53 +168,6 @@ _lifestyle_list = [
             '手作 工具 diy',
         ] 
     },
-    { 
-        'level_1': '兒童',  'level_2': '兒童',  
-        'search_keywords': [
-            '兒童 故事 兒歌 童謠',
-            '兒童 卡通 動畫',
-            '兒童 kids baby cartoon song story'
-            '兒童 玩具 玩偶 kids toys doll',
-        ] 
-    },
-    { 
-        'level_1': '健康',  'level_2': '健康',  
-        'search_keywords': [
-            '健康 生活 health',
-            '健康 營養 養生 保健',
-            '健康 醫療 醫學 疾病',
-        ] 
-    },
-    { 
-        'level_1': '健康',  'level_2': '瑜伽',  
-        'search_keywords': ['瑜伽 yoga', '瑜伽 冥想 呼吸 拉伸 教學'] 
-    },
-    { 
-        'level_1': '健身',  'level_2': '健身',  
-        'search_keywords': [
-            '健身 fitness gym workout', 
-            '健身 鍛煉 增肌 力量 muscle',
-            '健身 減脂 減肥 瘦身',
-            '健身 有氧運動 cardio',
-        ] 
-    },
-    { 
-        'level_1': '生活',  'level_2': '旅行',  
-        'search_keywords': [
-            '旅行 旅遊 travel tourism',
-            '旅行 travel tour 交通 酒店 環球 自駕',
-            '戶外 野外 徒步 探險 outdoor hiking adventure',
-            '旅遊 遊記 攻略 景點 度假 vacation resort',
-        ] 
-    },
-    {   
-        'level_1': '車輛',  'level_2': '汽車',  
-        'search_keywords': [
-            '汽車 評論 車展 cars review',
-            '買車 養車 攻略',
-            '汽車 suv 跑車 發動機 變速箱 引擎 馬力',
-        ], 
-    },
 ]
 
 _food_list = [
@@ -236,46 +189,52 @@ _food_list = [
             '美食 食譜 recipe cooking baking',
         ] 
     },
-    #{ 
-    #    'level_1': '美食',  'level_2': '探店',  
-    #    'search_keywords': [
-    #        '美食 探店 restaurant review',
-    #        '美食 探店 試吃 必吃 評價',
-    #        '街頭美食 小吃 餐廳 飯店 味道 座位 價格 地址',
-    #    ] 
-    #},
+    { 
+       'level_1': '美食',  'level_2': '探店',  
+        'search_keywords': [
+            '美食 探店 restaurant review',
+            '美食 探店 試吃 必吃 評價',
+            #'街頭美食 小吃 餐廳 飯店 味道 座位 價格 地址',
+        ] 
+    },
     { 
         'level_1': '美食',  'level_2': '吃播',  
         'search_keywords': ['美食 吃播', '吃播 大胃王'] 
     },
 ]
 
+'''
 _pets_list = [
     { 
         'level_1': '動物',  'level_2': '動物',  
-        'search_keywords': [
-            '動物 animal',
-            '動物 馬 牛 羊 鹿 獅 虎 豹 熊 象',
-            '動物 魚 鯨 鯊 豚 章魚 鱷魚 河馬',
-            '動物 鳥類 禽 鵝 鷹 鶴 孔雀',
-        ],
+        'search_keywords': ['動物 animal'],
+    },
+    { 
+        'level_1': '動物',  'level_2': '野生動物',  
+        'search_keywords': ['野生動物', '獅 虎 豹 狼', '斑馬 長頸鹿 河馬 羚羊'] 
+    },
+    { 
+        'level_1': '動物',  'level_2': '魚',  
+        'search_keywords': ['海洋生物', '水族館', '魚 鯨 鯊 豚 fish shark whale'] 
+    },
+    { 
+        'level_1': '動物',  'level_2': '鳥',  
+        'search_keywords': ['鳥 鳥類 bird', '鵝 鷹 鶴 孔雀 鸚鵡'] 
     },
     { 
         'level_1': '動物',  'level_2': '寵物',  
-        'search_keywords': [
-            '寵物 pets',
-            '寵物 鳥 魚 烏龜 水族箱',
-        ] 
+        'search_keywords': ['寵物 pets', '寵物 貓 pet cat kitten', '物 狗 pet dog puppy'] 
     },
-    { 
-        'level_1': '動物',  'level_2': '貓貓',  
-        'search_keywords': ['寵物 貓 cat kitten'] 
-    },
-    { 
-        'level_1': '動物',  'level_2': '狗狗',  
-        'search_keywords': ['寵物 狗 dog puppy'] 
-    },
+    #{ 
+    #    'level_1': '動物',  'level_2': '貓貓',  
+    #    'search_keywords': ['寵物 貓 pet cat kitten'] 
+    #},
+    #{ 
+    #    'level_1': '動物',  'level_2': '狗狗',  
+    #    'search_keywords': ['寵物 狗 pet dog puppy'] 
+    #},
 ]
+'''
 
 _sports_list = [
     { 
@@ -311,16 +270,8 @@ _sports_list = [
         'search_keywords': ['體育 橄欖球', '橄欖球 American football'] 
     },
     { 
-        'level_1': '體育',  'level_2': '賽車',  
-        'search_keywords': ['體育 賽車', '賽車 motorsport'] 
-    },
-    { 
         'level_1': '體育',  'level_2': '排球',  
         'search_keywords': ['體育 排球', '排球 volleyball'] 
-    },
-    { 
-        'level_1': '體育',  'level_2': '高爾夫球',  
-        'search_keywords': ['體育 高爾夫球', '高爾夫球 golf'] 
     },
     { 
         'level_1': '體育',  'level_2': '拳擊',  
@@ -403,23 +354,31 @@ _entertainment_list = [
     },
     { 
         'level_1': '娛樂',  'level_2': '搞笑',  
-        'search_keywords': ['娛樂 搞笑 幽默'] 
-    },
-    { 
-        'level_1': '娛樂',  'level_2': '紀錄片',  
-        'search_keywords': ['紀錄片', '紀錄片 documentary'] 
+        'search_keywords': ['娛樂 搞笑 幽默', '相聲 小品 段子 脫口秀'] 
     },
     { 
         'level_1': '娛樂',  'level_2': '動漫',  
         'search_keywords': ['動漫 cartoon animation comics', '娛樂 動漫 漫畫'] 
     },
     { 
-        'level_1': '娛樂',  'level_2': '舞蹈',  
-        'search_keywords': ['舞蹈 dance dancer dancing', '舞蹈 芭蕾 拉丁舞 街舞'] 
+        'level_1': '娛樂',  'level_2': '紀錄片',  
+        'search_keywords': [
+            '紀錄片 Documentary', 
+            '紀錄片 Documentary BBC Discovery', 
+            '紀錄片 Documentary 国家地理'
+        ] 
     },
 ]
 
 _other_list = [
+    {
+        'level_1': '新聞',  'level_2': '新聞',  
+        'search_keywords': [
+            '新聞 報導 熱點 時事 評論', 
+            '新聞 社會 民生 法制 百姓',
+            '時政 新聞 要聞 國際 政治',
+        ] 
+    },
     {
         'level_1': '科技',  'level_2': '科技',  
         'search_keywords': [
@@ -429,33 +388,94 @@ _other_list = [
         ] 
     },
     {
-        'level_1': '教育',  'level_2': '教育',  
+        'level_1': '',  'level_2': '教育',  
         'search_keywords': [
-            '教育 學校 老師 學生 學習 知識',
-            '教育 科普 公開課 人文 社會 歷史 地理',
-            '教育 科普 公開課 自然 科學 物理 化學 天文 宇宙',
+            #'教育 學校 老師 學生 學習 知識',
+            '教育 科普 公開課',
+            '教育 人文 社會 歷史 地理',
+            '教育 自然 科學 物理 化學 天文 宇宙',
             'education course lecture tutorial degree certificate',
         ] 
     },
-    {
-        'level_1': '新聞',  'level_2': '社會',  
-        'search_keywords': ['新聞 報導 熱點 時事 評論', '新聞 社會 民生 法制 百姓'] 
+   {
+        'level_1': '',  'level_2': '財經',  
+        'search_keywords': [
+            '財經 經濟 金融 貿易 財政', 
+            '財經 投資 商業 股市',
+        ] 
     },
     {
-        'level_1': '新聞',  'level_2': '政治',  
-        'search_keywords': ['時政 新聞 政治 要聞', '時政 新聞 國際 政治'] 
-    },
-    {
-        'level_1': '新聞',  'level_2': '財經',  
-        'search_keywords': ['財經 經濟 金融 貿易 財政', '財經 經濟 金融 貿易 財政'] 
-    },
-    {
-        'level_1': '新聞',  'level_2': '軍事',  
+        'level_1': '',  'level_2': '軍事',  
         'search_keywords': ['軍事 軍迷 軍武', '軍事 軍情 裝備'] 
     },
     {
-        'level_1': '宗教',  'level_2': '宗教',  
-        'search_keywords': ['宗教 佛 释 道 法 师', '宗教 基督 耶稣 上帝'] 
+        'level_1': '',  'level_2': '宗教',  
+        'search_keywords': ['宗教', '佛 释 道 法 师', '宗教 基督 耶稣 上帝'] 
+    },
+    { 
+        'level_1': '',  'level_2': '舞蹈',  
+        'search_keywords': ['舞蹈 dance dancer dancing', '舞蹈 芭蕾 拉丁舞 街舞'] 
+    },
+    {   
+        'level_1': '',  'level_2': '汽車',  
+        'search_keywords': [
+            '汽車 評論 車展 cars review',
+            '買車 養車 攻略',
+            '汽車 suv 跑車 發動機 變速箱 引擎 馬力',
+        ], 
+    },
+    { 
+        'level_1': '',  'level_2': '兒童',  
+        'search_keywords': [
+            '兒童 kid child'
+            '兒童 kid cartoon video song story'
+            '兒童 故事 兒歌 童謠 卡通 動畫',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': '玩具',  
+        'search_keywords': [
+            '兒童 玩具 toys',
+            '玩具 玩偶 toys doll barbie',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': '健康',  
+        'search_keywords': [
+            '健康 生活 health',
+            '健康 營養 養生 保健',
+            '健康 醫療 醫學 疾病',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': '瑜伽',  
+        'search_keywords': ['瑜伽 yoga', '瑜伽 冥想 呼吸 拉伸 教學'] 
+    },
+    { 
+        'level_1': '',  'level_2': '健身',  
+        'search_keywords': [
+            '健身 fitness gym workout tabata hiit', 
+            '健身 鍛煉 增肌 力量 muscle',
+            '健身 減脂 減肥 瘦身',
+            '健身 有氧運動 cardio',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': '旅行',  
+        'search_keywords': [
+            '旅行 旅遊 travel tourism',
+            '旅行 travel tour 交通 酒店 環球 自駕',
+            '戶外 野外 徒步 探險 outdoor hiking adventure',
+            '旅遊 遊記 攻略 景點 度假 vacation resort',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': '寵物',  
+        'search_keywords': [
+            '寵物 pets', 
+            '寵物 貓 pet cat kitten', 
+            '寵物 狗 pet dog puppy'
+        ] 
     },
 ]
 
@@ -468,7 +488,6 @@ zhHant_search_keywords_list = (
         + _electronic_list
         + _lifestyle_list
         + _food_list
-        + _pets_list
         + _sports_list
         + _music_list
         + _entertainment_list

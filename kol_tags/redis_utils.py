@@ -11,19 +11,22 @@ pool_spider = redis.ConnectionPool(
 redis_spider = redis.Redis(connection_pool=pool_spider)
 
 #redis_channel_id_list_name = 'all_tag_rule_cid'
+#redis_channel_id_list_name = 'all_tag_rule_cid.zh'
 redis_channel_id_list_name = 'all_tag_rule_cid.test'
 
 
-def clean_data():
+def clean_pipe():
     redis_spider.delete(redis_channel_id_list_name)
-    return not redis_spider.exists(redis_channel_id_list_name)
+    succ = not redis_spider.exists(redis_channel_id_list_name)
+    logging.info('clean pipe %s succ? %s' % (redis_channel_id_list_name, str(succ)))
+    return succ
 
 
 def get_current_length(redis_name):
     return redis_spider.llen(redis_name)
 
 
-def watch_current_length(redis_name, interval=30):
+def watch_pipe_current_length(redis_name, interval=60):
     wait_time = 0
     wait_time_max = 10
     while True:
@@ -37,6 +40,10 @@ def watch_current_length(redis_name, interval=30):
                 break
         else:
             wait_time = 0
+
+
+def watch_pipe():
+    watch_pipe_current_length(redis_channel_id_list_name)
 
 
 def write_id_2_redis(redis_name, sql):
@@ -53,39 +60,24 @@ def write_id_2_redis(redis_name, sql):
     logging.info('write channel id to redis finish! total: %d' % (total_num))
 
 
-def run_write_ids():
+def get_sql():
     #sql = 'select cid from kol_channel_base order by sub desc'
     #sql = 'select cid from kol_channel_base where lang = "zh" and sub > 10000 order by sub desc'
     #sql = 'select cid from kol_channel_base where lang = "zh-Hant" and sub > 10000 order by sub desc'
     sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 order by sub desc'
-    #sql += ' limit 100'
+    #sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") order by sub desc'
+    return sql
+
+
+def insert_pipe():
+    sql = get_sql()
     write_id_2_redis(redis_channel_id_list_name, sql)
 
 
-def test_write_ids():
-    #sql = 'select cid from kol_channel_base order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang = "zh" and sub > 10000 order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang = "zh-Hant" and sub > 10000 order by sub desc'
-    sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 order by sub desc'
-    sql += ' limit 100'
-    logging.info('test write id. sql: %s' % sql)
-    write_id_2_redis(redis_channel_id_list_name, sql)
-
-
-def run_clean_and_write_ids():
-    if clean_data():
-        run_write_ids()
+def set_pipe():
+    if clean_pipe():
+        insert_pipe()
     else:
         logging.error('clean data error!')
-
-
-if __name__ == '__main__':
-    #run_write_ids()
-    #test_write_ids()
-    #clean_data()
-
-    #print(get_current_length(redis_channel_id_list_name))
-    #run_clean_and_write_ids()
-    watch_current_length(redis_channel_id_list_name)
 
 

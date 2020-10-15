@@ -18,7 +18,8 @@ now = datetime.now()
 
 CHANNEL_VIDEO_COUNT_MAX = 32
 CHANNEL_VIDEO_COUNT_MIN = 5
-CHANNEL_TAG_TOTAL_MAX = 5
+VIDEO_TAG_TOTAL_MAX = 3 #5
+CHANNEL_TAG_TOTAL_MAX = 3 #5
 CHANNEL_TAG_COUNT_THRESHOLD = 6
 CHANNEL_UPDATE_DAYS_THRESHOLD = 180
 CHANNEL_SUB_NUM_MIN_THRESHOLD = 10000
@@ -51,8 +52,20 @@ def _load_models(language):
 
 
 def _predict(video_info_list, tfidf_model, tag_model):
-    feature_data = get_feature_data_from_video_info_iter(video_info_list, tfidf_model)
-    ret = tag_model.get_top_prob_class_list_batch(feature_data.X)
+    video_id_pred_item_map = {}
+    feature_data, valid_video_id_list = get_feature_data_from_video_info_iter(video_info_list, tfidf_model)
+    logging.info('video tag predict. total video: %d, valid video: %d' 
+            % (len(video_info_list), len(valid_video_id_list)))
+    if len(valid_video_id_list) > 0:
+        pred_result = tag_model.get_top_prob_class_list_batch(feature_data.X)
+        video_id_pred_item_map = {video_id:pred_item 
+                for video_id, pred_item in zip(valid_video_id_list, pred_result)}
+    ret = []
+    for video_info in video_info_list:
+        video_id = video_info.video_data.video_id
+        #if video_id in video_id_pred_item_map:
+        pred_item = video_id_pred_item_map.get(video_id, None)
+        ret.append(pred_item)
     return ret
 
 
@@ -62,21 +75,26 @@ def normalize_score(score):
         score = 1
     return score
 
-def _get_sorted_tag_score_list(pred_tag_result, video_data, tag_index, tag_model, tag_match_model, topic_id_list, max_size=3):
+def _get_sorted_tag_score_list(pred_tag_result, video_data, tag_index, tag_model, tag_match_model, topic_id_list):
     tag_1_class_prob_list, tag_2_class_prob_list = tag_model.get_valid_tag_list(pred_tag_result) 
     addition_tag_class_list = tag_match_model.get_tag_class_list(video_data.get_feature_words())
     tag_class_score_map = defaultdict(int)
     for tag_class, tag_prob in tag_1_class_prob_list + tag_2_class_prob_list:
         tag_class_score_map[tag_class] += tag_prob
+        #print(1, tag_class_score_map)
     for tag_class in addition_tag_class_list:
         tag_class_score_map[tag_class] += 5
     for topic_id in topic_id_list:
         tag_class = tag_index.get_tag_name_by_topic_id(topic_id)
         if tag_class is not None:
             tag_class_score_map[tag_class] += 2
-    tag_class_score_list = sorted([(tag_class, normalize_score(score)) for tag_class, score in tag_class_score_map.items()], 
+    #print(2, tag_class_score_map)
+    tag_class_score_list = sorted(
+            [(tag_class, normalize_score(score)) 
+                for tag_class, score in tag_class_score_map.items()
+                if tag_class != ''], 
             key=lambda x: x[1], reverse=True)
-    return tag_class_score_list[:max_size]
+    return tag_class_score_list[:VIDEO_TAG_TOTAL_MAX]
 
 
 class VideoTags():
@@ -135,6 +153,7 @@ class TagPredictor():
         return channel_structure_tag_list
 
     def get_channel_video_tags(self, video_info_list):
+        channel_tag_list = []
         video_tags_map = {}
         channel_tag_counter = Counter()
         video_id_list = [video_info.video_data.video_id for video_info in video_info_list]
@@ -148,14 +167,14 @@ class TagPredictor():
                     self.tag_model, self.tag_match_model)
             video_tags_map[video_data.video_id] = video_tags
 
-            tag_name_list = [tag_name for tag_name, tag_score in video_tags.tag_score_list
-                    if tag_score > 0.1]
+            tag_name_list = [tag_name for tag_name, tag_score in video_tags.tag_score_list]
+                    #if tag_score > 0.1]
             channel_tag_counter.update(tag_name_list)   
 
         total_count = len(video_info_list)
         channel_tag_list = [ (tag, count / total_count) 
                 for tag, count in channel_tag_counter.most_common(CHANNEL_TAG_TOTAL_MAX) 
-                if count >= CHANNEL_TAG_COUNT_THRESHOLD]
+                if count > CHANNEL_TAG_COUNT_THRESHOLD]
 
         return channel_tag_list, video_tags_map
     
@@ -169,6 +188,7 @@ class TagPredictorManager():
     default_predictor = tag_predictor_map['en']
     @classmethod
     def Get_predictor(cls, language):
+        logging.info('TagPredictorManager get predictor, language: %s' % (language))
         if language in cls.tag_predictor_map:
             tag_predictor = cls.tag_predictor_map[language]
         else:
@@ -185,31 +205,32 @@ class TagPredictorManager():
 
 
 def _is_valid_channel_to_update_tags(channel_id, channel_data): 
-
+    '''
     required_names = ['sub_num', 'languages', 'latest_three_pub_date']
     for name in required_names:
         if name not in channel_data:
             logging.info('information miss: ' % name)
             return False
-
+   
     sub_num = channel_data['sub_num']    
     if sub_num < CHANNEL_SUB_NUM_MIN_THRESHOLD:
         logging.info('Too few subscribes, ignore! channel: %s, sub num: %d' % (channel_id, sub_num))
         return False
-    
+    ''' 
     support_language_set = TagPredictorManager.tag_predictor_map.keys()
-    language = channel_data['languages']
+    #language = channel_data['languages']
+    language = channel_data.get('languages', '')
     if language not in support_language_set:
         logging.info('Language not support yet. channel: %s, language: %s' % (channel_id, language))
         return False
-
+    '''
     latest_video_timestamp = channel_data['latest_three_pub_date']
     latest_video_date = datetime.fromtimestamp(latest_video_timestamp / 1000)
     delta = now - latest_video_date
     if delta.days > CHANNEL_UPDATE_DAYS_THRESHOLD:      
         logging.info('Channel have not updated for a while! channel: %s, days: %d' % (channel_id, delta.days))
         return False
-
+    '''
     return True
 
 def _get_channel_info(channel_id, channel_data, channel_video_list):
@@ -238,18 +259,21 @@ class ChannelInfo():
         self.channel_country = channel_data.get('country', '')
         self.channel_language = channel_data.get('languages', '')
         self.channel_tag_detail = channel_data.get('tag_detail', [])
+        self.channel_tag_list = channel_data.get('tag_list', [])
         self.channel_data = channel_data
         self.video_info_list = video_info_list
         self.tag_predictor = TagPredictorManager.Get_predictor(self.channel_language)
         self.channel_tag_score_list = None
         self.channel_video_tag_dict = None
         self.channel_structure_tag_list = None
+        self.channel_all_tag_name_list = None
 
     def process_tags(self):
         self.channel_tag_score_list, self.channel_video_tag_dict = self.tag_predictor.get_channel_video_tags(
                 self.video_info_list)
         self.channel_structure_tag_list = self.tag_predictor.get_channel_structure_tag_list(
                 self.channel_tag_score_list)
+        self.channel_all_tag_name_list = [tag_name for tag_name, score in self.channel_tag_score_list]
 
     def get_data(self):
         data = {
@@ -274,6 +298,14 @@ class ChannelInfo():
         data['videos'] = video_data_list
         return data
     
+    def get_channel_video_tags(self):
+        #self.channel_video_tags = []
+        data = {}
+        for video_id, video_tags in self.channel_video_tag_dict.items():
+            video_tags_list = video_tags.tag_score_list 
+            data[video_id] = video_tags_list
+        return data
+
     @staticmethod
     def Load(channel_id, channel_data=None, channel_video_list=None):
         channel_info = None

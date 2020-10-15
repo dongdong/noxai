@@ -71,8 +71,9 @@ _fashion_list = [
         'level_1': 'Fashion',  'level_2': 'Clothing',  
         'search_keywords': [
             'fashion clothing', 
-            'clothing haul', 
-            'fashion clothes outfits dresses suits pants jeans skirts'
+            'clothing collection haul', 
+            'fashion clothes outfits dress',
+            'fashion clothing shirts suits pants jeans skirts'
         ] 
     },
     { 
@@ -85,7 +86,7 @@ _fashion_list = [
     },
     { 
         'level_1': 'Fashion',  'level_2': 'Bags',  
-        'search_keywords': ['fashion bags', 'bag collection'] 
+        'search_keywords': ['fashion bags', 'bag collection', 'bag handbag wallet purse'] 
     },
     { 
         'level_1': 'Fashion',  'level_2': 'Hats',  
@@ -106,7 +107,6 @@ _fashion_list = [
 ]
 
 _electronic_list = [
-
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Consumer Electronic',  
         'search_keywords': [
@@ -170,59 +170,7 @@ _lifestyle_list = [
     },
     { 
         'level_1': 'Life Style',  'level_2': 'DIY',  
-        'search_keywords': ['diy', 'diy crafts handmade'] 
-    },
-    { 
-        'level_1': 'Health',  'level_2': 'Health',  
-        'search_keywords': [
-            #'health',
-            'health healthy life tips habits', 
-            'health healthy nutrition eating diet', 
-            'health body age heart brain weight',
-            'health medicine medical doctor disease illness treatment',
-        ], 
-    },
-    { 
-        'level_1': 'Health',  'level_2': 'Yoga',  
-        'search_keywords': [
-            'yoga meditation flow vinyasa', 
-            'yoga class stretch pose'
-        ] 
-    },
-    { 
-        'level_1': 'Fitness',  'level_2': 'Fitness',  
-        'search_keywords': [
-            'fitness', 
-            'gym workout train bodybuild muscle',
-            'cardio abs fat burn', 
-            'hiit tabata crossfit'
-        ] 
-    },
-    { 
-        'level_1': 'Kids',  'level_2': 'Kids',  
-        'search_keywords': [
-            'kids child children baby toddler nursery',
-            'kids child songs story video cartoon', 
-            'kids toys dolls barbie playground',        
-        ] 
-    },
-    { 
-        'level_1': 'Vehicles',  'level_2': 'Cars',  
-        'search_keywords': [
-            'cars review guide recommend advice test drive',
-            'vehicles sports car suv van crossover truck',
-            'car vehicle benz bmw audi toyota nissan ford porsche',
-            #'car vehicle engine gear power speed safety',
-        ] 
-    },
-    { 
-        'level_1': 'Travel',  'level_2': 'Travel',  
-        'search_keywords': [
-            'travel trip airplane train car hotel',
-            'travel vacation holiday tourism guide resort', 
-            'travel view mountain lake river island beach',
-            'travel hiking adventure outdoor',
-        ] 
+        'search_keywords': ['diy', 'diy idea', 'diy craft handmade'] 
     },
 ]
 
@@ -246,6 +194,7 @@ _food_list = [
     },
 ]
 
+'''
 _pets_list = [
     { 
         'level_1': 'Pets & Animals',  'level_2': 'Animal',  
@@ -265,7 +214,7 @@ _pets_list = [
     },
     { 
         'level_1': 'Pets & Animals',  'level_2': 'Sea animal',  
-        'search_keywords': ['sea animals', 'aquarium',] 
+        'search_keywords': ['sea animals aquarium fish',] 
     },
     { 
         'level_1': 'Pets & Animals',  'level_2': 'Dog',  
@@ -276,6 +225,7 @@ _pets_list = [
         'search_keywords': ['pets cat kitten'] 
     },
 ]
+'''
 
 _sports_list = [
     { 
@@ -306,14 +256,14 @@ _sports_list = [
         'level_1': 'Sports',  'level_2': 'Golf',  
         'search_keywords': ['sports golf', 'golf shot pga'] 
     },
-    { 
-        'level_1': 'Sports',  'level_2': 'Cycling',  
-        'search_keywords': ['sports cycling', 'cycling biking'] 
-    },
-    { 
-        'level_1': 'Sports',  'level_2': 'Fishing',  
-        'search_keywords': ['sports fishing', 'fishing lure bait rod'] 
-    },
+    #{ 
+    #    'level_1': 'Sports',  'level_2': 'Cycling',  
+    #    'search_keywords': ['sports cycling', 'cycling biking'] 
+    #},
+    #{ 
+    #    'level_1': 'Sports',  'level_2': 'Fishing',  
+    #    'search_keywords': ['sports fishing', 'fishing lure bait rod'] 
+    #},
     { 
         'level_1': 'Sports',  'level_2': 'American football',  
         'search_keywords': ['american football', 'nfl'] 
@@ -387,14 +337,14 @@ _music_list = [
         'level_1': 'Music',  'level_2': 'Pop music',  
         'search_keywords': ['pop music', 'pop music songs'] 
     },
-    { 
-        'level_1': 'Music',  'level_2': 'Reggae',  
-        'search_keywords': ['reggae music', 'reggae music songs'] 
-    },
-    { 
-        'level_1': 'Music',  'level_2': 'Rhythm & Blues',  
-        'search_keywords': ['rhythm and blues', 'rhythm blues music songs'] 
-    },
+    #{ 
+    #    'level_1': 'Music',  'level_2': 'Reggae',  
+    #    'search_keywords': ['reggae music', 'reggae music songs'] 
+    #},
+    #{ 
+    #    'level_1': 'Music',  'level_2': 'Rhythm & Blues',  
+    #    'search_keywords': ['rhythm and blues', 'rhythm blues music songs'] 
+    #},
 ]
 
 _entertainment_list = [
@@ -436,14 +386,7 @@ _entertainment_list = [
     },
     { 
         'level_1': 'Entertainment',  'level_2': 'Documentary',  
-        'search_keywords': ['documentary', 'bbc documentary'] 
-    },
-    { 
-        'level_1': 'Entertainment',  'level_2': 'Dance',  
-        'search_keywords': [
-            'dance dancing dancer',
-            'dance tutorial belly cha cha hip hop', 
-        ] 
+        'search_keywords': ['documentary', 'documentary bbc discovery'] 
     },
 ]
 
@@ -471,6 +414,79 @@ _other_list = [
             'news society culture domestic',
         ] 
     },
+    { 
+        'level_1': '',  'level_2': 'Health',  
+        'search_keywords': [
+            #'health',
+            'health healthy life tips habits', 
+            'health healthy nutrition eating diet', 
+            'health body age heart brain weight',
+            'health medicine medical doctor disease illness treatment',
+        ], 
+    },
+    { 
+        'level_1': '',  'level_2': 'Fitness',  
+        'search_keywords': [
+            #'fitness', 
+            'fitness gym workout train bodybuild muscle',
+            'fitness cardio abs fat burn', 
+            'fitness hiit tabata crossfit'
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Yoga',  
+        'search_keywords': [
+            'yoga meditation flow vinyasa', 
+            'yoga class stretch pose'
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Dance',  
+        'search_keywords': [
+            'dance dancing dancer',
+            'dance class tutorial', 
+            'dance belly cha cha hip hop', 
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Kids',  
+        'search_keywords': [
+            'kids child baby toddler',
+            'kids songs nursery rhymes', 
+            'kids story fairy tales', 
+            'kids video cartoon film', 
+            'kids toys dolls barbie playground',
+        ] 
+    },
+    #{ 
+    #    'level_1': '',  'level_2': 'Toys',  
+    #    'search_keywords': [
+    #        'kids toys', 
+    #        'toys dolls barbie',        
+    #    ] 
+    #},
+    { 
+        'level_1': '',  'level_2': 'Cars',  
+        'search_keywords': [
+            'cars review guide recommend advice test drive',
+            'vehicles sports car suv van crossover truck',
+            'car vehicle benz bmw audi toyota nissan ford porsche',
+            #'car vehicle engine gear power speed safety',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Travel',  
+        'search_keywords': [
+            'travel trip airplane train hotel',
+            'travel vacation holiday tourism guide resort', 
+            'travel view mountain lake river island beach',
+            'travel hiking adventure outdoor backpack',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Pets',  
+        'search_keywords': ['pets', 'pets dog puppy', 'pets cat kitten'] 
+    },
 ]
 
 
@@ -482,7 +498,6 @@ en_search_keywords_list = (
         + _electronic_list
         + _lifestyle_list
         + _food_list
-        + _pets_list
         + _sports_list
         + _music_list
         + _entertainment_list

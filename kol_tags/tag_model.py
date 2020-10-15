@@ -160,19 +160,22 @@ class TagModel():
 
 
     def get_valid_tag_list(self, pred_result):
+        if not pred_result:
+            return [], []
+
         tag_1_class_score_list, tag_2_class_score_list = [], []
         tag_1_pred_class_list, tag_1_pred_prob_list, tag_2_pred_class_list, tag_2_pred_prob_list = pred_result
         
         for tag_1_pred_class, tag_1_pred_prob in zip(tag_1_pred_class_list, tag_1_pred_prob_list):
             tag_1_default_prob = self.get_tag_1_default_prob(tag_1_pred_class)
-            tag_1_prob_threshold = tag_1_default_prob * 3
+            tag_1_prob_threshold = tag_1_default_prob * 2
             if tag_1_pred_prob > tag_1_prob_threshold:
                 tag_1_class_score = (tag_1_pred_prob - tag_1_prob_threshold) / tag_1_default_prob
                 tag_1_class_score_list.append((tag_1_pred_class, tag_1_class_score))
 
         for tag_2_pred_class, tag_2_pred_prob in zip(tag_2_pred_class_list, tag_2_pred_prob_list):
             tag_2_default_prob = self.get_tag_2_default_prob(tag_2_pred_class)
-            tag_2_prob_threshold = tag_2_default_prob * 3
+            tag_2_prob_threshold = tag_2_default_prob * 2
             if tag_2_pred_prob > tag_2_prob_threshold:
                 tag_2_class_score = (tag_2_pred_prob - tag_2_prob_threshold) / tag_2_default_prob
                 tag_2_class_score_list.append((tag_2_pred_class, tag_2_class_score))
@@ -330,12 +333,14 @@ def test_tag_model():
 
 
 def test_tag_match_model():
-    #language = 'en'
+    language = 'en'
     #language = 'zh-Hans'
-    language = 'zh-Hant'
+    #language = 'zh-Hant'
     tag_match_model = TagMatchModel(language)
     print(tag_match_model.match_word_tag_map)
         
 
 if __name__ == '__main__':
     test_tag_model()
+
+
