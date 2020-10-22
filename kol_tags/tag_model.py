@@ -81,7 +81,7 @@ class TagMatchModel():
     def __init__(self, language):
         self.match_words_config = {
             'Unboxing': ['unboxing', '开箱', '開箱'], 
-            'VLOG': ['vlog', 'vloger', 'vlogging'], 
+            'VLOG': ['vlog', 'vloger', 'vlogging', 'vlog', 'vlogs'], 
             'ASMR': ['asmr'],
         }
         self.match_word_tag_map = {}
@@ -218,18 +218,21 @@ class TagModel():
     def load_model(self, model_dir):
         tag_1_model_path = self._get_tag_1_model_file_path(model_dir)
         tag_2_model_path = self._get_tag_2_model_file_path(model_dir)
-        logging.info('load tag_1 model from path: %s' % (tag_1_model_path))
-        with open(tag_1_model_path, 'rb') as f_1:
-            self.tag_1_model = pickle.load(f_1)
-        logging.info('load tag_2 model from path: %s' % (tag_2_model_path))
-        with open(tag_2_model_path, 'rb') as f_2:
-            self.tag_2_model = pickle.load(f_2)
+        try:
+            logging.info('load tag_1 model from path: %s' % (tag_1_model_path))
+            with open(tag_1_model_path, 'rb') as f_1:
+                self.tag_1_model = pickle.load(f_1)
+            logging.info('load tag_2 model from path: %s' % (tag_2_model_path))
+            with open(tag_2_model_path, 'rb') as f_2:
+                self.tag_2_model = pickle.load(f_2)
         
-        meta_data_path = self._get_meta_data_file_path(model_dir)
-        with open(meta_data_path, 'r') as f:
-            meta_data = json.load(f)
-            self.tag_1_default_prob_map = meta_data['tag_1_default_prob_map']
-            self.tag_2_default_prob_map = meta_data['tag_2_default_prob_map']
+            meta_data_path = self._get_meta_data_file_path(model_dir)
+            with open(meta_data_path, 'r') as f:
+                meta_data = json.load(f)
+                self.tag_1_default_prob_map = meta_data['tag_1_default_prob_map']
+                self.tag_2_default_prob_map = meta_data['tag_2_default_prob_map']
+        except:
+            logging.warn('TagModel failed to load model. Exception:' + traceback.format_exc())
 
 
 def load_train_data(feature_data_path):
@@ -340,7 +343,58 @@ def test_tag_match_model():
     print(tag_match_model.match_word_tag_map)
         
 
+def get_tag_model_features(model, dictionary, max_len):
+    tag_class_range, feature_word_range = model.feature_log_prob_.shape
+    #print(tag_class_range, feature_word_range)
+
+    tag_class_feature_words_map = {}
+    for tag_class_index in range(tag_class_range):
+        tag_class = model.classes_[tag_class_index]
+        feature_value = model.feature_log_prob_[tag_class_index]
+        top_feature_vocab_index_list = feature_value.argsort()[:-(max_len+1):-1]
+        top_feature_word_list = [dictionary[i] for i in top_feature_vocab_index_list] 
+        #print(tag_class, top_feature_word_list)
+        tag_class_feature_words_map[tag_class] = top_feature_word_list
+
+    return tag_class_feature_words_map
+
+
+def test_tag_model_features():
+    from text_processor import TFIDFModel
+    #language = 'zh-Hant'
+    language = 'en'
+    tfidf_model_path = pm.get_tfidf_inference_model_dir(language)
+    tag_model_path = pm.get_tag_inference_model_dir(language)
+    tfidf_model = TFIDFModel(tfidf_model_path)
+    tfidf_model.load_model()
+    tag_model = TagModel()
+    tag_model.load_model(tag_model_path)
+
+    tag_class_feature_words_map_1 = get_tag_model_features(tag_model.tag_1_model, tfidf_model.dictionary, 300)
+    tag_class_feature_words_map_2 = get_tag_model_features(tag_model.tag_2_model, tfidf_model.dictionary, 100)
+
+    for k, v in tag_class_feature_words_map_1.items():
+        print(k)
+        print(v)
+    for k, v in tag_class_feature_words_map_2.items():
+        print(k)
+        print(v)
+
+    '''
+    all_feature_words = set()
+    for feature_word_list in tag_class_feature_words_map_1.values():
+        all_feature_words.update(feature_word_list)
+    for feature_word_list in tag_class_feature_words_map_2.values():
+        all_feature_words.update(feature_word_list)
+    
+    for word in all_feature_words:
+        print(word)
+    '''
+
 if __name__ == '__main__':
-    test_tag_model()
+    #test_tag_model()
+    test_tag_model_features()
+
+
 
 

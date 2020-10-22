@@ -3,8 +3,12 @@ bin=`cd "$bin"; pwd`
 
 
 date_str=`date "+%Y%m%d%H%M%S"`
+num_processors=$1
+if [ -z "$num_processors" ]; then
+    num_processors=4
+fi
+echo "num jobs: $num_processors"
 
-num_processors=4
 for processor_id in $(seq 1 $num_processors) 
 do
     echo "start consumer $processor_id"

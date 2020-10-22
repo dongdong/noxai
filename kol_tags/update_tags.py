@@ -1,4 +1,4 @@
-from tag_inference import ChannelInfo, TagPredictorManager 
+from tag_inference import ChannelInfo 
 from es_utils import get_channel_contents, write_tag_info  
 from redis_utils import redis_spider, redis_channel_id_list_name
 import time
@@ -18,6 +18,8 @@ def process_channel(channel_id, channel_data=None):
         all_tag_name_list = channel_info.channel_all_tag_name_list
         succ = write_tag_info(channel_id, tag_info_list, all_tag_name_list)
         #logging.info('Process channel. All channel tags: %s' % channel_info.channel_tag_score_list)
+        logging.info('Process channel. channel country: %s, language: %s' % 
+                (channel_info.channel_country, channel_info.channel_language))
         logging.info('Process channel. Channel video tags: %s' % channel_info.get_channel_video_tags())
         logging.info('Process channel. Update channel succ? %s, channel id: %s' % (str(succ), channel_id))
         logging.info('Structure tags before: %s' % pre_tag_info_list)
@@ -66,8 +68,6 @@ def update_channel_tags_from_redis():
                 logging.info('STATS. update channel tags, processed: %d, succ: %d.' % (total_num, succ_num))
     
     logging.info('STATS. update channel tags finish. total channels: %d, update channels: %d.' % (total_num, succ_num))
-    #unknown_topic_id_set = TagPredictorManager.Get_unknown_topic_ids()
-    #logging.info('Unknown topic ids: %s' % (unknown_topic_id_set))
 
 
 def clear_channel_tags(channel_id):

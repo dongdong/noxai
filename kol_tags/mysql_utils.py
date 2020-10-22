@@ -135,10 +135,12 @@ def update_brand_tag():
 
 def test():
     #sql = 'select * from brand_tag_v3 where is_delete = 1 order by display_priority'
-    sql = 'select * from brand_tag_v3'
+    #sql = 'select * from brand_tag_v3'
+    sql = 'select * from brand_tag_v3 where is_delete = 1 and ch_name != "" order by display_priority'
     tag_info_list = _get_tag_info_rows(sql)
     for tag_info in tag_info_list:
-        print(tag_info)
+        #print(tag_info)
+        print(tag_info[0], tag_info[2])
 
 
 def test_channel_data():

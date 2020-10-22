@@ -32,8 +32,11 @@ class TFIDFModel():
         return vec
 
     def get_dictionary_size(self):
-        return len(self.dictionary)
- 
+        if self.dictionary:
+            return len(self.dictionary)
+        else:
+            return 0
+
     def get_keyword_list(self, doc, max_len=24):
         keyword_list = []
         tfidf_vec = self.get_vector(doc)
@@ -62,10 +65,10 @@ class TFIDFModel():
         if os.path.exists(model_path) and os.path.exists(dictionary_path):
             self.dictionary = Dictionary.load_from_text(dictionary_path)
             self.model = TfidfModel.load(model_path)
-            logging.info("load model, path:" + model_path)
+            logging.info("TFIDFModel load model, path:" + model_path)
             succ = True
         else:
-            logging.warn("load model error: no model to load!")
+            logging.warn("TFIDFModel load model error: no model to load!")
         return succ       
 
 

@@ -26,10 +26,13 @@ def get_topic_tag_name_map(language):
     tag_name_map = {}
     topic_tag_name_map = {}
     for item in tag_name_config_list:
-        if 'en' not in item or language not in item:
+        if 'en' not in item: #or language not in item:
             continue
         en_name = item['en']
-        name = item[language]
+        if language in item:
+            name = item[language]
+        else:
+            name = en_name
         if en_name != '' and name != '':
             tag_name_map[en_name] = name
     for topic_id, en_name in youtube_topic_id_en_name_map.items(): 

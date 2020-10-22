@@ -20,6 +20,7 @@ tag_name_config_list = [
         {'zh-Hans': '即时战略游戏', 'zh-Hant': '即時戰略遊戲', 'en': 'RTS', 'id': 17}, 
         #18 Trivia
         {'zh-Hans': '知识', 'zh-Hant': '知識', 'en': 'Knowledge', 'id': 25},
+        #{'zh-Hans': '知识', 'zh-Hant': '知識', 'en': 'Knowledge', 'id': 165}, #Education
 
         {'zh-Hans': '音乐', 'zh-Hant': '音樂', 'en': 'Music', 'id': 31},
         {'zh-Hans': '摇滚音乐', 'zh-Hant': '搖滾音樂', 'en': 'Rock music', 'id': 32},

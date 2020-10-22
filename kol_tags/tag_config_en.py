@@ -10,23 +10,27 @@ _gamming_list = [
     },
     { 
         'level_1': 'Gaming',  'level_2': 'Action game',  
-        'search_keywords': ['gaming action game'] 
+        'search_keywords': ['gaming action game', 'action game'] 
     },
     { 
         'level_1': 'Gaming',  'level_2': 'Casual game',  
-        'search_keywords': ['gaming casual game'] 
+        'search_keywords': ['gaming casual game', 'casual game'] 
     },
     { 
         'level_1': 'Gaming',  'level_2': 'Role-playing game',  
-        'search_keywords': ['gaming role playing game rpg'] 
+        'search_keywords': ['role playing game', 'gaming rpg'] 
     },
     { 
         'level_1': 'Gaming',  'level_2': 'Strategy game',  
-        'search_keywords': ['gaming strategy game'] 
+        'search_keywords': ['gaming strategy game', 'strategy game'] 
     },
     { 
         'level_1': 'Gaming',  'level_2': 'RTS',  
-        'search_keywords': ['gaming rts game', 'gaming real time strategy game'] 
+        'search_keywords': ['gaming rts game', 'gaming real time strategy'] 
+    },
+    { 
+        'level_1': 'Gaming',  'level_2': 'Minecraft',  
+        'search_keywords': ['gaming minecraft', 'minecraft'] 
     },
  ]
 
@@ -98,7 +102,11 @@ _fashion_list = [
     },
     { 
         'level_1': 'Fashion',  'level_2': 'Popular accessories',  
-        'search_keywords': ['fashion popular accessories', 'popular accessories'] 
+        'search_keywords': [
+            'fashion popular accessories', 
+            'top fashion accessories trends',
+            'fashion accessories necklace bracelet belt',
+        ] 
     },
     { 
         'level_1': 'Fashion',  'level_2': 'Men fashion',  
@@ -363,11 +371,17 @@ _entertainment_list = [
             'movie', 
             'movie review recommend trailer', 
             'movie film drama comedy action crime thriller'
+            'movie hollywood',
         ] 
     },
     { 
         'level_1': 'Entertainment',  'level_2': 'Cartoon & Animation',  
-        'search_keywords': ['cartoon animation', 'cartoon animated film movie', 'comics'] 
+        'search_keywords': [
+            'cartoon animation', 
+            'cartoon video film movie', 
+            'animated video film movie', 
+            'comics'
+        ] 
     },
     { 
         'level_1': 'Entertainment',  'level_2': 'Humor',  
@@ -393,25 +407,27 @@ _entertainment_list = [
 _other_list = [
 
     { 
-        'level_1': 'Science & Technology',  'level_2': 'Science & Technology',  
+        'level_1': '',  'level_2': 'News & Politics',  
+        'search_keywords': [
+            'news politics country nation people global', 
+            'news economy finance trade investment stocks', 
+            'news society culture domestic',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Science & Technology',  
         'search_keywords': [
             'science technology', 'technology', 'science',
         ] 
     },
     { 
-        'level_1': 'Education',  'level_2': 'Education',  
+        'level_1': '',  'level_2': 'Education',  
         'search_keywords': [
             'education', 
             'education degree diploma certificate learn skill', 
             'moocs online education course learning',
-        ] 
-    },
-    { 
-        'level_1': 'News & Politics',  'level_2': 'News & Politics',  
-        'search_keywords': [
-            'news politics country nation people global', 
-            'news economy finance trade investment stocks', 
-            'news society culture domestic',
+            'learn teach study student teacher knowledge',
+            'english math physics chemistry biology',
         ] 
     },
     { 
@@ -486,6 +502,10 @@ _other_list = [
     { 
         'level_1': '',  'level_2': 'Pets',  
         'search_keywords': ['pets', 'pets dog puppy', 'pets cat kitten'] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Painting',  
+        'search_keywords': ['painting art',  'painting idea acrylic canvas'] 
     },
 ]
 
