@@ -18,15 +18,15 @@ _gamming_list = [
             '캐주얼게임 캐주얼 게임 모바일 casual',
         ] 
     },
-    { 
-        #游戏，Music game		
-        'level_1': '게임',  'level_2': '리듬게임', 
-        'search_keywords': [
-            '리듬게임 추천', 
-            '리듬게임 고인물',
-            '리듬게임 모바일',
-        ] 
-    },
+    #{ 
+    #    #游戏，Music game		
+    #    'level_1': '게임',  'level_2': '리듬게임', 
+    #    'search_keywords': [
+    #        '리듬게임 추천', 
+    #        '리듬게임 고인물',
+    #        '리듬게임 모바일',
+    #    ] 
+    #},
     { 
         #游戏，Role-playing game		
         'level_1': '게임',  'level_2': 'RPG게임', 
@@ -36,15 +36,15 @@ _gamming_list = [
             'RPG게임 모바일 PC 스팀',
         ] 
     },
-    { 
-        #游戏，Sports		
-        'level_1': '게임',  'level_2': '스포츠게임', 
-        'search_keywords': [
-            '스포츠게임', 
-            '스포츠게임 추천 리뷰',
-            '닌텐도 스팀 스포츠게임 sportsgame',
-        ] 
-    },
+    #{ 
+    #    #游戏，Sports		
+    #    'level_1': '게임',  'level_2': '스포츠게임', 
+    #    'search_keywords': [
+    #        '스포츠게임', 
+    #        '스포츠게임 추천 리뷰',
+    #        '닌텐도 스팀 스포츠게임 sportsgame',
+    #    ] 
+    #},
     {   
         #游戏，Strategy game		
         'level_1': '게임',  'level_2': '전략게임', 
@@ -86,7 +86,7 @@ _beauty_list = [
         ] 
     },
     { 
-	#Beauty, Hairstyle
+	    #Beauty, Hairstyle
         'level_1': '뷰티',  'level_2': '헤어스타일',  
         'search_keywords': [
             '헤어스타일', 
@@ -95,7 +95,7 @@ _beauty_list = [
         ] 
     },
     { 
-	#Beauty, Manicure
+	    #Beauty, Manicure
         'level_1': '뷰티',  'level_2': '네일',  
         'search_keywords': [
             '네일 네일아트', 
@@ -107,50 +107,58 @@ _beauty_list = [
 
 _fashion_list = [
     { 
-        #fashion，Clothing
+        #fashion，fashion
         'level_1': '패션',  'level_2': '패션',  
         'search_keywords': [
-	    '패션', 
-	    '패션 fashion', 
-	    '패션 코디 옷 패션하울 SS FW',
+	        '패션', 
+	        '패션 fashion', 
         ] 
     },
     { 
-	#fashion，Jewelry
-        'level_1': '패션',  'level_2': '주얼리',  
+        #fashion，Clothing
+        'level_1': '패션',  'level_2': '옷',  
         'search_keywords': [
-	    '주얼리 악세사리', 
-	    '주얼리 악세사리 하울', 
-	    '주얼리 추천 목걸이 귀걸이 팔찌',
-	] 
+	        #'패션 코디 옷 패션하울 SS FW',
+	        '패션 코디',
+            '옷 패션하울 SS FW',
+        ] 
     },
     { 
-	#fashion，Shoes
+	    #fashion，Jewelry
+        'level_1': '패션',  'level_2': '주얼리',  
+        'search_keywords': [
+	        '주얼리 악세사리', 
+	        '주얼리 악세사리 하울', 
+	        '주얼리 추천 목걸이 귀걸이 팔찌',
+	    ] 
+    },
+    { 
+	    #fashion，Shoes
         'level_1': '패션',  'level_2': '슈즈',  
         'search_keywords': [
-	    '슈즈 신발', 
-	    '슈즈', 
-	    '슈즈 코디 구두',
-	    '운동화',
-	] 
+	        '슈즈 신발', 
+	        '슈즈', 
+	        '슈즈 코디 구두',
+	        '운동화',
+	    ] 
     },
     { 
         #fashion，Bags
         'level_1': '패션',  'level_2': '가방',  
         'search_keywords': [
             '백 가방', 
-	    '데일리백 명품백', 
-	    '가방 추천 가방하울',
-	    '핸드백 가방',
+	        '데일리백 명품백', 
+	        '가방 추천 가방하울',
+	        '핸드백 가방',
         ] 
     },
     { 
-	#fashion，Hats
+	    #fashion，Hats
         'level_1': '패션',  'level_2': '모자',  
         'search_keywords': [
             '모자 추천', 
-	    '모자 스타일링 캡모자', 
-	    '모자 코디',
+	        '모자 스타일링 캡모자', 
+	        '모자 코디',
         ] 
     },
 ]
@@ -161,17 +169,17 @@ _electronic_list = [
         'level_1': '전자제품',  'level_2': '스마트폰',  
         'search_keywords': [
             '스마트폰 ', 
-	    '스마트폰 추천 ',
+	        '스마트폰 추천 ',
             '아이폰 개봉기',        
             '갤럭시 개봉기 리뷰',
         ] 
     },
     { 
-	#Consumer Electronic, Tablet
+	    #Consumer Electronic, Tablet
         'level_1': '전자제품',  'level_2': '태블릿',  
         'search_keywords': [
             '태블릿', 
-	    '아이패드',
+	        '아이패드',
         ] 
     },
     { 
@@ -179,46 +187,46 @@ _electronic_list = [
         'level_1': '전자제품',  'level_2': '카메라',  
         'search_keywords': [
             '카메라 추천', 
-	    '카메라 입문',
+	        '카메라 입문',
             '카메라 언박싱 리뷰', 
         ] 
     },
     { 
-	#Consumer Electronic, Computer
+	    #Consumer Electronic, Computer
         'level_1': '전자제품',  'level_2': '컴퓨터',  
         'search_keywords': [
             '컴퓨터 추천 조립', 
-	    '컴퓨터 조립 견적',
-	    '노트북 추천',
+	        '컴퓨터 조립 견적',
+	        '노트북 추천',
             '노트북 언박싱 리뷰', 
         ] 
     },
     { 
-	#Consumer Electronic, Game console
+	    #Consumer Electronic, Game console
         'level_1': '전자제품',  'level_2': '게임콘솔',  
         'search_keywords': [
             '콘솔 추천 리뷰', 
-	    '조이스틱 추천 리뷰',
-	    '게임패드 추천 리뷰',
+	        '조이스틱 추천 리뷰',
+	        '게임패드 추천 리뷰',
         ] 
     },
     { 
-	#Consumer Electronic, Headset
+	    #Consumer Electronic, Headset
         'level_1': '전자제품',  'level_2': '헤드셋',  
         'search_keywords': [
             '헤드셋 추천 리뷰', 
-	    '게이밍헤드셋 추천 리뷰 테스트',
-	    '무선헤드셋 추천 리뷰',
+	        '게이밍헤드셋 추천 리뷰 테스트',
+	        '무선헤드셋 추천 리뷰',
         ] 
     },
     { 
-	#Consumer Electronic, Keyboard&Mouse
+	    #Consumer Electronic, Keyboard&Mouse
         'level_1': '전자제품',  'level_2': '키보드&마우스',  
         'search_keywords': [
             '키보드 추천', 
-	    '키보드 리뷰',
-	    '마우스 추천', 
-	    '마우스 리뷰',
+	        '키보드 리뷰',
+	        '마우스 추천', 
+	        '마우스 리뷰',
         ] 
     },
 	
@@ -234,17 +242,17 @@ _lifestyle_list = [
         ] 
     },
     { 
-	#Life Style, Food&Cooking
+	    #Life Style, Food&Cooking
         'level_1': '라이프스타일',  'level_2': '음식&요리',  
         'search_keywords': [
             '맛있는 음식', 
             '음식 추천',
-	    '음식 요리 만들기 레시피',
-	    '쿠킹 cooking',
+	        '음식 요리 만들기 레시피',
+	        '쿠킹 cooking',
         ] 
     },
     { 
-	#Life Style, MUKBANG
+	    #Life Style, MUKBANG
         'level_1': '라이프스타일',  'level_2': '먹방',  
         'search_keywords': [
             '먹방', 
@@ -260,7 +268,7 @@ _lifestyle_list = [
         ] 
     },
     { 
-	#Life Style, Health
+	    #Life Style, Health
         'level_1': '라이프스타일',  'level_2': '헬스',  
         'search_keywords': [
             '헬스 운동', 
@@ -269,54 +277,19 @@ _lifestyle_list = [
         ] 
     },
     { 
-	#Life Style, Sports
-        'level_1': '라이프스타일',  'level_2': '스포츠',  
-        'search_keywords': [
-            '스포츠', 
-            '스포츠 운동',
-	    '스포츠 경기',
-        ] 
-    },
-    { 
-	#Life Style, Pets
-        'level_1': '라이프스타일',  'level_2': '애완동물',  
-        'search_keywords': [
-            '강아지 고양이', 
-            '반려 동물 키우기 분양 생활',
-	    '애견 반려견 반려묘',
-        ] 
-    },
-    { 
-	#Life Style, Kids
-        'level_1': '라이프스타일',  'level_2': '키즈',  
-        'search_keywords': [
-            '키즈 어린이', 
-            '어린이 유튜브',
-	    '유아 아동 동요 교육',
-        ] 
-    },
-    { 
-	#Life Style, Toys
-        'level_1': '라이프스타일',  'level_2': '장난감',  
-        'search_keywords': [
-            '장난감 토이', 
-            '장난감 로봇',
-        ] 
-    },
-    { 
-	#Life Style, DIY
+	    #Life Style, DIY
         'level_1': '라이프스타일',  'level_2': 'DIY',  
         'search_keywords': [
             '만들기 취미', 
             '만들기 미니어처 수공예',
-	    '셀프 DIY 만들기',
+	        '셀프 DIY 만들기',
         ] 
     },
 ]
 
 _music_list = [
     { 
-	#Music, rock
+	    #Music, rock
         'level_1': '음악',  'level_2': 'Rock',  
         'search_keywords': [
             '락 음악', 
@@ -325,7 +298,7 @@ _music_list = [
         ] 
     },
     { 
-	#Music, Classical
+	    #Music, Classical
         'level_1': '음악',  'level_2': '클래식',  
         'search_keywords': [
             '클래식 명곡', 
@@ -334,7 +307,7 @@ _music_list = [
         ] 
     },
     { 
-	#Music, Electronic
+	    #Music, Electronic
         'level_1': '음악',  'level_2': '일렉트로닉',  
         'search_keywords': [
             '일렉트로닉 브금', 
@@ -344,7 +317,7 @@ _music_list = [
         ] 
     },
     { 
-	#Music, Hip Hop
+	    #Music, Hip Hop
         'level_1': '음악',  'level_2': '힙합',  
         'search_keywords': [
             '힙합', 
@@ -353,7 +326,7 @@ _music_list = [
         ] 
     },
     { 
-	#Music, Pop music
+	    #Music, Pop music
         'level_1': '음악',  'level_2': '팝송',  
         'search_keywords': [
             '팝송', 
@@ -362,7 +335,7 @@ _music_list = [
         ] 
     },
     { 
-	#Music, KPOP
+	    #Music, KPOP
         'level_1': '음악',  'level_2': 'KPOP',  
         'search_keywords': [
             'KPOP 케이팝', 
@@ -374,7 +347,7 @@ _music_list = [
 
 _entertainment_list = [
     { 
-	#Entertainment, Movie
+	    #Entertainment, Movie
         'level_1': '엔터테인먼트',  'level_2': '영화',  
         'search_keywords': [
             '영화 ', 
@@ -383,7 +356,7 @@ _entertainment_list = [
         ] 
     },
     { 
-	#Entertainment, Cartoon
+	    #Entertainment, Cartoon
         'level_1': '엔터테인먼트',  'level_2': '만화',  
         'search_keywords': [
             '만화 그리기 ', 
@@ -393,7 +366,7 @@ _entertainment_list = [
         ] 
     },
     { 
-	#Entertainment, Humor
+	    #Entertainment, Humor
         'level_1': '엔터테인먼트',  'level_2': '유머',  
         'search_keywords': [
             '유머 모음 ', 
@@ -402,7 +375,7 @@ _entertainment_list = [
         ] 
     },
     { 
-	#Entertainment, TV shows
+	    #Entertainment, TV shows
         'level_1': '엔터테인먼트',  'level_2': '방송',  
         'search_keywords': [
             '예능 드라마',
@@ -412,7 +385,7 @@ _entertainment_list = [
         ] 
     },
     { 
-	#Entertainment, Documentary
+	    #Entertainment, Documentary
         'level_1': '엔터테인먼트',  'level_2': '다큐멘터리',  
         'search_keywords': [
             '다큐', 
@@ -434,62 +407,60 @@ _Artist_list = [
 '''
 
 _other_list = [
-    '''
-    { 
-        #unboxing, unboxing
-        'level_1': '언박싱',  'level_2': '언박싱',  
-	'search_keywords': [
-            '언박싱', 
-            '언박싱 하올',
-	] 
-    },
-    { 
-        #asmr, asmr
-        'level_1': 'ASMR',  'level_2': 'ASMR',  
-	'search_keywords': [
-            'ASMR',
-	    '먹방 ASMR',
-	    'ASMR 팅글',
-	] 
-    },
-    { 
-        'level_1': '브이로그',  'level_2': '브이로그',  
-        #VLOG, VLOG
-        'search_keywords': [
-            '브이로그 VLOG',
-	    '일상 VLOG',
-	    '브이로그 일상',
-	] 
-    },
-    '''
+    #{ 
+    #    #unboxing, unboxing
+    #    'level_1': '언박싱',  'level_2': '언박싱',  
+	#'search_keywords': [
+    #        '언박싱', 
+    #        '언박싱 하올',
+	#    ] 
+    #},
+    #{ 
+    #    #asmr, asmr
+    #    'level_1': 'ASMR',  'level_2': 'ASMR',  
+	#    'search_keywords': [
+    #        'ASMR',
+	#        '먹방 ASMR',
+	#        'ASMR 팅글',
+	#] 
+    #},
+    #{ 
+    #    'level_1': '브이로그',  'level_2': '브이로그',  
+    #    #VLOG, VLOG
+    #    'search_keywords': [
+    #        '브이로그 VLOG',
+	#        '일상 VLOG',
+	#        '브이로그 일상',
+	#    ] 
+    #},
     { 
         #Science & Technology, Science & Technology
-        'level_1': '과학기술',  'level_2': '과학기술',  
+        'level_1': '',  'level_2': '과학기술',  
         'search_keywords': [
             '과학 기술 다큐',
-	    '미래 과학 기술',
-	    '첨단기술 과학',
-	    '사이언스 과학',
+	        '미래 과학 기술',
+	        '첨단기술 과학',
+	        '사이언스 과학',
         ] 
     },
     { 
         #Education, Education
-        'level_1': '교육',  'level_2': '교육',  
-	'search_keywords': [
+        'level_1': '',  'level_2': '교육',  
+	    'search_keywords': [
             '교육 다큐',
-	    '교육 공부',
-	    '교육 영상',
-	] 
+	        '교육 공부',
+	        '교육 영상',
+	    ] 
     },
     { 
         #News & Politics, News & Politics
-        'level_1': '뉴스/정치',  'level_2': '뉴스/정치',  
-	'search_keywords': [
+        'level_1': '',  'level_2': '뉴스&정치',  
+	    'search_keywords': [
             '뉴스',
-	    '뉴스 실시간 생방송',
-	    '정치',
-	    '청와대 국회 의원 외교',
-	] 
+	        '뉴스 실시간 생방송',
+	        '정치',
+	        '청와대 국회 의원 외교',
+	    ] 
     },
     { 
         # Dance
@@ -498,6 +469,41 @@ _other_list = [
             '댄스 커버',
             '댄스 안무', 
             '댄스 배우기', 
+        ] 
+    },
+    { 
+	    #Kids
+        'level_1': '',  'level_2': '키즈',  
+        'search_keywords': [
+            '키즈 어린이', 
+            '어린이 유튜브',
+	        '유아 아동 동요 교육',
+        ] 
+    },
+    { 
+	    #Toys
+        'level_1': '',  'level_2': '장난감',  
+        'search_keywords': [
+            '장난감 토이', 
+            '장난감 로봇',
+        ] 
+    },
+    { 
+	    #Sports
+        'level_1': '',  'level_2': '스포츠',  
+        'search_keywords': [
+            '스포츠', 
+            '스포츠 운동',
+	        '스포츠 경기',
+        ] 
+    },
+    { 
+	    #Pets
+        'level_1': '',  'level_2': '애완동물',  
+        'search_keywords': [
+            '강아지 고양이', 
+            '반려 동물 키우기 분양 생활',
+	        '애견 반려견 반려묘',
         ] 
     },
 ] 

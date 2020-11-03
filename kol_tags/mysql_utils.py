@@ -25,7 +25,8 @@ spider_config = {
 def _get_tag_info_rows(sql):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
-    #cursor.execute('select parent_id,' + query_field + ' from brand_tag_v2 where id=%s', (tag_id,))
+    #cursor.execute('select parent_id,' + query_field + 
+    #' from brand_tag_v2 where id=%s', (tag_id,))
     #cursor.execute('select * from brand_tag_v2')
     #cursor.execute('select * from brand_tag_v2_bak')
     cursor.execute(sql)

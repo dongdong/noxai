@@ -1,4 +1,3 @@
-
 from redis_utils import set_pipe, clean_pipe, watch_pipe
 
 import argparse
@@ -29,6 +28,11 @@ def update_channels_from_pipe():
     update_channel_tags_from_redis()
 
 
+def stat_words_from_pipe():
+    from update_tags import stat_feature_words_from_redis
+    stat_feature_words_from_redis()
+
+
 def main(arguments):
     print(arguments)
     cmd = arguments['cmd']
@@ -44,8 +48,11 @@ def main(arguments):
         clear_channel_tags(arguments)
     elif cmd == 'update-channels-from-pipe':
         update_channels_from_pipe()
+    elif cmd == 'stat-words-from-pipe':
+        stat_words_from_pipe()
     else:
         pass
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -55,6 +62,7 @@ if __name__ == '__main__':
             'update-channel', 
             'clear-channel-tags', 
             'update-channels-from-pipe',
+            'stat-words-from-pipe',
             'set-pipe',
             'clean-pipe',
             'watch-pipe',

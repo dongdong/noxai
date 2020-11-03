@@ -3,6 +3,7 @@ import os
 cache_dir = './cache'
 train_model_dir = './models'
 inference_model_dir = './models.online'
+files_dir = './files'
 
 def get_tag_video_list_path(language):
     return os.path.join(cache_dir, language, 'tag_video_id_list.json')
@@ -42,6 +43,8 @@ def get_tag_inference_model_dir(language):
     model_dir = _get_inference_model_dir(language)
     return os.path.join(model_dir, 'tag_model')
 
+def get_feature_word_dict_path():
+    return os.path.join(files_dir, 'feature_word_dict.txt')
 
 
 

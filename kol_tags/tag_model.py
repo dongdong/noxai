@@ -80,8 +80,8 @@ class TrainData():
 class TagMatchModel():
     def __init__(self, language):
         self.match_words_config = {
-            'Unboxing': ['unboxing', '开箱', '開箱'], 
-            'VLOG': ['vlog', 'vloger', 'vlogging', 'vlog', 'vlogs'], 
+            'Unboxing': ['unboxing', '开箱', '開箱', '언박싱'], 
+            'VLOG': ['vlog', 'vloger', 'vlogging', 'vlog', 'vlogs', '브이로그'], 
             'ASMR': ['asmr'],
         }
         self.match_word_tag_map = {}
@@ -328,9 +328,10 @@ def load_and_evaluate_model(language):
 
 
 def test_tag_model():
-    language = 'en'
+    #language = 'en'
     #language = 'zh-Hans'
     #language = 'zh-Hant'
+    language = 'ko'
     train_tag_model(language)
     load_and_evaluate_model(language)
 
@@ -370,15 +371,34 @@ def test_tag_model_features():
     tag_model = TagModel()
     tag_model.load_model(tag_model_path)
 
-    tag_class_feature_words_map_1 = get_tag_model_features(tag_model.tag_1_model, tfidf_model.dictionary, 300)
-    tag_class_feature_words_map_2 = get_tag_model_features(tag_model.tag_2_model, tfidf_model.dictionary, 100)
+    #tag_class_feature_words_map_1 = get_tag_model_features(tag_model.tag_1_model, tfidf_model.dictionary, 200)
+    tag_class_feature_words_map_2 = get_tag_model_features(tag_model.tag_2_model, tfidf_model.dictionary, 64)
 
-    for k, v in tag_class_feature_words_map_1.items():
-        print(k)
-        print(v)
-    for k, v in tag_class_feature_words_map_2.items():
-        print(k)
-        print(v)
+    word_tag_counter = defaultdict(int)    
+    #for k, v_list in tag_class_feature_words_map_1.items():
+    #    for v in v_list:
+    #        word_tag_counter[v] += 1
+    for k, v_list in tag_class_feature_words_map_2.items():
+        for v in v_list:
+            word_tag_counter[v] += 1
+
+    black_list = set([k for k, v in word_tag_counter.items() if v > 3])
+    print(black_list)
+
+    #for k, v_list in tag_class_feature_words_map_1.items():
+    #    #print(k)
+    #    #print(v)
+    #    if k == '': 
+    #        continue
+    #    for v in v_list:
+    #        if v not in black_list:
+    #            print("%s##%s" % (k, v))
+    for k, v_list in tag_class_feature_words_map_2.items():
+        #print(k)
+        #print(v)
+        for v in v_list:
+            if v not in black_list:
+                print("%s##%s" % (k, v))
 
     '''
     all_feature_words = set()
@@ -392,8 +412,8 @@ def test_tag_model_features():
     '''
 
 if __name__ == '__main__':
-    #test_tag_model()
-    test_tag_model_features()
+    test_tag_model()
+    #test_tag_model_features()
 
 
 

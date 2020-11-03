@@ -1,7 +1,8 @@
 import redis
 from mysql_utils import get_channel_data_rows
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s : %(message)s')
+logging.basicConfig(level=logging.INFO, 
+        format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s : %(message)s')
 import time
 
 pool_spider = redis.ConnectionPool(
@@ -64,9 +65,14 @@ def get_sql():
     #sql = 'select cid from kol_channel_base order by sub desc'
     #sql = 'select cid from kol_channel_base where lang = "zh" and sub > 10000 order by sub desc'
     #sql = 'select cid from kol_channel_base where lang = "zh-Hant" and sub > 10000 order by sub desc'
-    sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 order by sub desc'
+    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 order by sub desc'
+    #sql = 'select cid from kol_channel_base where (lang = "zh" or lang = "zh-Hant" or lang = "zh-Hans") and sub > 10000 limit 3000'
+    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 50000 limit 50000'
+    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 limit 1000'
+    #sql = 'select cid from kol_channel_base where lang = "ko" and sub > 10000 limit 3000'
     #sql = 'select cid from kol_channel_base where lang = "en" and sub <= 10000 and sub > 5000 order by sub desc'
     #sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") order by sub desc'
+    sql = 'select cid from kol_channel_base where lang != "ko" and lang != "en" and lang != "zh" and lang != "zh-Hant" and lang != "zh-Hans" and sub > 10000 order by sub desc'
 
     return sql
 

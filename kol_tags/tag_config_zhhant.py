@@ -32,10 +32,10 @@ _gamming_list = [
         'level_1': '遊戲',  'level_2': '街機遊戲',  
         'search_keywords': ['遊戲 街機遊戲', '街機 遊戲'] 
     },
-    { 
-        'level_1': '遊戲',  'level_2': '卡牌遊戲',  
-        'search_keywords': ['遊戲 卡牌遊戲', '卡牌遊戲 card game'] 
-    },
+    #{ 
+    #    'level_1': '遊戲',  'level_2': '卡牌遊戲',  
+    #    'search_keywords': ['遊戲 卡牌遊戲', '卡牌遊戲 card game'] 
+    #},
     { 
         'level_1': '遊戲',  'level_2': '射擊遊戲',  
         'search_keywords': ['遊戲 射擊遊戲', '射擊遊戲 和平精英 絕地求生'] 
@@ -94,12 +94,16 @@ _fashion_list = [
     },
     { 
         'level_1': '時尚',  'level_2': '首飾',  
-        'search_keywords': ['時尚 首飾 fashion jewelry 搭配', '首飾 戒指 耳環 手鐲 項鍊 珠寶'] 
+        'search_keywords': [
+            '時尚 首飾 fashion jewelry 搭配', 
+            '首飾 戒指 耳環 手鐲 項鍊 珠寶',
+            '時尚 流行配飾 popular accessories',
+        ] 
     },
-    { 
-        'level_1': '時尚',  'level_2': '流行配飾',  
-        'search_keywords': ['時尚 流行配飾 popular accessories', '流行配飾 fashion'] 
-    },
+    #{ 
+    #    'level_1': '時尚',  'level_2': '流行配飾',  
+    #    'search_keywords': ['時尚 流行配飾 popular accessories', '流行配飾 fashion'] 
+    #},
     { 
         'level_1': '時尚',  'level_2': '男裝',  
         'search_keywords': ['時尚 男裝 men fashion', '時尚 男裝 穿搭'] 
@@ -174,11 +178,10 @@ _food_list = [
     { 
         'level_1': '美食',  'level_2': '美食',  
         'search_keywords': [
-            '美食 食物 美味',
-            '美食 小吃 家常菜 火鍋 燒烤 海鮮',
-            '美食 料理 中國 日本 韓國 西式',
-            '美食 甜點 蛋糕 烘焙',
-            '美食 food pizz barbecue bbq seafood cake dessert bakery',
+            '美食 食物 美味 小吃 家常菜',
+            '美食 料理 火鍋 燒烤 海鮮',
+            '美食 甜點 蛋糕 烘焙 cake dessert bakery',
+            '美食 food pizz steak bbq seafood',
         ] 
     },
     { 
@@ -430,15 +433,16 @@ _other_list = [
             '兒童 kid child'
             '兒童 kid cartoon video song story'
             '兒童 故事 兒歌 童謠 卡通 動畫',
+            '兒童 玩具 玩偶 toys doll barbie',
         ] 
     },
-    { 
-        'level_1': '',  'level_2': '玩具',  
-        'search_keywords': [
-            '兒童 玩具 toys',
-            '玩具 玩偶 toys doll barbie',
-        ] 
-    },
+    #{ 
+    #    'level_1': '',  'level_2': '玩具',  
+    #    'search_keywords': [
+    #        '兒童 玩具 toys',
+    #        '玩具 玩偶 toys doll barbie',
+    #    ] 
+    #},
     { 
         'level_1': '',  'level_2': '健康',  
         'search_keywords': [

@@ -69,15 +69,20 @@ _beauty_list = [
 _fashion_list = [
     { 
         'level_1': 'Fashion',  'level_2': 'Fashion',  
-        'search_keywords': ['fashion', 'fashion hual', 'fashion trends design collection'] 
+        'search_keywords': [
+            'fashion', 
+            'fashion hual', 
+            'fashion trends design collection'
+        ] 
     },
     { 
         'level_1': 'Fashion',  'level_2': 'Clothing',  
         'search_keywords': [
             'fashion clothing', 
-            'clothing collection haul', 
-            'fashion clothes outfits dress',
-            'fashion clothing shirts suits pants jeans skirts'
+            'fashion clothing collection haul', 
+            'fashion clothes outfits', 
+            'fashion clothes clothing style tips',
+            'fashion clothes dress suits pants jeans skirts',
         ] 
     },
     { 
@@ -90,27 +95,43 @@ _fashion_list = [
     },
     { 
         'level_1': 'Fashion',  'level_2': 'Bags',  
-        'search_keywords': ['fashion bags', 'bag collection', 'bag handbag wallet purse'] 
-    },
-    { 
-        'level_1': 'Fashion',  'level_2': 'Hats',  
-        'search_keywords': ['fashion hats', 'hats collection'] 
-    },
-    { 
-        'level_1': 'Fashion',  'level_2': 'Jewelry',  
-        'search_keywords': ['fashion jewelry', 'jewelry ring necklace bracelet earring'] 
-    },
-    { 
-        'level_1': 'Fashion',  'level_2': 'Popular accessories',  
         'search_keywords': [
-            'fashion popular accessories', 
-            'top fashion accessories trends',
-            'fashion accessories necklace bracelet belt',
+            'fashion bags', 
+            'fashion bag collection', 
+            'bag handbag wallet purse'
         ] 
     },
     { 
+        'level_1': 'Fashion',  'level_2': 'Hats',  
+        'search_keywords': [
+            'fashion hats', 
+            'fashion hats collection'
+            'hats headwear beanies fedoras'
+        ] 
+    },
+    { 
+        'level_1': 'Fashion',  'level_2': 'Jewelry',  
+        'search_keywords': [
+            'fashion jewelry', 
+            'fashion jewelry ring necklace bracelet earring'
+            'fashion jewelry popular accessories', 
+        ] 
+    },
+    #{ 
+    #    'level_1': 'Fashion',  'level_2': 'Popular accessories',  
+    #    'search_keywords': [
+    #        'fashion popular accessories', 
+    #        'top fashion accessories trends',
+    #        'fashion accessories necklace bracelet belt',
+    #    ] 
+    #},
+    { 
         'level_1': 'Fashion',  'level_2': 'Men fashion',  
-        'search_keywords': ['men fashion', 'men outfits clothing bags'] 
+        'search_keywords': [
+            'men fashion', 
+            'men fahsion outfits clothing',
+            'men fashion bags hats shoes'
+        ] 
     },
 ]
 
@@ -118,46 +139,65 @@ _electronic_list = [
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Consumer Electronic',  
         'search_keywords': [
-            'consumer electronic', 'electronic devices',
-            'smart watch furniture electronic device vacuum',        
-            'apple samsung asus'
+            'consumer electronic devices',
+            'smart watch furniture home vacuum',
+            'smart electronic wearable device',        
+            'apple samsung asus xiaomi '
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Smartphone',  
         'search_keywords': [
+                'smartphone',
                 'smartphone mobile unboxing', 
                 'smartphone processor screen camera battery', 
-                'iphone galaxy redmi oppo vivo realme'
+                'iphone galaxy oppo vivo realme',
+                'smartphone accessories',
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Camera',  
-        'search_keywords': ['camera nikon canon', 'camera unboxing review'] 
+        'search_keywords': [
+            'camera nikon canon', 
+            'camera unboxing review',
+            'camera lens',
+        ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Computer',  
-        'search_keywords': ['computer unboxing review assembly', 'personal computer pc desktop laptop'] 
+        'search_keywords': [
+            'personal computer pc desktop laptop',
+            'computer unboxing review',
+            'computer unboxing assembly', 
+            'computer accessories',
+        ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Game console',  
-        'search_keywords': ['game console', 'game console unboxing review'] 
+        'search_keywords': [
+            'game console', 
+            'game console unboxing review'
+        ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'TV set',  
         'search_keywords': [
-            'tv set', 'tv set unboxing review',
+            'tv set', 
+            'tv set unboxing review',
             'tv cube box sky satellite cable smart home theater',
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Headset',  
-        'search_keywords': ['headset', 'headset unboxing review'] 
+        'search_keywords': [
+            'headset', 
+            'headset unboxing review',
+        ] 
     },
-    { 
-        'level_1': 'Consumer Electronic',  'level_2': 'Smartphone accessories',  
-        'search_keywords': ['smartphone accessories', 'smartphone accessories unboxing review'] 
-    },
+    #{ 
+    #    'level_1': 'Consumer Electronic',  'level_2': 'Smartphone accessories',  
+    #    'search_keywords': ['smartphone accessories', 'smartphone accessories unboxing review'] 
+    #},
 ]
 
 _lifestyle_list = [
@@ -179,6 +219,37 @@ _lifestyle_list = [
     { 
         'level_1': 'Life Style',  'level_2': 'DIY',  
         'search_keywords': ['diy', 'diy idea', 'diy craft handmade'] 
+    },
+    { 
+        'level_1': 'Life Style',  'level_2': 'stitching',  
+        'search_keywords': ['embroidery', 'stitching', 'knitting', 'crochet'] 
+    },
+]
+
+_art_list = [
+    { 
+        'level_1': 'Art',  'level_2': 'Painting',  
+        'search_keywords': [
+            'art painting',  
+            'painting idea artwork canvas'
+            'painting acrylic watercolor'
+        ] 
+    },
+    { 
+        'level_1': 'Art',  'level_2': 'Drawing',  
+        'search_keywords': [
+            'art drawing',  
+            'draw sketch',
+            'drawing pastel',
+        ] 
+    },
+    { 
+        'level_1': 'Art',  'level_2': 'Hand design',  
+        'search_keywords': ['mehndi',  'henna'] 
+    },
+    { 
+        'level_1': 'Art',  'level_2': 'Rangoli',  
+        'search_keywords': ['rangoli',  'muggulu', 'kolam'] 
     },
 ]
 
@@ -409,6 +480,7 @@ _other_list = [
     { 
         'level_1': '',  'level_2': 'News & Politics',  
         'search_keywords': [
+            'news politics',
             'news politics country nation people global', 
             'news economy finance trade investment stocks', 
             'news society culture domestic',
@@ -433,7 +505,7 @@ _other_list = [
     { 
         'level_1': '',  'level_2': 'Health',  
         'search_keywords': [
-            #'health',
+            'health',
             'health healthy life tips habits', 
             'health healthy nutrition eating diet', 
             'health body age heart brain weight',
@@ -503,12 +575,7 @@ _other_list = [
         'level_1': '',  'level_2': 'Pets',  
         'search_keywords': ['pets', 'pets dog puppy', 'pets cat kitten'] 
     },
-    { 
-        'level_1': '',  'level_2': 'Painting',  
-        'search_keywords': ['painting art',  'painting idea acrylic canvas'] 
-    },
 ]
-
 
 en_search_keywords_list = (
         _other_list 
@@ -521,4 +588,5 @@ en_search_keywords_list = (
         + _sports_list
         + _music_list
         + _entertainment_list
+        + _art_list
 )
