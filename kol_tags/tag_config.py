@@ -296,7 +296,7 @@ structured_tag_config_en = {
         'Clothing',
         'Jewelry',
         'Shoes',
-        'Popular accessories',
+        #'Popular accessories',
         'Bags',
         'Hats',
     ],
@@ -323,7 +323,7 @@ structured_tag_config_en = {
     'Vlog': [],
     'Science & Technology': [],
     'Education': [],
-    'News & Politics': [],
+    #'News & Politics': [],
     'Music': [
         'Rock',
         'Classical',

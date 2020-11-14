@@ -31,7 +31,8 @@ es_video = es_post = Elasticsearch(['http://10.100.1.77:9200'], timeout=30)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s : %(message)s')
 
 #channel_index = 'kol_v2'
-channel_index = 'kol_v9'
+#channel_index = 'kol_v9'
+channel_index = 'kol_v8'
 
 def get_video_contents(video_id):
     data = None
@@ -174,7 +175,9 @@ def test_video_contents():
 
 
 def test_channel_contents():
-    channel_id = 'UCO6SoJNF3VY2tnlzypHl-4w'
+    #channel_id = 'UCO6SoJNF3VY2tnlzypHl-4w'
+    #channel_id = 'UCxse2SVhmf5wzi12L6B_Wog'
+    channel_id = 'UCg4mMShkzgnIWuwTZ5uMahQ'
     channel_contents = get_channel_contents(channel_id)
     print(channel_contents)
 
@@ -198,8 +201,8 @@ def test_video_description_batch():
 
 
 if __name__ == "__main__":
-    #test_channel_contents()        
-    test_video_description_batch()
+    test_channel_contents()        
+    #test_video_description_batch()
 
 
 

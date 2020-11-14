@@ -83,6 +83,7 @@ class TagMatchModel():
             'Unboxing': ['unboxing', '开箱', '開箱', '언박싱'], 
             'VLOG': ['vlog', 'vloger', 'vlogging', 'vlog', 'vlogs', '브이로그'], 
             'ASMR': ['asmr'],
+            'MUKBANG': ['mukbang', '먹방'],
         }
         self.match_word_tag_map = {}
         for item in tag_name_config_list:

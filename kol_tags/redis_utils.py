@@ -14,6 +14,8 @@ redis_spider = redis.Redis(connection_pool=pool_spider)
 #redis_channel_id_list_name = 'all_tag_rule_cid'
 #redis_channel_id_list_name = 'all_tag_rule_cid.zh'
 redis_channel_id_list_name = 'all_tag_rule_cid.test'
+#redis_channel_id_list_name = 'all_tag_rule_cid.other'
+#redis_channel_id_list_name = 'all_tag_rule_cid.ko'
 
 
 def clean_pipe():
@@ -67,12 +69,16 @@ def get_sql():
     #sql = 'select cid from kol_channel_base where lang = "zh-Hant" and sub > 10000 order by sub desc'
     #sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 order by sub desc'
     #sql = 'select cid from kol_channel_base where (lang = "zh" or lang = "zh-Hant" or lang = "zh-Hans") and sub > 10000 limit 3000'
-    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 50000 limit 50000'
+    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 5000 limit 100000'
     #sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 limit 1000'
     #sql = 'select cid from kol_channel_base where lang = "ko" and sub > 10000 limit 3000'
     #sql = 'select cid from kol_channel_base where lang = "en" and sub <= 10000 and sub > 5000 order by sub desc'
     #sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") order by sub desc'
-    sql = 'select cid from kol_channel_base where lang != "ko" and lang != "en" and lang != "zh" and lang != "zh-Hant" and lang != "zh-Hans" and sub > 10000 order by sub desc'
+    #sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") and sub > 5000 limit 50000'
+    #sql = 'select cid from kol_channel_base where (lang="en" or lang="zh" or lang="zh-Hant" or lang="zh-Hans") and sub > 3000 and sub <= 5000 order by sub desc'
+    #sql = 'select cid from kol_channel_base where lang != "ko" and lang != "en" and lang != "zh" and lang != "zh-Hant" and lang != "zh-Hans" and sub > 10000 order by sub desc'
+    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 100000 limit 1000'
+    sql = 'select cid from kol_channel_base where lang = "ko" and sub > 1000 limit 30000'
 
     return sql
 

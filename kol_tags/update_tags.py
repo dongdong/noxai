@@ -16,11 +16,11 @@ def process_channel(channel_id, channel_data=None):
         pre_all_tag_name_list = channel_info.channel_tag_list
         tag_info_list = channel_info.channel_structure_tag_list
         all_tag_name_list = channel_info.channel_all_tag_name_list
-        succ = write_tag_info(channel_id, tag_info_list, all_tag_name_list)
+        #succ = write_tag_info(channel_id, tag_info_list, all_tag_name_list)
         logging.info('Process channel. channel country: %s, language: %s' 
                 % (channel_info.channel_country, channel_info.channel_language))
-        logging.info('Process channel. Channel video tags: %s' 
-                % channel_info.get_channel_video_tags())
+        #logging.info('Process channel. Channel video tags: %s' 
+        #        % channel_info.get_channel_video_tags())
         logging.info('Process channel. Update channel succ? %s, channel id: %s' 
                 % (str(succ), channel_id))
         logging.info('Structure tags before: %s' % pre_tag_info_list)
@@ -112,15 +112,15 @@ def get_feature_words(channel_id):
 
 
 def dump_feature_words_stats():
-    word_size = 50000
-    count_min_threshold = 1
+    word_size = 10000
+    count_min_threshold = 5
     for feature_word, count in TagPredictor.feature_words_stats.most_common(word_size):
         if count > count_min_threshold:
             print(feature_word, count)
 
 
 def stat_feature_words_from_redis():
-    batch_size = 100
+    batch_size = 10
     total_num = 0
     succ_num = 0
     wait_time = 0
@@ -142,16 +142,17 @@ def stat_feature_words_from_redis():
             wait_time = 0
             channel_id = str(channel_id_bytes, encoding='utf-8')
 
-            #succ = stat_feature_words(channel_id)
+            succ = stat_feature_words(channel_id)
             #succ, feature_word_list = get_feature_words(channel_id)
-            succ = dump_all_tags(channel_id)
+            #succ = dump_all_tags(channel_id)
 
             total_num += 1
             if succ:
                 succ_num += 1
             if total_num % batch_size == 0:    
-                logging.info('STATS. update channel tags, processed: %d, succ: %d.' 
+                logging.info('STATS. stat channel keywords, processed: %d, succ: %d.' 
                         % (total_num, succ_num))
+                time.sleep(1)
     
     logging.info('stat feature word finish. total channels: %d, succ: %d.' 
             % (total_num, succ_num))

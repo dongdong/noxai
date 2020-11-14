@@ -21,7 +21,7 @@ class VideoData():
         raw_text = self.title 
         raw_text += '. ' + self.title 
         raw_text += '. ' + self.title 
-        raw_text += '. ' + '. '.join(self.keyword_list[:10])
+        raw_text += '. ' + '. '.join(self.keyword_list[:12])
         description_list = self.description.split('\n')
         raw_text += '. ' + ' '.join(description_list[:5])
         return raw_text

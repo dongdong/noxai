@@ -18,18 +18,22 @@ logging.basicConfig(level=logging.INFO,
 now = datetime.now()
 
 CHANNEL_VIDEO_COUNT_MAX = 32
-CHANNEL_VIDEO_COUNT_MIN = 5
+CHANNEL_VIDEO_COUNT_MIN = 8
 VIDEO_TAG_TOTAL_MAX = 5 #3 #5
 CHANNEL_TAG_TOTAL_MAX = 5 #3 #5
 CHANNEL_TAG_COUNT_THRESHOLD = 5 #6
-CHANNEL_UPDATE_DAYS_THRESHOLD = 180
+CHANNEL_UPDATE_DAYS_THRESHOLD = 365 * 3
 CHANNEL_SUB_NUM_MIN_THRESHOLD = 10000
 MATCH_MODEL_TAG_SCORE = 3
 YOUTUBE_TOPIC_TAG_SCORE = 2
 
-def _get_video_info_list(channel_id):
-    max_video_size = CHANNEL_VIDEO_COUNT_MAX
+def _get_video_info_list(channel_id, channel_data):
     video_info_list = []
+    total_videos = channel_data.get('total_videos', 0)
+    if total_videos < CHANNEL_VIDEO_COUNT_MIN:
+        logging.warn('channel do not have enough videos. video count: %d' % total_videos)
+        return video_info_list
+    max_video_size = CHANNEL_VIDEO_COUNT_MAX
     video_contents_list = get_channel_video_list(channel_id, max_video_size)
     video_id_list = [video_contents['id'] for video_contents in video_contents_list]
     video_id_description_map = get_video_description_batch(video_id_list)
@@ -83,13 +87,16 @@ def _load_models(language):
 
 
 def _load_feature_word_dict():
-    feature_word_set = set()
+    feature_word_dict = {}
     path = pm.get_feature_word_dict_path()
     with open(path, 'r') as f:
         for line in f:
-            feature_word_set.add(line.strip())
-    #print(feature_word_set)
-    return feature_word_set
+            words = line.strip().split(', ')
+            if len(words) > 0:
+                value = words[0]
+                for word in words:
+                    feature_word_dict[word] = value
+    return feature_word_dict
 
 
 class TagPredictor():
@@ -109,12 +116,15 @@ class TagPredictor():
 
     def __init__(self, language, video_info_list):
         self.language = language
+        self.topic_tag_score = YOUTUBE_TOPIC_TAG_SCORE
         if language in TagPredictor.models_map:
             models = TagPredictor.models_map[language]
             self.tfidf_model, self.tag_model, self.tag_match_model = models 
         else:
-            ret = TagPredictor.default_models
-            self.tfidf_model, self.tag_model, self.tag_match_model = ret 
+            default_models = TagPredictor.default_models
+            self.tfidf_model, self.tag_model, self.tag_match_model = default_models
+            self.tag_model = None
+
         if language in TagPredictor.tag_index_map:
             self.tag_index = TagPredictor.tag_index_map[language]
         else:
@@ -123,9 +133,11 @@ class TagPredictor():
         self.video_info_list = video_info_list
         self.video_id_list = [video_info.video_data.video_id 
             for video_info in video_info_list]
+        self.total_videos = len(video_info_list)
         self.video_topic_list_map = None
         self.video_model_tag_score_map = None
         self.video_match_model_tag_list_map = None
+        
 
     def _process_tags(self):
         if not self.video_topic_list_map:
@@ -136,10 +148,15 @@ class TagPredictor():
             self._get_match_model_tag_list_map()
 
     def _get_ytb_topic_tag_list_map(self):
+        self.video_topic_list_map = {}
+        if self.total_videos < CHANNEL_VIDEO_COUNT_MIN:
+            return
         self.video_topic_list_map = get_youtube_video_topics_batch(self.video_id_list) 
 
     def _get_model_tag_score_map(self):
         self.video_model_tag_score_map = {}
+        if self.total_videos < CHANNEL_VIDEO_COUNT_MIN:
+            return
         if self.tag_model:
             pred_tag_list = _predict(self.video_info_list, self.tfidf_model, 
                     self.tag_model)
@@ -154,6 +171,8 @@ class TagPredictor():
 
     def _get_match_model_tag_list_map(self):
         self.video_match_model_tag_list_map = {}
+        if self.total_videos < CHANNEL_VIDEO_COUNT_MIN:
+            return
         if self.tag_match_model:
             for video_info in self.video_info_list:
                 video_data = video_info.video_data
@@ -163,7 +182,6 @@ class TagPredictor():
                 self.video_match_model_tag_list_map[video_id] = match_model_tags
     
     def get_video_tag_score_list(self, video_id):
-        self._process_tags()
         topic_id_list = self.video_topic_list_map.get(video_id, [])
         model_tag_score_map = self.video_model_tag_score_map.get(video_id, {})
         match_model_tag_list = self.video_match_model_tag_list_map.get(video_id, [])
@@ -176,7 +194,7 @@ class TagPredictor():
         for topic_id in topic_id_list:
             tag_class = self.tag_index.get_tag_name_by_topic_id(topic_id)
             if tag_class is not None:
-                tag_class_score_map[tag_class] += YOUTUBE_TOPIC_TAG_SCORE
+                tag_class_score_map[tag_class] += self.topic_tag_score
 
         sorted_tag_class_score_list = sorted(
                 [(tag_class, score) 
@@ -192,6 +210,7 @@ class TagPredictor():
         channel_tag_counter = Counter()
         channel_tag_score = defaultdict(float)
         
+        self._process_tags()
         for video_id in self.video_id_list:
             tag_score_list = self.get_video_tag_score_list(video_id)
             video_tags_map[video_id] = tag_score_list
@@ -209,7 +228,8 @@ class TagPredictor():
         channel_tag_list = normalize_score(channel_tag_list)
         total_count = len(self.video_id_list)
         channel_tag_list = [(tag, score * channel_tag_counter[tag] / total_count) 
-                for tag, score in channel_tag_list]
+                for tag, score in channel_tag_list
+                if score > 0.1]
         return channel_tag_list, video_tags_map
 
     def get_structure_tag_list(self, channel_tag_list):
@@ -219,28 +239,32 @@ class TagPredictor():
             'zh': 'zh',
         }
         default_language = 'en'
-        channel_structure_tag_list = []
+        if self.language in language_map:
+            language = language_map[self.language]
+        elif self.language in TagPredictor.languages:
+            language = self.language
+        else:
+            logging.warn('Warn: language %s not support yet.' % self.language)
+            language = default_language
+        channel_structure_tag_map = {}
         for tag_name, score in channel_tag_list:
             structure_info = self.tag_index.get_structure_tag_info(tag_name)
             if structure_info:
-                if self.language in language_map:
-                    language = language_map[self.language]
-                elif self.language in TagPredictor.languages:
-                    language = self.language
-                else:
-                    logging.warn('Warn: language %s not support yet.' % self.language)
-                    language = default_language
                 name = structure_info[language]
                 if name is None:
                     name = tag_name
-                data = {
-                    'level': structure_info['level'], 
-                    'tag_name': name, 
-                    'weight': score,
-                    'language': language,
-                    'id': structure_info['id'],
-                } 
-                channel_structure_tag_list.append(data) 
+                if name not in channel_structure_tag_map: 
+                    data = {
+                        'level': structure_info['level'], 
+                        'tag_name': name, 
+                        'weight': score,
+                        'language': language,
+                        'id': structure_info['id'],
+                    } 
+                    channel_structure_tag_map[name] = data 
+                else:
+                    channel_structure_tag_map[name]['weight'] += score
+        channel_structure_tag_list = list(channel_structure_tag_map.values())
         return channel_structure_tag_list
 
     def stat_feature_words(self):
@@ -264,19 +288,21 @@ class TagPredictor():
             if count <= 3:
                 continue
             if word in TagPredictor.feature_word_dict:
-                feature_word_list.append(word)
+                feature_word = TagPredictor.feature_word_dict[word]
+                feature_word_list.append(feature_word)
             else:
                 not_feature_word_list.append(word)
-        print('feature words:', feature_word_list)
-        print('not feature words:', not_feature_word_list)
+        #print('feature words:', feature_word_list)
+        logging.info('not feature words: %s' % (str(not_feature_word_list)))
         return feature_word_list
 
     def _get_feature_word_counter(self):
         feature_word_counter = Counter()
         for video_info in self.video_info_list:
             video_data = video_info.video_data
-            video_data.process_tfidf_words(self.tfidf_model)
-            feature_word_list = [word for word, score in video_data.tfidf_word_list]
+            #video_data.process_tfidf_words(self.tfidf_model)
+            #feature_word_list = [word for word, score in video_data.tfidf_word_list]
+            feature_word_list = video_data.keyword_list
             feature_word_counter.update(feature_word_list)
             #print(video_data.video_id, feature_word_list)
         #print(feature_word_counter.most_common(16))
@@ -284,52 +310,63 @@ class TagPredictor():
 
 
 def _is_valid_channel_to_update_tags(channel_id, channel_data): 
-    '''
-    required_names = ['sub_num', 'languages', 'latest_three_pub_date']
+    required_names = ['is_delete']
     for name in required_names:
         if name not in channel_data:
-            logging.info('information miss: ' % name)
+            logging.info('information miss: %s' % name)
             return False
-   
+
+    is_delete = (channel_data['is_delete'] != 1)
+    if is_delete:
+        logging.info('Channel has been deleted! channel id: %s' % (channel_id))
+        return False
+
+    ''' 
+    total_videos = channel_data.get('total_videos', 0)
+    if total_videos < CHANNEL_VIDEO_COUNT_MIN: 
+        logging.info('Channel do not have enough videos! channel id: %s, videos: %d' 
+                % (channel_id, total_videos))
+        return False
+ 
     sub_num = channel_data['sub_num']    
     if sub_num < CHANNEL_SUB_NUM_MIN_THRESHOLD:
-        logging.info('Too few subscribes, ignore! channel: %s, sub num: %d' % (channel_id, sub_num))
+        logging.info('Too few subscribes, ignore! channel id: %s, sub num: %d' 
+                % (channel_id, sub_num))
         return False
 
     support_language_set = TagPredictor.models_map.keys()
-    #language = channel_data['languages']
     language = channel_data.get('languages', '')
     if language not in support_language_set:
-        logging.info('Language not support yet. channel: %s, language: %s' % (channel_id, language))
+        logging.info('Language not support yet. channel id: %s, language: %s' 
+                % (channel_id, language))
         return False
 
-    latest_video_timestamp = channel_data['latest_three_pub_date']
+    latest_video_timestamp = channel_data.get('latest_three_pub_date', 0)
     latest_video_date = datetime.fromtimestamp(latest_video_timestamp / 1000)
     delta = now - latest_video_date
     if delta.days > CHANNEL_UPDATE_DAYS_THRESHOLD:      
-        logging.info('Channel have not updated for a while! channel: %s, days: %d' % (channel_id, delta.days))
+        logging.info('Channel have not updated for a while! channel id: %s, days: %d' 
+                % (channel_id, delta.days))
         return False
     '''
+
     return True
 
 
 def _get_channel_info(channel_id, channel_data, channel_video_list):
         if not channel_data:
             channel_data = get_channel_contents(channel_id)
-            #if channel_data is None or not _is_valid_channel_to_update_tags(
-            #        channel_id, channel_data):
-            #    logging.info('Channel is not valid to update tags, channel: %s' % (channel_id))
-            #    return None
+            if channel_data is None or not _is_valid_channel_to_update_tags(
+                    channel_id, channel_data):
+                logging.info('Channel not valid to update tags, channel id: %s' % (channel_id))
+                return None
         if channel_data is None:
             return None
-        if not channel_video_list:
-            channel_video_list = _get_video_info_list(channel_id) 
-        if channel_video_list is not None and len(channel_video_list) > CHANNEL_VIDEO_COUNT_MIN:
-            channel_info = ChannelInfo(channel_id, channel_data, channel_video_list)
-        else:
-            logging.warn('Fail to load channel videos. channel id: %s, channel videos: %d' % 
-                        (channel_id, len(channel_video_list)))
-            channel_info = None
+
+        if not channel_video_list: 
+            channel_video_list = _get_video_info_list(channel_id, channel_data) 
+
+        channel_info = ChannelInfo(channel_id, channel_data, channel_video_list)
         return channel_info
 
 
@@ -353,11 +390,19 @@ class ChannelInfo():
         self.channel_tag_score_list, self.channel_video_tag_dict = self.tag_predictor.get_tags()
         self.channel_structure_tag_list = self.tag_predictor.get_structure_tag_list(
                 self.channel_tag_score_list)
+        
         self.channel_all_tag_name_list = [tag_name 
                 for tag_name, score in self.channel_tag_score_list]
 
+        '''
+        tag_name_list = [tag_name.lower() 
+                for tag_name, score in self.channel_tag_score_list]
+        feature_word_list = self.get_feature_words()
+        self.channel_all_tag_name_list = list(set(tag_name_list + feature_word_list))
+        '''
+
     def stat_feature_words(self):
-        print('channel: ', self.channel_id)
+        print('channel id: ', self.channel_id)
         print('channel language: ', self.channel_language)
         self.tag_predictor.stat_feature_words()
 

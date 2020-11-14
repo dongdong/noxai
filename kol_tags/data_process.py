@@ -220,9 +220,14 @@ def _process_video_data_file(video_data_path, processed_video_data_path,
     with open(video_data_path, 'r') as f_in:
         for line in f_in:
             total_num += 1
-            json_obj = json.loads(line)
-            video_id = json_obj.get('id', '')
-            print('processing video data:', video_id) #test
+            try:
+                json_obj = json.loads(line)
+                video_id = json_obj.get('id', '')
+            except:
+                logging.warn('parse video data error! contents: ' + line)
+                fail_num += 1
+                continue
+            #print('processing video data:', video_id) #test
             if is_incremental_update and video_id in video_info_cache:
                 video_info = video_info_cache[video_id]
                 cache_num += 1
@@ -402,6 +407,6 @@ if __name__ == '__main__':
     #dump_video_data_from_video_list(language)
     #dump_video_data_from_video_list(language, False)
     #dump_processed_video_data(language, False)
-    #dump_processed_video_data(language)
-    dump_feature_data(language)
+    dump_processed_video_data(language)
+    #dump_feature_data(language)
 

@@ -39,7 +39,7 @@ class TFIDFModel():
         else:
             return 0
 
-    def get_keyword_list(self, doc, max_len=24):
+    def get_keyword_list(self, doc, max_len=16):
         keyword_list = []
         tfidf_vec = self.get_vector(doc)
         tfidf_vec_sorted = sorted(tfidf_vec, key=lambda v: v[1], reverse=True)        
@@ -185,20 +185,15 @@ class ParserZh(ParserEn):
 
 
 class ParserKo(ParserEn):
-    nlp = Kkma()
-
+    nlp = Kkma(max_heap_size=2048)
     def _clean_text(self, text):
         text = re.sub(u"(?:[^\uac00-\ud7ff])", u' ', text).strip()
-        #text = re.sub(' +', ' ', text)    
+        text = (' '.join([word for word in text.split(' ') 
+            if len(word) < 16])).strip()
         return text
 
     def _get_doc(self, clean_text):
-        #pos_tag = ParserKo.nlp.pos(clean_text)
-        #print(pos_tag)
-        #nouns_list = ParserKo.nlp.nouns(clean_text) 
-        #print(nouns_list)   
-        #print(clean_text)
-        return clean_text    
+        return clean_text 
 
     def _get_tokens(self, doc):
         pos_filter_set = set(['SP'])
@@ -244,39 +239,6 @@ class Parser():
 
 def test_parser_ko():
     text = '''
-지금까지 방송에서 보여드리지 못했던 모습, 나누지 못했던 이야기들 하나씩 풀어가려고 합니다~
-자주만나요!^^
-
-촬영 죠슈아신스튜디오
-편집 임혜민
-음악 차정민
-제작 TKC
-
-안녕하세요 여러분~~! 
-함연지의 과거 여행 제 2탄, 유년시절 썰을 가지고 왔어요!
-오늘 저의 너무너무 소중한 가족 앨범의 사진들을 보여 드리면서 추억을 하나하나 되짚어 보았는데요.ð
-부모님과의 인터뷰를 통해서 어린 시절 저의 성격, 태몽, 훈육 방법, 제 이름이 왜 연지인지 등등!!! 
-여러분들이 남겨주셨던 질문에 대한 Q&A 시간도 가져보았습니다~!
-
-오늘 방송된 MBC '전지적 참견 시점'에도 이 영상을 촬영하는 장면이 나왔어요 헤헤!
-'전지적 참견 시점'도 많은 시청 바랍니당~! 감사합니다!!
-
-시청해 주셔서 감사합니다!
-맛있는 하루 보내세요! 
-
-햄연지의 더 많은 일상이 궁금하시다면?
-ðhttps://www.instagram.com/yonjiham/
-
-[햄연지(함연지) 공식 유튜브 채널]
-제작
-ð(주)샌드박스네트워크
-비즈니스 이메일
-ðyonjiham@sandbox.co.kr
-
-Music provided by Bgm President
-Track : Playful Kitten - https://youtu.be/1GXe7LPxN_k
-Track : Everyday Picnic  - https://youtu.be/h0HtDfVzIys
-Track : a Little Clown at Champs-Elysees  - https://youtu.be/zw23_hWjmuY
     '''
 
     language = 'ko'

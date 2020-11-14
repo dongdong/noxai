@@ -100,10 +100,6 @@ _fashion_list = [
             '時尚 流行配飾 popular accessories',
         ] 
     },
-    #{ 
-    #    'level_1': '時尚',  'level_2': '流行配飾',  
-    #    'search_keywords': ['時尚 流行配飾 popular accessories', '流行配飾 fashion'] 
-    #},
     { 
         'level_1': '時尚',  'level_2': '男裝',  
         'search_keywords': ['時尚 男裝 men fashion', '時尚 男裝 穿搭'] 
@@ -205,39 +201,6 @@ _food_list = [
         'search_keywords': ['美食 吃播', '吃播 大胃王'] 
     },
 ]
-
-'''
-_pets_list = [
-    { 
-        'level_1': '動物',  'level_2': '動物',  
-        'search_keywords': ['動物 animal'],
-    },
-    { 
-        'level_1': '動物',  'level_2': '野生動物',  
-        'search_keywords': ['野生動物', '獅 虎 豹 狼', '斑馬 長頸鹿 河馬 羚羊'] 
-    },
-    { 
-        'level_1': '動物',  'level_2': '魚',  
-        'search_keywords': ['海洋生物', '水族館', '魚 鯨 鯊 豚 fish shark whale'] 
-    },
-    { 
-        'level_1': '動物',  'level_2': '鳥',  
-        'search_keywords': ['鳥 鳥類 bird', '鵝 鷹 鶴 孔雀 鸚鵡'] 
-    },
-    { 
-        'level_1': '動物',  'level_2': '寵物',  
-        'search_keywords': ['寵物 pets', '寵物 貓 pet cat kitten', '物 狗 pet dog puppy'] 
-    },
-    #{ 
-    #    'level_1': '動物',  'level_2': '貓貓',  
-    #    'search_keywords': ['寵物 貓 pet cat kitten'] 
-    #},
-    #{ 
-    #    'level_1': '動物',  'level_2': '狗狗',  
-    #    'search_keywords': ['寵物 狗 pet dog puppy'] 
-    #},
-]
-'''
 
 _sports_list = [
     { 

@@ -4,7 +4,7 @@ _gamming_list = [
         'level_1': 'Gaming',  'level_2': 'Gaming',  
         'search_keywords': [
             'gaming games', 
-            'video games pc games phone games',
+            'video games pc games mobile games',
             'video game recommend',
         ] 
     },
@@ -48,15 +48,15 @@ _beauty_list = [
         'level_1': 'Beauty',  'level_2': 'Skincare',  
         'search_keywords': [
             'beauty skincare', 
-            'skincare tips', 
-            'skin care facial mask moisturiser remedy cream'
+            'skincare skin care tips', 
+            'skin care facial mask cleanser moisturiser remedy cream'
         ] 
     },
     { 
         'level_1': 'Beauty',  'level_2': 'Hairstyle',  
         'search_keywords': [
             'beauty hairstyle', 
-            'haircut dye wax fade', 
+            'haircut hairdo dye wax fade', 
             'hair style puff bun braid juda ponytail curl'
         ] 
     },
@@ -117,14 +117,6 @@ _fashion_list = [
             'fashion jewelry popular accessories', 
         ] 
     },
-    #{ 
-    #    'level_1': 'Fashion',  'level_2': 'Popular accessories',  
-    #    'search_keywords': [
-    #        'fashion popular accessories', 
-    #        'top fashion accessories trends',
-    #        'fashion accessories necklace bracelet belt',
-    #    ] 
-    #},
     { 
         'level_1': 'Fashion',  'level_2': 'Men fashion',  
         'search_keywords': [
@@ -142,17 +134,15 @@ _electronic_list = [
             'consumer electronic devices',
             'smart watch furniture home vacuum',
             'smart electronic wearable device',        
-            'apple samsung asus xiaomi '
+            'apple samsung asus xiaomi huawei'
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Smartphone',  
         'search_keywords': [
-                'smartphone',
-                'smartphone mobile unboxing', 
-                'smartphone processor screen camera battery', 
-                'iphone galaxy oppo vivo realme',
-                'smartphone accessories',
+                'smartphone mobile unboxing review', 
+                'smartphone iphone android galaxy oppo vivo realme',
+                'smartphone accessories screen battery camera',
         ] 
     },
     { 
@@ -166,17 +156,17 @@ _electronic_list = [
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Computer',  
         'search_keywords': [
-            'personal computer pc desktop laptop',
-            'computer unboxing review',
+            'computer pc desktop laptop unboxing review',
             'computer unboxing assembly', 
-            'computer accessories',
+            'computer accessories keyboad mouse',
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Game console',  
         'search_keywords': [
             'game console', 
-            'game console unboxing review'
+            'game console unboxing review',
+            'xbox playstation nintendo psp switch',
         ] 
     },
     { 
@@ -190,8 +180,9 @@ _electronic_list = [
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Headset',  
         'search_keywords': [
-            'headset', 
             'headset unboxing review',
+            'headset earbuds headphone airpods wireless',
+            'headset jbl bose sony sennheiser',
         ] 
     },
     #{ 
@@ -244,12 +235,11 @@ _art_list = [
         ] 
     },
     { 
-        'level_1': 'Art',  'level_2': 'Hand design',  
-        'search_keywords': ['mehndi',  'henna'] 
-    },
-    { 
-        'level_1': 'Art',  'level_2': 'Rangoli',  
-        'search_keywords': ['rangoli',  'muggulu', 'kolam'] 
+        'level_1': 'Art',  'level_2': '',  
+        'search_keywords': [
+            'mehndi',  'henna',
+            'rangoli',  'muggulu', 'kolam',
+        ]
     },
 ]
 
@@ -260,7 +250,7 @@ _food_list = [
             'food', 
             'food steak pizza burger hot dog salad barbecue seafood', 
             'food restaurant review yummy', 
-            'food cake bakery dessert snack icecream'
+            'food bread cake bakery dessert snack icecream'
         ] 
     },
     { 
@@ -272,39 +262,6 @@ _food_list = [
         ] 
     },
 ]
-
-'''
-_pets_list = [
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Animal',  
-        'search_keywords': ['animals'] 
-    },
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Pet',  
-        'search_keywords': ['pets'] 
-    },
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Wildlife',  
-        'search_keywords': ['wildlife animals'] 
-    },
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Bird',  
-        'search_keywords': ['bird'] 
-    },
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Sea animal',  
-        'search_keywords': ['sea animals aquarium fish',] 
-    },
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Dog',  
-        'search_keywords': ['pets dog puppy'] 
-    },
-    { 
-        'level_1': 'Pets & Animals',  'level_2': 'Cat',  
-        'search_keywords': ['pets cat kitten'] 
-    },
-]
-'''
 
 _sports_list = [
     { 
@@ -335,14 +292,10 @@ _sports_list = [
         'level_1': 'Sports',  'level_2': 'Golf',  
         'search_keywords': ['sports golf', 'golf shot pga'] 
     },
-    #{ 
-    #    'level_1': 'Sports',  'level_2': 'Cycling',  
-    #    'search_keywords': ['sports cycling', 'cycling biking'] 
-    #},
-    #{ 
-    #    'level_1': 'Sports',  'level_2': 'Fishing',  
-    #    'search_keywords': ['sports fishing', 'fishing lure bait rod'] 
-    #},
+    { 
+        'level_1': 'Sports',  'level_2': 'Cycling',  
+        'search_keywords': ['sports cycling', 'cycling biking'] 
+    },
     { 
         'level_1': 'Sports',  'level_2': 'American football',  
         'search_keywords': ['american football', 'nfl'] 
@@ -382,7 +335,7 @@ _music_list = [
     { 
         'level_1': 'Music',  'level_2': 'Music',  
         'search_keywords': [
-            'music', 
+            #'music', 
             'music song video mv audio album playlist', 
             'music sing rhyme lyric melody',
             'music piano violin cello drum bass guitar',
@@ -458,7 +411,8 @@ _entertainment_list = [
         'level_1': 'Entertainment',  'level_2': 'Humor',  
         'search_keywords': [
             'entertainment humor', 
-            'funny jokes pranks tricks'
+            'funny jokes halirious', 
+            'funny pranks'
         ] 
     },
     { 
@@ -495,7 +449,7 @@ _other_list = [
     { 
         'level_1': '',  'level_2': 'Education',  
         'search_keywords': [
-            'education', 
+            #'education', 
             'education degree diploma certificate learn skill', 
             'moocs online education course learning',
             'learn teach study student teacher knowledge',
@@ -505,7 +459,7 @@ _other_list = [
     { 
         'level_1': '',  'level_2': 'Health',  
         'search_keywords': [
-            'health',
+            #'health',
             'health healthy life tips habits', 
             'health healthy nutrition eating diet', 
             'health body age heart brain weight',
@@ -524,23 +478,24 @@ _other_list = [
     { 
         'level_1': '',  'level_2': 'Yoga',  
         'search_keywords': [
-            'yoga meditation flow vinyasa', 
-            'yoga class stretch pose'
+            'yoga meditation',
+            'yoga flow vinyasa stretch pose', 
+            'yoga class tutorial'
         ] 
     },
     { 
         'level_1': '',  'level_2': 'Dance',  
         'search_keywords': [
             'dance dancing dancer',
-            'dance class tutorial', 
-            'dance belly cha cha hip hop', 
+            'dance lesson class tutorial', 
+            'ballet belly dance cha cha hip hop', 
         ] 
     },
     { 
         'level_1': '',  'level_2': 'Kids',  
         'search_keywords': [
             'kids child baby toddler',
-            'kids songs nursery rhymes', 
+            'kids songs music nursery rhymes', 
             'kids story fairy tales', 
             'kids video cartoon film', 
             'kids toys dolls barbie playground',
@@ -558,8 +513,7 @@ _other_list = [
         'search_keywords': [
             'cars review guide recommend advice test drive',
             'vehicles sports car suv van crossover truck',
-            'car vehicle benz bmw audi toyota nissan ford porsche',
-            #'car vehicle engine gear power speed safety',
+            'cars vehicle benz bmw audi toyota nissan ford porsche',
         ] 
     },
     { 
@@ -575,6 +529,12 @@ _other_list = [
         'level_1': '',  'level_2': 'Pets',  
         'search_keywords': ['pets', 'pets dog puppy', 'pets cat kitten'] 
     },
+    #{ 
+    #    'level_1': '',  'level_2': '',  
+    #    'search_keywords': [
+    #       '', 
+    #    ] 
+    #},
 ]
 
 en_search_keywords_list = (

@@ -7,8 +7,7 @@ def update_channel(arguments):
     from update_tags import process_channel
     channel_id = arguments['channel_id']
     if channel_id:
-        succ = process_channel(channel_id)
-        logging.info('update channel finish. succ? ' + str(succ))
+        process_channel(channel_id)
     else:
         logging.error('channel id required when update channel')
 
