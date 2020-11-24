@@ -78,7 +78,8 @@ def get_sql():
     #sql = 'select cid from kol_channel_base where (lang="en" or lang="zh" or lang="zh-Hant" or lang="zh-Hans") and sub > 3000 and sub <= 5000 order by sub desc'
     #sql = 'select cid from kol_channel_base where lang != "ko" and lang != "en" and lang != "zh" and lang != "zh-Hant" and lang != "zh-Hans" and sub > 10000 order by sub desc'
     #sql = 'select cid from kol_channel_base where lang = "en" and sub > 100000 limit 1000'
-    sql = 'select cid from kol_channel_base where lang = "ko" and sub > 1000 limit 30000'
+    #sql = 'select cid from kol_channel_base where lang = "ko" and sub > 1000 limit 30000'
+    sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") order by sub desc'
 
     return sql
 

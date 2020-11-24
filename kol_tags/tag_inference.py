@@ -267,45 +267,50 @@ class TagPredictor():
         channel_structure_tag_list = list(channel_structure_tag_map.values())
         return channel_structure_tag_list
 
-    def stat_feature_words(self):
+    def stat_feature_words(self, size=8, count_min_threshold=3):
         feature_word_counter = self._get_feature_word_counter()
         feature_words = [word for word, count 
-            in feature_word_counter.most_common(16)
-            if count > 3]
+            in feature_word_counter.most_common(size)
+            if count > count_min_threshold]
         #print('feature words：', feature_words)
         TagPredictor.feature_words_stats.update(feature_words)
 
         feature_word_stats = [(word, count) for word, count 
-            in feature_word_counter.most_common(16)
-            if count > 3]
+            in feature_word_counter.most_common(size)
+            if count > count_min_threshold]
         print('feature words：', feature_word_stats)
 
-    def get_feature_words(self):
+    def get_feature_words(self, size=8, count_min_threshold=3):
         feature_word_counter = self._get_feature_word_counter()
-        feature_word_list = []
-        not_feature_word_list = []
-        for word, count in feature_word_counter.most_common(16):
-            if count <= 3:
+        feature_word_set = set()
+        not_feature_word_set = set()
+        for word, count in feature_word_counter.most_common(size):
+            if count <= count_min_threshold:
                 continue
             if word in TagPredictor.feature_word_dict:
                 feature_word = TagPredictor.feature_word_dict[word]
-                feature_word_list.append(feature_word)
+                feature_word_set.add(feature_word)
             else:
-                not_feature_word_list.append(word)
-        #print('feature words:', feature_word_list)
-        logging.info('not feature words: %s' % (str(not_feature_word_list)))
+                not_feature_word_set.add(word)
+        logging.info('feature words: %s' % str(feature_word_set))
+        logging.info('not feature words: %s' % str(not_feature_word_set))
+        return list(feature_word_set)
+
+    def _get_video_feature_words(self, video_data):
+        #video_data.process_tfidf_words(self.tfidf_model)
+        #feature_word_list = [word for word, score in video_data.tfidf_word_list]
+        feature_word_list = [word.lower() for word in video_data.keyword_list]
+        #feature_word_set = set()
+        #for word in video_data.keyword_list:
         return feature_word_list
 
     def _get_feature_word_counter(self):
         feature_word_counter = Counter()
         for video_info in self.video_info_list:
             video_data = video_info.video_data
-            #video_data.process_tfidf_words(self.tfidf_model)
-            #feature_word_list = [word for word, score in video_data.tfidf_word_list]
-            feature_word_list = video_data.keyword_list
+            feature_word_list = self._get_video_feature_words(video_data)
             feature_word_counter.update(feature_word_list)
             #print(video_data.video_id, feature_word_list)
-        #print(feature_word_counter.most_common(16))
         return feature_word_counter
 
 
@@ -391,15 +396,12 @@ class ChannelInfo():
         self.channel_structure_tag_list = self.tag_predictor.get_structure_tag_list(
                 self.channel_tag_score_list)
         
-        self.channel_all_tag_name_list = [tag_name 
-                for tag_name, score in self.channel_tag_score_list]
-
-        '''
+        #self.channel_all_tag_name_list = [tag_name 
+        #        for tag_name, score in self.channel_tag_score_list]
         tag_name_list = [tag_name.lower() 
                 for tag_name, score in self.channel_tag_score_list]
         feature_word_list = self.get_feature_words()
         self.channel_all_tag_name_list = list(set(tag_name_list + feature_word_list))
-        '''
 
     def stat_feature_words(self):
         print('channel id: ', self.channel_id)

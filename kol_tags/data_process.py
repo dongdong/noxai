@@ -203,11 +203,12 @@ def _get_video_info_cache(processed_video_data_path):
 
 
 def _process_video_data_file(video_data_path, processed_video_data_path, 
-        is_incremental_update, video_info_data_dict, tfidf_train_data_list, file_name):
+        is_incremental_update, tfidf_train_data_list, file_name):
     total_num = 0
     cache_num = 0
     fail_num = 0
     logging.info("process video data, file path: %s." % video_data_path)
+    video_info_list = []
     
     if is_incremental_update:
         video_info_cache = _get_video_info_cache(processed_video_data_path)
@@ -216,7 +217,6 @@ def _process_video_data_file(video_data_path, processed_video_data_path,
     else:
         video_info_cache = {}
 
-    video_info_data_dict[file_name] = []
     with open(video_data_path, 'r') as f_in:
         for line in f_in:
             total_num += 1
@@ -239,10 +239,17 @@ def _process_video_data_file(video_data_path, processed_video_data_path,
                 video_info.video_data.parse_text()
             feature_words = video_info.video_data.get_feature_words()
             tfidf_train_data_list.append(feature_words)
-            video_info_data_dict[file_name].append(video_info)
-       
+            video_info_list.append(video_info)
+
     logging.info("process video data %s finish. total: %d, cached: %d, failed: %d" 
             % (file_name, total_num, cache_num, fail_num))
+    
+    logging.info("dump processed video data, file path: %s." % processed_video_data_path)    
+    with open(processed_video_data_path, 'w') as f_out:
+        for video_info in video_info_list:
+            dump_data = video_info.get_data()
+            f_out.write(json.dumps(dump_data) + '\n')
+       
     return total_num, cache_num, fail_num
 
 
@@ -250,7 +257,6 @@ def _process_video_data(video_data_dir, processed_video_data_dir,
         is_incremental_update, model_tag_config):
     logging.info("process video data, dir: %s." % video_data_dir)
     tfidf_train_data_list = []
-    video_info_data_dict = {}
     cache_num_sum = 0
     total_num_sum = 0
     fail_num_sum = 0
@@ -267,8 +273,8 @@ def _process_video_data(video_data_dir, processed_video_data_dir,
             continue       
 
         total_num, cache_num, fail_num = _process_video_data_file(video_data_path, 
-                processed_video_data_path, is_incremental_update, video_info_data_dict, 
-                tfidf_train_data_list, file_name)
+                processed_video_data_path, is_incremental_update, tfidf_train_data_list, 
+                file_name)
         total_num_sum += total_num
         cache_num_sum += cache_num
         fail_num_sum += fail_num
@@ -276,7 +282,7 @@ def _process_video_data(video_data_dir, processed_video_data_dir,
 
     logging.info("process video data finish. total: %d, cached: %d, failed: %d" 
             % (total_num_sum, cache_num_sum, fail_num_sum))
-    return tfidf_train_data_list, video_info_data_dict
+    return tfidf_train_data_list
         
 
 def _dump_processed_video_data(processed_video_data_dir, video_info_data_dict, tfidf_model):
@@ -300,8 +306,8 @@ def dump_processed_video_data(language, is_incremental_update=True):
     logging.info("dump processed video data, input dir: %s." % video_data_dir)
 
     model_tag_config = ModelTagConfig.Create(language)
-    tfidf_train_data_list, video_info_data_dict = _process_video_data(video_data_dir, 
-            processed_video_data_dir, is_incremental_update, model_tag_config)
+    tfidf_train_data_list = _process_video_data(video_data_dir, processed_video_data_dir, 
+            is_incremental_update, model_tag_config)
     logging.info('process video contents finish. data size:%d' % len(tfidf_train_data_list))
 
     tfidf_model_dir = pm.get_tfidf_train_model_dir(language)
@@ -310,8 +316,8 @@ def dump_processed_video_data(language, is_incremental_update=True):
     tfidf_model.save_model()
     logging.info('train tfidf model finish. model dir:%s' % (tfidf_model_dir))
 
-    logging.info("dump processed video data, output dir: %s." % processed_video_data_dir)
-    _dump_processed_video_data(processed_video_data_dir, video_info_data_dict, tfidf_model)
+    #logging.info("dump processed video data, output dir: %s." % processed_video_data_dir)
+    #_dump_processed_video_data(processed_video_data_dir, video_info_data_dict, tfidf_model)
     
 
 def get_feature_data_from_video_info_iter(video_info_iter, tfidf_model, is_train=False):

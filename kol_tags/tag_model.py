@@ -329,10 +329,10 @@ def load_and_evaluate_model(language):
 
 
 def test_tag_model():
-    #language = 'en'
+    language = 'en'
     #language = 'zh-Hans'
     #language = 'zh-Hant'
-    language = 'ko'
+    #language = 'ko'
     train_tag_model(language)
     load_and_evaluate_model(language)
 

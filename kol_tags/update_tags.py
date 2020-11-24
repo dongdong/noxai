@@ -16,7 +16,7 @@ def process_channel(channel_id, channel_data=None):
         pre_all_tag_name_list = channel_info.channel_tag_list
         tag_info_list = channel_info.channel_structure_tag_list
         all_tag_name_list = channel_info.channel_all_tag_name_list
-        #succ = write_tag_info(channel_id, tag_info_list, all_tag_name_list)
+        succ = write_tag_info(channel_id, tag_info_list, all_tag_name_list)
         logging.info('Process channel. channel country: %s, language: %s' 
                 % (channel_info.channel_country, channel_info.channel_language))
         #logging.info('Process channel. Channel video tags: %s' 

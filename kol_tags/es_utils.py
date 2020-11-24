@@ -199,10 +199,102 @@ def test_video_description_batch():
         print(k, v[:10])
 
 
+def get_channel_list_by_tag(tag, size):
+    channel_id_list = []
+    try:
+        param_dic = {
+            "size": size,
+            "query": {
+                "bool": {
+                    "must": [
+                        #{"term": {"languages": {"value": language}}},
+                        {"term": {"tag_list.keyword": {"value": tag}}},
+                        {"range": {"is_delete": {"lt": 2}}},
+                    ]
+                }
+            },
+            "sort":[
+                {"total_views": {"order": "desc"}},
+            ]
+        }
+        json_obj = es.search(index=channel_index, body=param_dic, timeout='1m')
+        hits = json_obj['hits']['hits']
+        channel_list = []
+        for hit in hits:
+            channel_id_list.append(hit['_id'])
+    except:
+        logging.error(traceback.format_exc())
+    return channel_id_list
+
+
+def get_pop_video(size=8, language=None, country=None):
+    try:
+        param_dict = {
+            "size": size,
+            "query": {"bool": {"must": [
+                {"exists": {"field": "last_view"}},        
+                {"exists": {"field": "category"}},        
+                {"script":{"script":{
+                    "source": "return doc['view'].getValue() - doc['last_view'].getValue() > 0", 
+                    "lang": "painless",
+                }}}
+            ]}},
+            #"_source": {
+            #    "includes": [ 
+            #        "id", "title", "pub_date", "view", "thumbnails", "dislikes", "likes", "comments",
+            #        "language", "category", "country", "last_view", "channel_id", "video_score", 
+            #        "channel.languages", "channel.avatar", "channel.sub_num", "channel.title",
+            #        "keywords",
+            #    ],
+            #    "excludes": [],
+            #},
+            "sort": [{
+                "_script": {
+                    "script": {
+                        "source": "return doc['view'].getValue() - doc['last_view'].getValue();",
+                        "lang": "painless",
+                    },
+                    "type": "number", 
+                    "order": "desc",
+                }
+            }]
+        }
+        if country:
+            country_query_term = {"term": {"country": {"value": country}}}
+            param_dict["query"]["bool"]["must"].append(country_query_term)
+        if language:
+            language_query_term = {"term": {"language": {"value": language}}}
+            param_dict["query"]["bool"]["must"].append(language_query_term)
+        json_obj = es_video.search(index='nox_kol_video_analysis-current', 
+                body=param_dict, timeout='1m')
+        pop_video_list = json_obj['hits']['hits']
+    except:
+        logging.error(traceback.format_exc())
+        pop_video_list = []
+
+    return pop_video_list
+
+
+def test_pop_video():
+    pop_video_list = get_pop_video()
+    for video in pop_video_list:
+        print(video)
+
+
+def test_get_channel_list_by_tag():
+    tag = '경제&재테크'
+    #tag = 'fitness'
+    #tag = '운세'
+    size = 1024
+    channel_list = get_channel_list_by_tag(tag, size)
+    for channel_info in channel_list:
+        print(channel_info)
+
 
 if __name__ == "__main__":
-    test_channel_contents()        
+    #test_channel_contents()        
     #test_video_description_batch()
-
+    #test_get_channel_list_by_tag()
+    test_pop_video()
 
 
