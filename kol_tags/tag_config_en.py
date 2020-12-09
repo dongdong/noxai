@@ -2,31 +2,32 @@ _gaming_list = [
     { 
         'level_1': 'Gaming',  'level_2': 'Gaming',  
         'search_keywords': [
-            'pc games', 
-            'mobile games',
-            'online games',
-            'video game recommend',
+            'video game',
             'gaming action game',
             'gaming casual game',
             'gaming role playing game rpg',
             'gaming strategy game',
-            'gaming card game',
-            'gaming racing games',
+            'gaming racing game',
+            'simulation game',
+            'gameplay',
             'minecraft',
             'pubg',
+            'fortnite',
+            'call of duty',
         ] 
     },
     { 
         'level_1': 'Gaming',  'level_2': 'RTS',  
         'search_keywords': [
-            'gaming rts',
             'rts real time strategy games',
             'rts games recommend',
-            'rts games mobile',
-            'rts warcraft starcraft',
+            'rts warcraft', 
+            'rts starcraft', 
+            'rts command & conquer',
         ] 
     },
 ]
+
 _beauty_list = [
     { 
         'level_1': 'Beauty',  'level_2': 'Makeup',  
@@ -36,7 +37,7 @@ _beauty_list = [
                 'makeup unboxing'
                 'makeup brush palette', 
                 'makeup eye shadow lash',
-                'lipstick', 
+                'lipsticks', 
                 'comsetics',
         ] 
     },
@@ -68,33 +69,23 @@ _beauty_list = [
             'manicure', 
             'nail art',
             'nail polish nail gel',
-            'nail salon',
+            'nail tutorial',
         ] 
     },
 ]
 
 _fashion_list = [
     { 
-        'level_1': 'Fashion',  'level_2': 'Fashion',  
-        'search_keywords': [
-            'fashion', 
-            'fashion hual', 
-            'fashion trends', 
-            'fashion design collection',
-            'fashion vogue',
-            'fashion lookbook',
-        ] 
-    },
-    { 
         'level_1': 'Fashion',  'level_2': 'Clothing',  
         'search_keywords': [
+            'fashion hual', 
+            'fashion trends', 
+            'fashion outfits', 
+            'fashion tips',
+            'fashion vogue',
+            'fashion lookbook',
             'fashion clothing', 
             'fashion clothing collection haul',
-            'fashion clothing unboxing', 
-            'fashion clothing outfits', 
-            'fashion clothing tips',
-            'fashion clothes dress suits', 
-            'fashion shirts pants jeans skirts',
         ] 
     },
     { 
@@ -115,7 +106,8 @@ _fashion_list = [
             'fashion bags collection', 
             'fashion bags unboxing',
             'bag handbag wallet purse',
-            'bags luxury designer'
+            'bags luxury designer',
+            'bags chanel gucci coach',
         ] 
     },
     { 
@@ -124,6 +116,7 @@ _fashion_list = [
             'fashion hats', 
             'fashion hats collection',
             'hats headwear',
+            'hats women',
             'hats beanies fedoras',
         ] 
     },
@@ -131,20 +124,10 @@ _fashion_list = [
         'level_1': 'Fashion',  'level_2': 'Jewelry',  
         'search_keywords': [
             'fashion jewelry', 
-            'fashion jewelry collection', 
-            'jewelry hual', 
-            'jewelry popular accessories', 
-            'jewelry ring necklace bracelet earrings',
-        ] 
-    },
-    { 
-        'level_1': 'Fashion',  'level_2': 'Men fashion',  
-        'search_keywords': [
-            'men fashion', 
-            'men fashion collection',
-            'men fahsion outfits', 
-            'men fashion clothing',
-            'men fashion bags hats shoes',
+            'fashion jewelry collection hual', 
+            'fashion popular accessories', 
+            'jewelry tiffany cartier',
+            'fashion watch',
         ] 
     },
 ]
@@ -164,31 +147,33 @@ _electronic_list = [
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Smartphone',  
         'search_keywords': [
-                'smartphone review', 
+                'smartphone review recommend', 
                 'smartphone unboxing',
-                'smartphone nexus galaxy oppo vivo realme redmi',
-                'iphone android',
-                'smartphone accessories',
-                'smartphone screen battery camera',
+                'iphone',
+                'smartphone android',
+                'smartphone sumsung',
+                'smartphone oppo vivo',
+                'smartphone realme redmi xiaomi',
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Camera',  
         'search_keywords': [
-            'camera unboxing',
-            'camera review',
+            'camera unboxing review',
             'camera nikon',
             'camera canon', 
+            'camera sony',
             'camera lens',
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Computer',  
         'search_keywords': [
-            'computer pc desktop laptop notebook review',
-            'computer laptop notebook review',
-            'computer laptop notebook unboxing',
-            'computer pc desktop unboxing assembly', 
+            'computer unboxing review',
+            'computer pc assembly', 
+            'pc desktop workstation',
+            'laptop notebook',
+            'tablet pad',
             'computer accessories keyboad mouse',
         ] 
     },
@@ -196,19 +181,19 @@ _electronic_list = [
         'level_1': 'Consumer Electronic',  'level_2': 'Game console',  
         'search_keywords': [
             'game console', 
-            'game console unboxing',
-            'game console review',
-            'xbox playstation',
-            'nintendo switch psp',
+            'game console unboxing review',
+            'xbox',
+            'playstation',
+            'nintendo switch',
         ] 
     },
     { 
         'level_1': 'Consumer Electronic',  'level_2': 'Headset',  
         'search_keywords': [
-            'headset unboxing',
-            'headset review',
-            'headset earbuds headphone ', 
-            'headset earphone airpods wireless',
+            'headset',
+            'headphone', 
+            'earbuds', 
+            'earphone',
             'jbl bose sony sennheiser',
         ] 
     },
@@ -220,39 +205,36 @@ _lifestyle_list = [
         'search_keywords': [
             'lifestyle life style', 
             'design decor decorate idea',
-            'home house room decor makeover', 
+            'home house room decor', 
+            'home house room makeover', 
             'farmhouse house room tour',
             'home room clean',
             'gardening garden flower lawn', 
-            'planting planter backyard',
-            'embroidery crochet', 
-            'stitching knitting',
-            'mehndi henna',
-            'rangoli muggulu kolam',
-            'fishing',
+            'planting planter',
         ] 
     },
     { 
         'level_1': 'Life Style',  'level_2': 'DIY',  
         'search_keywords': [
             'diy', 
-            'diy craft handmade'
+            'diy handmade'
             'diy craft idea',
             'do it yourself', 
             'paper craft',
             'miniature',
+            'embroidery crochet', 
+            'stitching knitting',
         ] 
     },
     { 
         'level_1': 'Life Style',  'level_2': 'Food',  
         'search_keywords': [
-            'food pizza burger hot dog salad barbecue', 
-            'food steak seafood',
-            'food bread cake bakery dessert snack icecream',
+            'food pizza burger hot dog salad', 
+            'food steak seafood barbecue',
+            'food bread cake bakery',
             'food recipe cooking', 
             'food cook bake roast toast fried stew stir',
-            'street food review',
-            'food restaurant review', 
+            'street food restaurant review',
             'food cuisine',
         ] 
     },
@@ -273,9 +255,11 @@ _lifestyle_list = [
         'level_1': 'Life Style',  'level_2': 'Health',  
         'search_keywords': [
             'health',
-            'health healthy life tips habits', 
-            'health healthy nutrition eating diet', 
-            'health body age heart brain',
+            'healthy life tips habits', 
+            'health nutrition eating diet', 
+            'health body age aging',
+            'health heart brain diseases diabetes',
+            'health health obesity',
             'health medicine medical care',
             'health doctor disease illness treatment',
         ], 
@@ -308,24 +292,51 @@ _entertainment_list = [
     { 
         'level_1': 'Entertainment',  'level_2': 'Entertainment',  
         'search_keywords': [
+            'entertainment',
             'entertainment celebrity star', 
             'entertainment news gossips'
-            'movie recommend review',
-            'movie trailer',
-            'cartoon animation video film',
             'drama comedy action crime thriller horror',
-            'comics comic books',
-            'marvel dc comics',
-            'tv shows recommend review',
-            'tv shows episodes',
-            'talk show',
+            'tiktok',
             'performing arts',
         ] 
     },
     { 
+        'level_1': 'Entertainment',  'level_2': 'Movie',  
+        'search_keywords': [
+            'movie recommend',
+            'movie review',
+            'movie trailer',
+            'movie clips',
+            'hollywood movies',
+            'bollywood movies',
+        ] 
+    },
+    { 
+        'level_1': 'Entertainment',  'level_2': 'TV shows',  
+        'search_keywords': [
+            'tv shows recommend review',
+            'tv shows episodes',
+            'tv shows hbo netflix',
+            'tv shows drama',
+            'tv shows comdy',
+            'tv talk show',
+        ] 
+    },
+    { 
+        'level_1': 'Entertainment',  'level_2': 'Cartoon & Animation',  
+        'search_keywords': [
+            'cartoon animation', 
+            'cartoon animated video film', 
+            'anime',
+            'comics',
+            'comic books',
+            'marvel dc comics',
+        ] 
+    },
+ 
+    { 
         'level_1': 'Entertainment',  'level_2': 'Humor',  
         'search_keywords': [
-            'humor',
             'entertainment humor', 
             'funny jokes halirious', 
             'funny pranks tricks',
@@ -426,9 +437,16 @@ _level_2_list = [
             'kids story fairy tales', 
             'kids video cartoon film', 
             'kids playground',
+        ] 
+    },
+    { 
+        'level_1': '',  'level_2': 'Toys',  
+        'search_keywords': [
             'kids toys',
             'kids dolls',
             'barbie',
+            'lego',
+            'action figures toys',
         ] 
     },
     { 
@@ -450,20 +468,7 @@ _level_2_list = [
             'pets cat kitten',
             'pets fish aquarium',
             'pets birds',
-            'pets rabbit hamster',
-            'pets snakes lizards turtles reptiles',
             'pets training beauty',
-        ] 
-    },
-    { 
-        'level_1': '',  'level_2': 'Animals',  
-        'search_keywords': [
-            'animals',
-            'wildlife animals',
-            'marine animals',
-            'reptile animals',
-            'birds',
-            'fish',
         ] 
     },
     { 
@@ -484,7 +489,7 @@ _level_2_list = [
         ] 
     },
     { 
-        'level_1': 'Life Style',  'level_2': 'Painting',  
+        'level_1': '',  'level_2': 'Painting',  
         'search_keywords': [
             'art painting',  
             'painting idea artwork canvas',
@@ -494,38 +499,36 @@ _level_2_list = [
             'drawing pastel',
         ] 
     },
-
+    {
+        'level_1': '',  'level_2': 'Designs',  
+        'search_keywords': [
+            'mehndi henna',
+            'rangoli muggulu kolam',
+        ] 
+    }
 ]
 
 _other_list = [
    { 
         'level_1': '',  'level_2': '',  
         'search_keywords': [
-            'tamil',
-            'hindi',
             'turtorial',
             'how to',
-            'compliations',
-            'reviews',
-            'vlogs',
+            'review',
+            'vlog',
             'hobby',
             'society',
             'religion',
-            'videos',
-            'collections',
             'share',
-            'youtubuer',
-            'popular',
-            'likes',
-            '2019',
-            '2020',
-            '2021',
+            'youtuber',
+            'video',
         ]
     },
 ]
 
 en_search_keywords_list = (
         _other_list 
+        + _gaming_list
         + _beauty_list
         + _fashion_list
         + _electronic_list

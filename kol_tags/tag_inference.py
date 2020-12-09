@@ -21,11 +21,12 @@ CHANNEL_VIDEO_COUNT_MAX = 32
 CHANNEL_VIDEO_COUNT_MIN = 8
 VIDEO_TAG_TOTAL_MAX = 5 #3 #5
 CHANNEL_TAG_TOTAL_MAX = 5 #3 #5
-CHANNEL_TAG_COUNT_THRESHOLD = 5 #6
+CHANNEL_TAG_COUNT_THRESHOLD = 4 #5 #6
 CHANNEL_UPDATE_DAYS_THRESHOLD = 365 * 3
 CHANNEL_SUB_NUM_MIN_THRESHOLD = 10000
 MATCH_MODEL_TAG_SCORE = 3
 YOUTUBE_TOPIC_TAG_SCORE = 2
+MODEL_SCORE_MAX = 10
 
 def _get_video_info_list(channel_id, channel_data):
     video_info_list = []
@@ -35,6 +36,10 @@ def _get_video_info_list(channel_id, channel_data):
         return video_info_list
     max_video_size = CHANNEL_VIDEO_COUNT_MAX
     video_contents_list = get_channel_video_list(channel_id, max_video_size)
+    if len(video_contents_list) < CHANNEL_VIDEO_COUNT_MIN:
+        logging.warn('channel do not have enough valid videos. video count: %d, valid: %d' 
+                % (total_videos, len(video_contents_list)))
+        return video_info_list
     video_id_list = [video_contents['id'] for video_contents in video_contents_list]
     video_id_description_map = get_video_description_batch(video_id_list)
     for video_contents in video_contents_list:
@@ -107,8 +112,10 @@ class TagPredictor():
         models_map[language] = _load_models(language)
         tag_index_map[language] = TagIndex.Create(language)
     models_map['zh'] = models_map['zh-Hant']
+    #models_map['zh'] = models_map['zh-Hans']
     default_models = models_map['en']
     tag_index_map['zh'] = tag_index_map['zh-Hant']
+    #tag_index_map['zh'] = tag_index_map['zh-Hans']
     default_tag_index = tag_index_map['en']
 
     feature_word_dict = _load_feature_word_dict()
@@ -116,7 +123,6 @@ class TagPredictor():
 
     def __init__(self, language, video_info_list):
         self.language = language
-        self.topic_tag_score = YOUTUBE_TOPIC_TAG_SCORE
         if language in TagPredictor.models_map:
             models = TagPredictor.models_map[language]
             self.tfidf_model, self.tag_model, self.tag_match_model = models 
@@ -152,6 +158,7 @@ class TagPredictor():
         if self.total_videos < CHANNEL_VIDEO_COUNT_MIN:
             return
         self.video_topic_list_map = get_youtube_video_topics_batch(self.video_id_list) 
+        #logging.info('youtube topic tags: %s' % str(self.video_topic_list_map))
 
     def _get_model_tag_score_map(self):
         self.video_model_tag_score_map = {}
@@ -168,6 +175,8 @@ class TagPredictor():
                 for tag_class, tag_prob in tag_1_class_prob_list + tag_2_class_prob_list:
                     tag_class_score_map[tag_class] += tag_prob
                 self.video_model_tag_score_map[video_id] = tag_class_score_map
+        #logging.info('model tags: %s' % str(self.video_model_tag_score_map))
+
 
     def _get_match_model_tag_list_map(self):
         self.video_match_model_tag_list_map = {}
@@ -180,6 +189,7 @@ class TagPredictor():
                 match_model_tags = self.tag_match_model.get_tag_class_list(
                         video_data.get_feature_words())
                 self.video_match_model_tag_list_map[video_id] = match_model_tags
+        #logging.info('match model tags: %s' % str(self.video_match_model_tag_list_map))
     
     def get_video_tag_score_list(self, video_id):
         topic_id_list = self.video_topic_list_map.get(video_id, [])
@@ -188,20 +198,22 @@ class TagPredictor():
         
         tag_class_score_map = defaultdict(int)
         for tag_class, score in model_tag_score_map.items():
+            if score > MODEL_SCORE_MAX:
+                score = MODEL_SCORE_MAX
             tag_class_score_map[tag_class] += score
         for tag_class in match_model_tag_list:
             tag_class_score_map[tag_class] += MATCH_MODEL_TAG_SCORE
         for topic_id in topic_id_list:
             tag_class = self.tag_index.get_tag_name_by_topic_id(topic_id)
             if tag_class is not None:
-                tag_class_score_map[tag_class] += self.topic_tag_score
+                tag_class_score_map[tag_class] += YOUTUBE_TOPIC_TAG_SCORE
 
         sorted_tag_class_score_list = sorted(
                 [(tag_class, score) 
                         for tag_class, score in tag_class_score_map.items()
                         if tag_class != ''], 
                 key=lambda x: x[1], reverse=True)[:VIDEO_TAG_TOTAL_MAX]
-        #sorted_tag_class_score_list = normalize_score(sorted_tag_class_score_list)
+        logging.info('video tags: %s' % str(sorted_tag_class_score_list))
         return sorted_tag_class_score_list
 
     def get_tags(self):
@@ -226,6 +238,7 @@ class TagPredictor():
                 key=lambda x: x[1],
                 reverse=True)[:CHANNEL_TAG_TOTAL_MAX]
         channel_tag_list = normalize_score(channel_tag_list)
+        logging.info('tag list: %s' % channel_tag_list)
         total_count = len(self.video_id_list)
         channel_tag_list = [(tag, score * channel_tag_counter[tag] / total_count) 
                 for tag, score in channel_tag_list
@@ -247,23 +260,27 @@ class TagPredictor():
             logging.warn('Warn: language %s not support yet.' % self.language)
             language = default_language
         channel_structure_tag_map = {}
+
         for tag_name, score in channel_tag_list:
             structure_info = self.tag_index.get_structure_tag_info(tag_name)
             if structure_info:
-                name = structure_info[language]
-                if name is None:
-                    name = tag_name
-                if name not in channel_structure_tag_map: 
+                #print(structure_info)
+                #name = structure_info[language]
+                #if name is None or name == '':
+                #    name = tag_name
+                tag_id = structure_info['id']
+                tag_level = structure_info['level']
+                if tag_id not in channel_structure_tag_map: 
                     data = {
-                        'level': structure_info['level'], 
-                        'tag_name': name, 
+                        'level': tag_level, 
+                        'tag_name': tag_name, 
                         'weight': score,
                         'language': language,
-                        'id': structure_info['id'],
+                        'id': tag_id,
                     } 
-                    channel_structure_tag_map[name] = data 
+                    channel_structure_tag_map[tag_id] = data 
                 else:
-                    channel_structure_tag_map[name]['weight'] += score
+                    channel_structure_tag_map[tag_id]['weight'] += score
         channel_structure_tag_list = list(channel_structure_tag_map.values())
         return channel_structure_tag_list
 

@@ -49,10 +49,11 @@ def request_youtube_api_obj(request_url):
     return json_obj
 
 
-def search_video_list_by_keyword(keyword, language, max_size=1000):
+def search_video_list_by_keyword(keyword, language):
     video_id_list = []
     page_size = 50
-    pages = int(max_size / page_size)
+    #pages = int(max_size / page_size)
+    pages = 8
     request_url = (('https://www.googleapis.com/youtube/v3/search?'
             + 'q=%s&relevanceLanguage=%s&maxResults=%d&key=%s&type=video') 
             % (keyword, language, page_size, youtube_key))

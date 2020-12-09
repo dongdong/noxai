@@ -354,7 +354,8 @@ def get_tag_model_features(model, dictionary, max_len):
         tag_class = model.classes_[tag_class_index]
         feature_value = model.feature_log_prob_[tag_class_index]
         top_feature_vocab_index_list = feature_value.argsort()[:-(max_len+1):-1]
-        top_feature_word_list = [dictionary[i] for i in top_feature_vocab_index_list] 
+        top_feature_word_list = [(dictionary[i], feature_value[i]) 
+                for i in top_feature_vocab_index_list] 
         #print(tag_class, top_feature_word_list)
         tag_class_feature_words_map[tag_class] = top_feature_word_list
 
@@ -365,8 +366,10 @@ def test_tag_model_features():
     from text_processor import TFIDFModel
     #language = 'zh-Hant'
     language = 'en'
-    tfidf_model_path = pm.get_tfidf_inference_model_dir(language)
-    tag_model_path = pm.get_tag_inference_model_dir(language)
+    #tfidf_model_path = pm.get_tfidf_inference_model_dir(language)
+    #tag_model_path = pm.get_tag_inference_model_dir(language)
+    tfidf_model_path = pm.get_tfidf_train_model_dir(language)
+    tag_model_path = pm.get_tag_train_model_dir(language)
     tfidf_model = TFIDFModel(tfidf_model_path)
     tfidf_model.load_model()
     tag_model = TagModel()
@@ -383,8 +386,8 @@ def test_tag_model_features():
         for v in v_list:
             word_tag_counter[v] += 1
 
-    black_list = set([k for k, v in word_tag_counter.items() if v > 3])
-    print(black_list)
+    black_list = set([k for k, v in word_tag_counter.items() if v > 2])
+    print('black_list: ', black_list)
 
     #for k, v_list in tag_class_feature_words_map_1.items():
     #    #print(k)
@@ -398,8 +401,8 @@ def test_tag_model_features():
         #print(k)
         #print(v)
         for v in v_list:
-            if v not in black_list:
-                print("%s##%s" % (k, v))
+            #if v not in black_list:
+            print("%s##%s" % (k, v))
 
     '''
     all_feature_words = set()
@@ -414,7 +417,8 @@ def test_tag_model_features():
 
 if __name__ == '__main__':
     test_tag_model()
-    #test_tag_model_features()
+    print("###")
+    test_tag_model_features()
 
 
 

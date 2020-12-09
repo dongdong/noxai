@@ -11,9 +11,9 @@ pool_spider = redis.ConnectionPool(
         port=6379)
 redis_spider = redis.Redis(connection_pool=pool_spider)
 
-#redis_channel_id_list_name = 'all_tag_rule_cid'
+redis_channel_id_list_name = 'all_tag_rule_cid'
 #redis_channel_id_list_name = 'all_tag_rule_cid.zh'
-redis_channel_id_list_name = 'all_tag_rule_cid.test'
+#redis_channel_id_list_name = 'all_tag_rule_cid.test'
 #redis_channel_id_list_name = 'all_tag_rule_cid.other'
 #redis_channel_id_list_name = 'all_tag_rule_cid.ko'
 
@@ -64,22 +64,12 @@ def write_id_2_redis(redis_name, sql):
 
 
 def get_sql():
-    #sql = 'select cid from kol_channel_base order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang = "zh" and sub > 10000 order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang = "zh-Hant" and sub > 10000 order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 order by sub desc'
-    #sql = 'select cid from kol_channel_base where (lang = "zh" or lang = "zh-Hant" or lang = "zh-Hans") and sub > 10000 limit 3000'
-    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 5000 limit 100000'
-    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 10000 limit 1000'
-    #sql = 'select cid from kol_channel_base where lang = "ko" and sub > 10000 limit 3000'
-    #sql = 'select cid from kol_channel_base where lang = "en" and sub <= 10000 and sub > 5000 order by sub desc'
     #sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") order by sub desc'
-    #sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") and sub > 5000 limit 50000'
-    #sql = 'select cid from kol_channel_base where (lang="en" or lang="zh" or lang="zh-Hant" or lang="zh-Hans") and sub > 3000 and sub <= 5000 order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang != "ko" and lang != "en" and lang != "zh" and lang != "zh-Hant" and lang != "zh-Hans" and sub > 10000 order by sub desc'
-    #sql = 'select cid from kol_channel_base where lang = "en" and sub > 100000 limit 1000'
-    #sql = 'select cid from kol_channel_base where lang = "ko" and sub > 1000 limit 30000'
-    sql = 'select cid from kol_channel_base where (lang="zh" or lang="zh-Hant" or lang="zh-Hans") order by sub desc'
+    #sql = 'select cid from kol_channel_base where lang="ko" order by sub desc'
+    #sql = 'select cid from kol_channel_base where sub > 50000'
+    #sql = 'select cid from kol_channel_base where sub > 50000'
+    #sql = 'select cid from kol_channel_base where sub <= 50000 and sub > 10000'
+    sql = 'select cid from kol_channel_base where sub <= 10000 and sub > 5000'
 
     return sql
 
@@ -90,9 +80,10 @@ def insert_pipe():
 
 
 def set_pipe():
+    '''
     if clean_pipe():
         insert_pipe()
     else:
         logging.error('clean data error!')
-
-
+    '''
+    insert_pipe()

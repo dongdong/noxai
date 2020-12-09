@@ -98,7 +98,7 @@ _beauty_list = [
 
 _fashion_list = [
     { 
-        'level_1': '패션',  'level_2': '패션',  
+        'level_1': '패션',  'level_2': '옷',  
         #fashion，Clothing
         'search_keywords': [
                 '패션', 

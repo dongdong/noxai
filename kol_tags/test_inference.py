@@ -1,5 +1,7 @@
-from tag_inference import ChannelInfo, VideoTags, TagPredictor, TagPredictorManager 
-from es_utils import get_channel_list_by_category_language
+#from tag_inference import ChannelInfo, VideoTags, TagPredictor, TagPredictorManager 
+#from es_utils import get_channel_list_by_category_language
+import os
+import json
 
 def get_channel_data():
     category_list = [24, 25, 26]
@@ -48,5 +50,21 @@ def test():
     dump_unknown_topic_ids()
 
 
+def dump_cache_file(data_path):
+    if os.path.exists(data_path):
+        with open(data_path) as f:
+            for line in f:
+                video_contents = json.loads(line)
+                for k, v in video_contents.items():
+                    print(k, v) 
+
+
 if __name__ == '__main__':
-    test()
+    #test()
+    #data_path = 'cache/zh-Hant/video_data/數碼產品_智能手機.json'
+    data_path = 'cache/zh-Hant/video_data_processed/數碼產品_智能手機.json'
+    dump_cache_file(data_path)
+
+
+
+

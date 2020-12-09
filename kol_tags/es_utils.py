@@ -34,7 +34,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(filename)s[line:%(
 #channel_index = 'kol_v9'
 channel_index = 'kol_v8'
 
-def get_video_contents(video_id):
+
+VIDEO_PUB_DAYS_THRESHOLD = 365 * 3
+now = datetime.datetime.now()
+pub_datatime_threshold = now - datetime.timedelta(days=VIDEO_PUB_DAYS_THRESHOLD)
+pub_time_threshold = pub_datatime_threshold.timestamp()
+pub_date_threshold = pub_datatime_threshold.strftime("%Y-%m-%d")
+
+
+def get_video_contents(video_id, video_description=None):
     data = None
     try:
         source_1 = es_video.get_source(index='kol_video', id=video_id)
@@ -46,8 +54,11 @@ def get_video_contents(video_id):
             'keywords': source_1['keywords'],
             'from:': 'es',
         } 
-        source_2 = es_video.get_source(index='kol_video_description', id=video_id)
-        data['description'] = source_2['description']
+        if video_description is None:
+            source_2 = es_video.get_source(index='kol_video_description', id=video_id)
+            data['description'] = source_2['description']
+        else:
+            data['description'] = video_description
     except:
         logging.warn('fail to get video contents. video id: ' + video_id)
     return data
@@ -93,8 +104,13 @@ def get_channel_video_list(channel_id, size):
             "size": size,
             "query": {"bool": {"must": [
                 {"term": {"channel_id": {"value": channel_id}}},
+                #{"range": {"pub_time": {"gt": pub_time_threshold}}},
+                {"range": {"pub_date": {"gt": pub_date_threshold}}},
             ]}},
-            "_source": ['title', 'category', 'language', 'description', 'keywords'],
+            "_source": [
+                'title', 'category', 'language', 'description', 'keywords',
+                'pub_date', 'pub_time',
+            ],
             "sort":[{
                "pub_date": {"order": "desc"},
             }],
@@ -105,6 +121,7 @@ def get_channel_video_list(channel_id, size):
             video_info = hit['_source'].copy()
             video_info['id'] = hit['_id']
             video_list.append(video_info)
+            #print(video_info)
     except:
         logging.error(traceback.format_exc())
 
@@ -176,8 +193,8 @@ def test_video_contents():
 
 def test_channel_contents():
     #channel_id = 'UCO6SoJNF3VY2tnlzypHl-4w'
-    #channel_id = 'UCxse2SVhmf5wzi12L6B_Wog'
-    channel_id = 'UCg4mMShkzgnIWuwTZ5uMahQ'
+    channel_id = 'UCxse2SVhmf5wzi12L6B_Wog'
+    #channel_id = 'UCg4mMShkzgnIWuwTZ5uMahQ'
     channel_contents = get_channel_contents(channel_id)
     print(channel_contents)
 
@@ -227,31 +244,29 @@ def get_channel_list_by_tag(tag, size):
     return channel_id_list
 
 
-def get_pop_video(size=8, language=None, country=None):
+def get_pop_videos(language, country=None, size=8):
+    sort_script = """
+    return ((doc['view'].getValue() - doc['last_view'].getValue())
+            / doc['channel']['sub_num'].getValue());
+ """
     try:
         param_dict = {
             "size": size,
             "query": {"bool": {"must": [
                 {"exists": {"field": "last_view"}},        
                 {"exists": {"field": "category"}},        
-                {"script":{"script":{
-                    "source": "return doc['view'].getValue() - doc['last_view'].getValue() > 0", 
-                    "lang": "painless",
-                }}}
+                {"term": {"language": {"value": language}}},
+                #{"script":{"script":{
+                #    "source": "return doc['view'].getValue() - doc['last_view'].getValue() > 0", 
+                #    "lang": "painless",
+                #}}}
             ]}},
-            #"_source": {
-            #    "includes": [ 
-            #        "id", "title", "pub_date", "view", "thumbnails", "dislikes", "likes", "comments",
-            #        "language", "category", "country", "last_view", "channel_id", "video_score", 
-            #        "channel.languages", "channel.avatar", "channel.sub_num", "channel.title",
-            #        "keywords",
-            #    ],
-            #    "excludes": [],
-            #},
+            "_source": ['title', 'category', 'language', 'description', 'keywords'],
             "sort": [{
                 "_script": {
                     "script": {
-                        "source": "return doc['view'].getValue() - doc['last_view'].getValue();",
+                        "source": "return doc['view'].getValue() - doc['last_view'].getValue()",
+                        #"source": "return doc['view'].getValue()",
                         "lang": "painless",
                     },
                     "type": "number", 
@@ -262,9 +277,6 @@ def get_pop_video(size=8, language=None, country=None):
         if country:
             country_query_term = {"term": {"country": {"value": country}}}
             param_dict["query"]["bool"]["must"].append(country_query_term)
-        if language:
-            language_query_term = {"term": {"language": {"value": language}}}
-            param_dict["query"]["bool"]["must"].append(language_query_term)
         json_obj = es_video.search(index='nox_kol_video_analysis-current', 
                 body=param_dict, timeout='1m')
         pop_video_list = json_obj['hits']['hits']
@@ -275,8 +287,9 @@ def get_pop_video(size=8, language=None, country=None):
     return pop_video_list
 
 
-def test_pop_video():
-    pop_video_list = get_pop_video()
+def test_pop_videos():
+    language = 'zh'
+    pop_video_list = get_pop_videos(language)
     for video in pop_video_list:
         print(video)
 
@@ -291,10 +304,19 @@ def test_get_channel_list_by_tag():
         print(channel_info)
 
 
+def test_get_channel_video_list():
+    channel_id = 'UCpEVIcVrgeTgJusnsV4C5wA'
+    video_list = get_channel_video_list(channel_id, 32)
+    for video in video_list:
+        print(video)
+
 if __name__ == "__main__":
-    #test_channel_contents()        
+    test_channel_contents()        
     #test_video_description_batch()
     #test_get_channel_list_by_tag()
-    test_pop_video()
+    #test_pop_videos()
+    #test_get_channel_video_list()
+
+
 
 

@@ -165,13 +165,13 @@ def clear_channel_tags(channel_id):
     tag_detail = channel_contents.get('tag_detail', [])
     tag_list = channel_contents.get('tag_list', [])
     logging.info('clear channel tags. prev tag detail: %s, prev tag list: %s' 
-            % tag_detail, tag_list)
+            % (tag_detail, tag_list))
     succ = write_tag_info(channel_id, [], [])
     channel_contents = get_channel_contents(channel_id)
     tag_detail = channel_contents.get('tag_detail', [])
     tag_list = channel_contents.get('tag_list', [])
     logging.info('clear channel tags. after tag detail: %s, after tag list: %s' 
-            % tag_detail, tag_list)
+            % (tag_detail, tag_list))
     return succ
     
 

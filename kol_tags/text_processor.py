@@ -24,7 +24,7 @@ class TFIDFModel():
     def train(self, dataset):
         dataset_uniq = [list(set(doc)) for doc in dataset]
         self.dictionary = Dictionary(dataset_uniq)
-        self.dictionary.filter_extremes(no_below=10)
+        self.dictionary.filter_extremes(no_below=5)
         corpus = [self.dictionary.doc2bow(doc) for doc in dataset]
         self.model = TfidfModel(corpus)
    
@@ -84,11 +84,10 @@ class ParserEn():
         self.entity_list = []
 
     def _clean_text(self, text):
-        
         text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', ' ', text)
         text = re.sub(r'^[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z]{1,13}\.[com,cn,net]{1,3}$', ' ', text)
         text = re.sub(r'[^a-zA-Z]', ' ', text).strip() 
-        text = re.sub(' {2,}', ', ', text)
+        text = re.sub(' +', ' ', text)
         text = text.lower()
         return text
 
@@ -131,11 +130,12 @@ class ParserEn():
 
 
 class ParserZh(ParserEn):
-    nlp = spacy.load("zh_core_web_sm")
+    #nlp = spacy.load("zh_core_web_sm")
+    nlp = spacy.load("zh_core_web_md")
 
     def _clean_text(self, text):
         text = re.sub(u'(?:[^\u4e00-\u9fa5])', u' ', text).strip()
-        text = re.sub(' +', ', ', text)    
+        text = re.sub(' +', ' ', text)    
         return text
 
     def _get_doc(self, clean_text):
@@ -150,34 +150,15 @@ class ParserZh(ParserEn):
 
     def _get_noun_chunks(self, doc):
         noun_chunk_list = []
-        q = Queue(maxsize=20)
-        #print([(token.text, token.pos_, token.tag_) for token in doc])
         noun_tags = set(['NN', 'NR'])
         for token in doc:
-            if token.tag_ in noun_tags and not q.full():
-                q.put(token.text)
+            if token.tag_ in noun_tags and len(token.text) > 1:
                 noun_chunk_list.append(token.text)
-            else:
-                if not q.empty():
-                    q_size = 1
-                    noun_word = q.get()
-                    noun_chunk = noun_word
-                    last_word = noun_word
-                    while not q.empty():
-                        #noun_chunk += q.get() 
-                        q_size += 1
-                        noun_word = q.get()
-                        noun_pair = last_word + noun_word
-                        noun_chunk_list.append(noun_pair)
-                        last_word = noun_word
-                        noun_chunk += noun_word
-                    if q_size > 2: # single and noun_pair already added
-                        noun_chunk_list.append(noun_chunk)
         return noun_chunk_list
 
     def _noun_words_filter(self, words):
         min_length = 2
-        max_length = 6
+        max_length = 8
         words = [word for word in words 
                     if len(word) >= min_length 
                     and len(word) <= max_length]
@@ -197,12 +178,13 @@ class ParserKo(ParserEn):
 
     def _get_tokens(self, doc):
         pos_filter_set = set(['SP'])
-        token_list = [word for (word, tag) in ParserKo.nlp.pos(doc) 
-            if tag not in pos_filter_set and len(word) > 1]
+        token_list = [word.strip() for (word, tag) in ParserKo.nlp.pos(doc) 
+            if tag not in pos_filter_set and len(word.strip()) > 1]
         return token_list
 
     def _get_noun_chunks(self, doc):
-        noun_chunk_list = ParserKo.nlp.nouns(doc)
+        noun_chunk_list = [word.strip() for word in ParserKo.nlp.nouns(doc)
+                if len(word.strip()) > 1]
         return noun_chunk_list
 
     def _noun_words_filter(self, words):

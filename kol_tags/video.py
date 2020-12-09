@@ -5,25 +5,33 @@ import logging
 
 from text_processor import TFIDFModel, Parser
 
+
+def _load_stop_words(file_path):
+    stop_word_set = set()
+    with open(file_path, 'r') as f:
+        for line in f:
+            word = line.strip()
+            stop_word_set.add(word)
+    return stop_word_set
+
+
 class VideoData():
     def __init__(self, video_id, title, category_id, keyword_list, description, language): 
         self.video_id = video_id
         self.title = title
         self.category_id = category_id
         self.keyword_list = keyword_list
-        self.description = description
+        self.description = '' #description
         self.language = language
         self.token_list = None
         self.noun_word_list = None
         self.tfidf_word_list = None
+        self.stop_word_set = _load_stop_words('stop_words')
 
     def _get_text(self):
         raw_text = self.title 
-        raw_text += '. ' + self.title 
-        raw_text += '. ' + self.title 
-        raw_text += '. ' + '. '.join(self.keyword_list[:12])
-        description_list = self.description.split('\n')
-        raw_text += '. ' + ' '.join(description_list[:5])
+        #raw_text += ' ' + self.title 
+        raw_text += ' ' + ' '.join(self.keyword_list)
         return raw_text
 
     def get_data(self):
@@ -49,6 +57,11 @@ class VideoData():
         self.parser.parse_text()
         self.token_list = self.parser.token_list
         self.noun_word_list = self.parser.noun_word_list
+        #@TODO
+        for keyword in self.keyword_list:
+            keyword = keyword.lower().replace('\n', ' ').strip()
+            if len(keyword) > 1:
+                self.noun_word_list.append(keyword)
 
     def process_tfidf_words(self, tfidf_model):
         feature_words = self.get_feature_words()
@@ -66,7 +79,10 @@ class VideoData():
     def get_feature_words(self):
         if self.token_list is None or self.noun_word_list is None:
             self.parse_text()
-        return self.token_list + self.noun_word_list
+        feature_word_list = [ word 
+                for word in self.token_list + self.noun_word_list
+                if word not in self.stop_word_set ]
+        return feature_word_list
 
     @staticmethod
     def From_dict(json_obj):
