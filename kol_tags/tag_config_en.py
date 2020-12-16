@@ -174,7 +174,8 @@ _electronic_list = [
             'pc desktop workstation',
             'laptop notebook',
             'tablet pad',
-            'computer accessories keyboad mouse',
+            #'computer accessories keyboad mouse',
+            'computer accessories keyboad',
         ] 
     },
     { 
