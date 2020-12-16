@@ -72,6 +72,11 @@ def get_channel_contents_from_es(channel_id):
     return source
 
 
+def update_channel_contents_to_es(channel_id, data):
+    param = {"retry_on_conflict": 5}
+    es.update(index=channel_index, params=param, id=channel_id, body={"doc": data})
+
+
 def clean_pipe():
     redis_spider.delete(redis_channel_id_list_name)
     succ = not redis_spider.exists(redis_channel_id_list_name)
@@ -119,7 +124,9 @@ def write_id_2_redis(redis_name, sql):
 
 
 def get_sql():
-    sql = 'select cid from kol_channel_base where sub > 10000 limit 5000'
+    #sql = 'select cid from kol_channel_base where sub > 10000 limit 5000'
+    #sql = 'select cid from kol_channel_base where sub > 10000'
+    sql = 'select cid from kol_channel_base where lang="zh-Hant" or lang="zh-Hans" or lang="zh"'
     return sql
 
 
@@ -142,7 +149,7 @@ def reset_pipe():
 
 def pop_channel_id_from_pipe():
     wait_time = 0
-    max_wait_time = 30
+    max_wait_time = 10
     while True:
         channel_id_bytes = redis_spider.lpop(redis_channel_id_list_name)
         if channel_id_bytes is None:
@@ -160,7 +167,6 @@ def pop_channel_id_from_pipe():
             wait_time = 0
             channel_id = str(channel_id_bytes, encoding='utf-8')
             yield channel_id
-
 
 
 

@@ -8,10 +8,10 @@ import logging
 logging.basicConfig(level=logging.INFO, 
         format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s : %(message)s')
 
-from age_gender_models import GroupStatModel, group_stat_model_path, WeightedGroupStatModel
-from age_gender_models import CrossGroupStatModel, cross_group_stat_model_path
-from utils import get_rows_by_sql_from_kol_v2, get_channel_contents_from_es 
+from utils import get_rows_by_sql_from_kol_v2
+from utils import get_channel_contents_from_es, update_channel_contents_to_es
 from utils import pop_channel_id_from_pipe
+from age_gender_models import KNN_Model
 
 true_dist_cache_path = './true_dist_channel_data.json'
 
@@ -150,9 +150,10 @@ def get_true_fans_distribution():
             raw_list = age_gender_dist_raw['rows']
             age_gender_dist_arr = get_age_gender_dist_arr(raw_list)
             data['age_gender_dist'] = age_gender_dist_arr
-            if sum(age_gender_dist_arr) < 0.1: # all zeros
-                logging.warn('get true fans distribution. Invalid data: %s' 
-                        % (row[5]))
+            if (sum(age_gender_dist_arr) < 0.1 or # all zeros
+                sum(age_gender_dist_arr) > 120 or # not sum upto 100, maybe fake data
+                max(age_gender_dist_arr) > 70 ): # extreme distribution
+                logging.warn('get true fans distribution. Invalid data: %s' % (row[5]))
                 continue
             data_list.append(data)
         except:
@@ -163,6 +164,7 @@ def get_true_fans_distribution():
 def dump_true_dist_channels(file_path):
     true_dist_list = get_true_fans_distribution()
     logging.info('get true fans distribution, total: %d' % len(true_dist_list))
+    count = 0
     with open(file_path, 'w') as f:
         for item in true_dist_list:
             channel_id = item['channel_id']
@@ -173,6 +175,8 @@ def dump_true_dist_channels(file_path):
                 continue
             channel_data.set_age_gender_dist(age_gender_dist)
             f.write(json.dumps(channel_data.get_data()) + '\n')
+            count += 1
+    logging.info('dump true dist channels finish. total data: %d' % count)
 
 
 def load_true_dist_channels(file_path):
@@ -186,14 +190,6 @@ def load_true_dist_channels(file_path):
     return channel_data_dict
 
 
-def load_age_gender_model():
-    logging.info('load model')
-    #model = GroupStatModel.Load(group_stat_model_path)
-    #model = WeightedGroupStatModel.Load(group_stat_model_path)
-    model = CrossGroupStatModel.Load(cross_group_stat_model_path)
-    return model
-
-
 def inference_age_gender_dist(model, channel_id):
     logging.info('inference age gender dist. channel_id: %s' % (channel_id))
     channel_data = ChannelData.From_es(channel_id)
@@ -203,30 +199,41 @@ def inference_age_gender_dist(model, channel_id):
     return channel_data
 
 
-global_age_gender_dist_model = load_age_gender_model()
-global_true_dist_channel_data_dict = load_true_dist_channels(true_dist_cache_path)
+global_true_dist_channel_data_dict = None
+global_age_gender_dist_model = None
+def load_age_gender_model():
+    global global_true_dist_channel_data_dict
+    global global_age_gender_dist_model
+    if global_true_dist_channel_data_dict is None:
+        global_true_dist_channel_data_dict = load_true_dist_channels(true_dist_cache_path)
+    if global_age_gender_dist_model is None:
+        global_age_gender_dist_model = KNN_Model()
+        global_age_gender_dist_model.train(global_true_dist_channel_data_dict)
+    return global_true_dist_channel_data_dict, global_age_gender_dist_model 
+
 
 def get_age_gender_distribution(channel_id):
-    if channel_id in global_true_dist_channel_data_dict:
-        logging.info('Real age gender distribution. No need to predict! channel id: %s'
-                % (channel_id))
-    channel_data = inference_age_gender_dist(global_age_gender_dist_model, channel_id)
+    true_dist_channel_data_dict, age_gender_dist_model = load_age_gender_model()
+    if channel_id in true_dist_channel_data_dict:
+        logging.info('True age gender distribution, ignore! channel id: %s'% (channel_id))
+        channel_data = true_dist_channel_data_dict[channel_id]
+    else:
+        channel_data = inference_age_gender_dist(age_gender_dist_model, channel_id)
     format_age_gender_dist = channel_data.get_follower_age_gender_distribution()
     logging.info('predict follower age gender distribution: \n%s' % format_age_gender_dist)
-    #print(global_age_gender_dist_model.not_support_group_stat)
     return format_age_gender_dist   
 
 
 def test_age_gender_inference():
-    for channel_id, channel_data in global_true_dist_channel_data_dict.items():
-        channel_data_infer = inference_age_gender_dist(
-                global_age_gender_dist_model, channel_id)    
+    true_dist_channel_data_dict, age_gender_dist_model = load_age_gender_model()
+    for channel_id, channel_data in true_dist_channel_data_dict.items():
+        channel_data_infer = inference_age_gender_dist(age_gender_dist_model, channel_id)    
         logging.info('real dist: %s' % (channel_data.age_gender_dist))
         logging.info('infer dist: %s' % (channel_data_infer.age_gender_dist))
-        logging.info('real dist argsort: %s' 
-                % (np.array(channel_data.age_gender_dist).argsort()))
-        logging.info('infer dist argsort: %s' 
-                % (np.array(channel_data_infer.age_gender_dist).argsort()))
+        #logging.info('real dist argsort: %s' 
+        #        % (np.array(channel_data.age_gender_dist).argsort()))
+        #logging.info('infer dist argsort: %s' 
+        #        % (np.array(channel_data_infer.age_gender_dist).argsort()))
 
 
 def dump_real_data():
@@ -239,21 +246,30 @@ def display_channel_contents(channel_id):
         print(k, v)
 
 
-def predict_age_gender_dist_from_pipe():
+def update_age_gender_dist_to_es(channel_id, age_gender_dist):
+    data = {
+        "follower_age_gender_distribution": age_gender_dist,
+    }
+    update_channel_contents_to_es(channel_id, data) 
+
+
+def update_age_gender_dist(channel_id):
+    logging.info('update followers age gender dist. channel id: %s' % (channel_id))
+    age_gender_dist = get_age_gender_distribution(channel_id)
+    update_age_gender_dist_to_es(channel_id, age_gender_dist)
+
+
+def update_age_gender_dist_from_pipe():
     count = 0
-    batch = 100
+    batch = 10
+
     for channel_id in pop_channel_id_from_pipe():
-        age_gender_dist = get_age_gender_distribution(channel_id)
+        update_age_gender_dist(channel_id)
         count += 1
         if count % batch == 0:
             time.sleep(1)
 
-    logging.info('predict age gender distribution finish! total: %d' 
-            % (count))
-
-    for k, v in global_age_gender_dist_model.not_support_group_stat.items():
-        if v > 3:
-            print(k, v)
+    logging.info('predict age gender distribution finish! total: %d' % (count))
 
 
 def test():

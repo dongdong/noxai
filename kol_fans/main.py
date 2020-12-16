@@ -2,8 +2,7 @@ import argparse
 import logging
 
 from fans_dist import get_age_gender_distribution, dump_real_data, display_channel_contents
-from fans_dist import predict_age_gender_dist_from_pipe
-from age_gender_models import train as train_age_gender_model
+from fans_dist import update_age_gender_dist, update_age_gender_dist_from_pipe
 from utils import watch_pipe, set_pipe, clean_pipe
 
 def main(arguments):
@@ -11,13 +10,14 @@ def main(arguments):
     cmd = arguments['cmd']
     if cmd == 'dump-real-data':
         dump_real_data()
-    elif cmd == 'train-age-gender-model':
-        train_age_gender_model()
     elif cmd == 'predict-age-gender-dist':
         channel_id = arguments['channel_id']
         get_age_gender_distribution(channel_id)
-    elif cmd == 'predict-age-gender-dist-from-pipe':
-        predict_age_gender_dist_from_pipe()
+    elif cmd == 'update-age-gender-dist':
+        channel_id = arguments['channel_id']
+        update_age_gender_dist(channel_id)
+    elif cmd == 'update-age-gender-dist-from-pipe':
+        update_age_gender_dist_from_pipe()
     elif cmd == 'display-channel-contents':
         channel_id = arguments['channel_id']
         display_channel_contents(channel_id)
@@ -37,9 +37,9 @@ if __name__ == '__main__':
         '--cmd',
         choices={
             'dump-real-data',
-            'train-age-gender-model',
             'predict-age-gender-dist', 
-            'predict-age-gender-dist-from-pipe', 
+            'update-age-gender-dist', 
+            'update-age-gender-dist-from-pipe', 
             'display-channel-contents',
             'watch-pipe',
             'set-pipe',
