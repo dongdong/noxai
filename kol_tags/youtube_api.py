@@ -145,7 +145,7 @@ def get_youtube_channel_topics(channel_id):
 
 def get_youtube_video_topics_batch(video_id_list):
     ret = {}
-    video_ids = ','.join(video_id_list)
+    video_ids = ','.join([video_id for video_id in video_id_list if video_id is not None])
     request_url = 'https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=topicDetails' % (video_ids, youtube_key)
     json_obj = request_youtube_api_obj(request_url)
     #print(json_obj)

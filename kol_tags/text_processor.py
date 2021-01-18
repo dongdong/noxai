@@ -130,8 +130,7 @@ class ParserEn():
 
 
 class ParserZh(ParserEn):
-    #nlp = spacy.load("zh_core_web_sm")
-    nlp = spacy.load("zh_core_web_md")
+    nlp = spacy.load("zh_core_web_sm")
 
     def _clean_text(self, text):
         text = re.sub(u'(?:[^\u4e00-\u9fa5])', u' ', text).strip()
@@ -159,6 +158,33 @@ class ParserZh(ParserEn):
     def _noun_words_filter(self, words):
         min_length = 2
         max_length = 8
+        words = [word for word in words 
+                    if len(word) >= min_length 
+                    and len(word) <= max_length]
+        return words
+
+
+class ParserJa(ParserEn):
+    #nlp = spacy.load("ja_core_news_sm")
+
+    def _clean_text(self, text):
+        text = re.sub(u"(?:[^\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff\u4e00-\u9fa5])", u' ', text).strip()
+        text = re.sub(' +', ' ', text)  
+        return text
+
+    def _get_doc(self, clean_text):
+        return clean_text        
+
+    def _get_tokens(self, doc):
+        return []
+
+    def _get_noun_chunks(self, doc):
+        noun_chunk_list = doc.split(' ')
+        return noun_chunk_list
+
+    def _noun_words_filter(self, words):
+        min_length = 2
+        max_length = 12
         words = [word for word in words 
                     if len(word) >= min_length 
                     and len(word) <= max_length]
@@ -209,6 +235,8 @@ class Parser():
             self.parser_list.append(ParserZh(raw_text))
         elif language == 'ko':
             self.parser_list.append(ParserKo(raw_text))
+        elif language == 'ja':
+            self.parser_list.append(ParserJa(raw_text))
         else:
             pass
     def parse_text(self):
@@ -219,20 +247,25 @@ class Parser():
             self.entity_list += parser.entity_list
 
 
-def test_parser_ko():
-    text = '''
-    '''
-
-    language = 'ko'
-    parser = Parser(text, language)
-    words = parser.parse_text()
-    #print(parser.token_list)
-    #print(parser.noun_word_list)
+def test_parser_ja():
+    language = 'ja'
+    test_file = 'ja_test.json'
+    with open(test_file, 'r') as f:
+        for line in f:
+            json_obj = json.loads(line)
+            title = json_obj['title']
+            keyword_list = [word.lower() for word in json_obj['keywords'] if len(word) > 1]
+            text = title + ' ' + ' '.join(keyword_list)
+            print(text)
+            #parser = ParserJa(title)
+            parser = Parser(text, language)
+            parser.parse_text()
+            print(parser.token_list + parser.noun_word_list + keyword_list)
 
 
 
 if __name__ == '__main__':
-    test_parser_ko()
+    test_parser_ja()
 
 
 

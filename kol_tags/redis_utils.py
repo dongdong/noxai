@@ -11,11 +11,12 @@ pool_spider = redis.ConnectionPool(
         port=6379)
 redis_spider = redis.Redis(connection_pool=pool_spider)
 
-redis_channel_id_list_name = 'all_tag_rule_cid'
+#redis_channel_id_list_name = 'all_tag_rule_cid'
 #redis_channel_id_list_name = 'all_tag_rule_cid.zh'
 #redis_channel_id_list_name = 'all_tag_rule_cid.test'
 #redis_channel_id_list_name = 'all_tag_rule_cid.other'
 #redis_channel_id_list_name = 'all_tag_rule_cid.ko'
+redis_channel_id_list_name = 'all_tag_rule_cid.jp'
 
 
 def clean_pipe():
@@ -69,7 +70,10 @@ def get_sql():
     #sql = 'select cid from kol_channel_base where sub > 50000'
     #sql = 'select cid from kol_channel_base where sub > 50000'
     #sql = 'select cid from kol_channel_base where sub <= 50000 and sub > 10000'
-    sql = 'select cid from kol_channel_base where sub <= 10000 and sub > 5000'
+    #sql = 'select cid from kol_channel_base where sub <= 10000 and sub > 5000'
+    #sql = 'select cid from kol_channel_base where sub <= 5000 and sub > 3000'
+    #sql = 'select cid from kol_channel_base where sub <= 3000 and sub > 1000'
+    sql = 'select cid from kol_channel_base where lang="ja" order by sub desc'
 
     return sql
 

@@ -25,8 +25,9 @@ CHANNEL_TAG_COUNT_THRESHOLD = 4 #5 #6
 CHANNEL_UPDATE_DAYS_THRESHOLD = 365 * 3
 CHANNEL_SUB_NUM_MIN_THRESHOLD = 10000
 MATCH_MODEL_TAG_SCORE = 3
-YOUTUBE_TOPIC_TAG_SCORE = 2
-MODEL_SCORE_MAX = 10
+YOUTUBE_TOPIC_TAG_SCORE = 3
+#MODEL_SCORE_MAX = 10
+MODEL_SCORE_MAX = 5
 
 def _get_video_info_list(channel_id, channel_data):
     video_info_list = []
@@ -41,14 +42,28 @@ def _get_video_info_list(channel_id, channel_data):
                 % (total_videos, len(video_contents_list)))
         return video_info_list
     video_id_list = [video_contents['id'] for video_contents in video_contents_list]
-    video_id_description_map = get_video_description_batch(video_id_list)
+    #video_id_description_map = get_video_description_batch(video_id_list)
     for video_contents in video_contents_list:
         video_id = video_contents['id']
         #video_contents['description'] = get_video_description(video_id)
-        video_contents['description'] = video_id_description_map.get(video_id, '')
+        video_contents['description'] = '' #video_id_description_map.get(video_id, '')
         video_data = VideoData.From_dict(video_contents)
         video_info = VideoInfo(video_data)
         video_info_list.append(video_info)
+
+    # @TODO add channel info as video data
+    channel_title = channel_data.get('title')
+    channel_intro = channel_data.get('introduction', '')
+    channel_keyword_list = channel_data.get('keywords', [])
+    channel_video_data = VideoData(None, channel_title + ' ' + channel_intro, None, 
+            channel_keyword_list, None, None)
+    video_info_list.append(VideoInfo(channel_video_data))
+    # @TODO add more weights 
+    video_info_list.append(VideoInfo(channel_video_data))
+
+    #for video_info in video_info_list:
+    #    print(video_info.get_data())
+
     return video_info_list
 
 
@@ -71,15 +86,6 @@ def _predict(video_info_list, tfidf_model, tag_model):
     return ret
 
 
-def normalize_score(tag_score_list):
-    total_score = 0
-    for tag, score in tag_score_list:
-        total_score += score
-    if total_score > 0:
-        tag_score_list = [(tag, score/total_score) for tag, score in tag_score_list]
-    return tag_score_list
-
-
 def _load_models(language):
     tfidf_model_path = pm.get_tfidf_inference_model_dir(language)
     tag_model_path = pm.get_tag_inference_model_dir(language)
@@ -91,8 +97,8 @@ def _load_models(language):
     return tfidf_model, tag_model, tag_match_model
 
 
-def _load_feature_word_dict():
-    feature_word_dict = {}
+def _load_feature_tag_dict():
+    feature_tag_dict = {}
     path = pm.get_feature_word_dict_path()
     with open(path, 'r') as f:
         for line in f:
@@ -100,12 +106,14 @@ def _load_feature_word_dict():
             if len(words) > 0:
                 value = words[0]
                 for word in words:
-                    feature_word_dict[word] = value
-    return feature_word_dict
+                    if word not in feature_tag_dict:
+                        feature_tag_dict[word] = []
+                    feature_tag_dict[word].append(value)
+    return feature_tag_dict
 
 
 class TagPredictor():
-    languages = ['en', 'zh-Hans', 'zh-Hant', 'ko']
+    languages = ['en', 'zh-Hans', 'zh-Hant', 'ko', 'ja']
     models_map = {}
     tag_index_map = {}
     for language in languages:
@@ -118,7 +126,7 @@ class TagPredictor():
     #tag_index_map['zh'] = tag_index_map['zh-Hans']
     default_tag_index = tag_index_map['en']
 
-    feature_word_dict = _load_feature_word_dict()
+    feature_tag_dict = _load_feature_tag_dict()
     feature_words_stats = Counter()
 
     def __init__(self, language, video_info_list):
@@ -213,6 +221,12 @@ class TagPredictor():
                         for tag_class, score in tag_class_score_map.items()
                         if tag_class != ''], 
                 key=lambda x: x[1], reverse=True)[:VIDEO_TAG_TOTAL_MAX]
+        # filter low weight tags
+        if len(sorted_tag_class_score_list) > 1:
+            top_score = sorted_tag_class_score_list[0][1]
+            sorted_tag_class_score_list = [ tag_class_score 
+                    for tag_class_score in sorted_tag_class_score_list
+                    if tag_class_score[1] * 5 > top_score]
         logging.info('video tags: %s' % str(sorted_tag_class_score_list))
         return sorted_tag_class_score_list
 
@@ -231,18 +245,34 @@ class TagPredictor():
                 channel_tag_score[tag_name] += tag_score
                 tag_name_list.append(tag_name)
             channel_tag_counter.update(tag_name_list)   
-        
-        channel_tag_list = sorted(
-                [(tag, score) for tag, score in channel_tag_score.items()
-                        if channel_tag_counter[tag] >= CHANNEL_TAG_COUNT_THRESHOLD],
-                key=lambda x: x[1],
-                reverse=True)[:CHANNEL_TAG_TOTAL_MAX]
-        channel_tag_list = normalize_score(channel_tag_list)
-        logging.info('tag list: %s' % channel_tag_list)
+       
+        #logging.info('channel tag scores: %s' % str(channel_tag_score))
+        #logging.info('channel tag counter: %s' % str(channel_tag_counter))
         total_count = len(self.video_id_list)
-        channel_tag_list = [(tag, score * channel_tag_counter[tag] / total_count) 
-                for tag, score in channel_tag_list
-                if score > 0.1]
+        tag_weight_list = []
+        total_score = sum(channel_tag_score.values())
+        full_score = 5
+        for tag, score in channel_tag_score.items():
+            tag_count = channel_tag_counter[tag]
+            if tag_count <= CHANNEL_TAG_COUNT_THRESHOLD:
+                continue
+            avg_score = (score / tag_count)
+            score_weight = avg_score / full_score  # 1 if ge 5
+            if score_weight > 1:
+                score_weight = 1
+            if score_weight < 0.1:
+                continue
+            freq_weight = tag_count / total_count
+            weight =  score_weight * freq_weight
+            logging.info('tag: %s, score weight: %f, freq weight: %f, weight: %f' 
+                    % (tag, score_weight, freq_weight, weight))
+            if weight > 0.01:
+                tag_weight_list.append((tag, weight))
+        
+        channel_tag_list = sorted(tag_weight_list, key=lambda x: x[1], 
+                reverse=True)[:CHANNEL_TAG_TOTAL_MAX]
+        logging.info('tag list final: %s' % channel_tag_list)
+
         return channel_tag_list, video_tags_map
 
     def get_structure_tag_list(self, channel_tag_list):
@@ -263,11 +293,8 @@ class TagPredictor():
 
         for tag_name, score in channel_tag_list:
             structure_info = self.tag_index.get_structure_tag_info(tag_name)
+            #print(structure_info)
             if structure_info:
-                #print(structure_info)
-                #name = structure_info[language]
-                #if name is None or name == '':
-                #    name = tag_name
                 tag_id = structure_info['id']
                 tag_level = structure_info['level']
                 if tag_id not in channel_structure_tag_map: 
@@ -281,7 +308,13 @@ class TagPredictor():
                     channel_structure_tag_map[tag_id] = data 
                 else:
                     channel_structure_tag_map[tag_id]['weight'] += score
-        channel_structure_tag_list = list(channel_structure_tag_map.values())
+                    if channel_structure_tag_map[tag_id]['weight'] > 1:
+                        channel_structure_tag_map[tag_id]['weight'] = 1
+        #channel_structure_tag_list = list(channel_structure_tag_map.values())
+        channel_structure_tag_list = sorted([item 
+                    for item in channel_structure_tag_map.values()
+                    if item['weight'] > 0.1], 
+                key=lambda x: x['weight'], reverse=True)
         return channel_structure_tag_list
 
     def stat_feature_words(self, size=8, count_min_threshold=3):
@@ -297,22 +330,30 @@ class TagPredictor():
             if count > count_min_threshold]
         print('feature words：', feature_word_stats)
 
-    def get_feature_words(self, size=8, count_min_threshold=3):
-        feature_word_counter = self._get_feature_word_counter()
-        feature_word_set = set()
-        not_feature_word_set = set()
-        for word, count in feature_word_counter.most_common(size):
-            if count <= count_min_threshold:
-                continue
-            if word in TagPredictor.feature_word_dict:
-                feature_word = TagPredictor.feature_word_dict[word]
-                feature_word_set.add(feature_word)
-            else:
-                not_feature_word_set.add(word)
-        logging.info('feature words: %s' % str(feature_word_set))
-        logging.info('not feature words: %s' % str(not_feature_word_set))
-        return list(feature_word_set)
-
+    def get_feature_tags(self, max_size=16):
+        feature_tag_counter = Counter()
+        not_feature_tag_counter = Counter()
+        for video_info in self.video_info_list:
+            video_data = video_info.video_data
+            feature_word_list = self._get_video_feature_words(video_data)
+            for feature_word in feature_word_list: 
+                if feature_word in TagPredictor.feature_tag_dict:
+                    feature_tag_list = TagPredictor.feature_tag_dict[feature_word]
+                    #print(feature_word, feature_tag_list)
+                    feature_tag_counter.update(feature_tag_list)
+                else:
+                    not_feature_tag_counter.update([feature_word])
+        logging.info('feature tag counter: %s' % str(feature_tag_counter.most_common(max_size)))
+        logging.info('not feature tag counter: %s' % str(not_feature_tag_counter.most_common(max_size)))
+        feature_tag_list = [word for word, count in feature_tag_counter.most_common(max_size) 
+                if count > CHANNEL_TAG_COUNT_THRESHOLD]  
+        # @TODO add 3 more tags from not_feature_tag_counter if frequently appears
+        for feature_word, count in not_feature_tag_counter.most_common(3):
+            if count > 10:
+                feature_tag_list.append(feature_word)
+        logging.info('feature tags final: %s' % str(feature_tag_list))
+        return feature_tag_list
+   
     def _get_video_feature_words(self, video_data):
         #video_data.process_tfidf_words(self.tfidf_model)
         #feature_word_list = [word for word, score in video_data.tfidf_word_list]
@@ -417,16 +458,16 @@ class ChannelInfo():
         #        for tag_name, score in self.channel_tag_score_list]
         tag_name_list = [tag_name.lower() 
                 for tag_name, score in self.channel_tag_score_list]
-        feature_word_list = self.get_feature_words()
-        self.channel_all_tag_name_list = list(set(tag_name_list + feature_word_list))
+        feature_tag_list = self.get_feature_tags()
+        self.channel_all_tag_name_list = list(set(tag_name_list + feature_tag_list))
 
     def stat_feature_words(self):
         print('channel id: ', self.channel_id)
         print('channel language: ', self.channel_language)
         self.tag_predictor.stat_feature_words()
 
-    def get_feature_words(self):
-        feature_word_list = self.tag_predictor.get_feature_words()
+    def get_feature_tags(self):
+        feature_word_list = self.tag_predictor.get_feature_tags()
         return feature_word_list
 
     def get_data(self):

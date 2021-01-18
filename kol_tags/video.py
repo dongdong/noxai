@@ -20,7 +20,12 @@ class VideoData():
         self.video_id = video_id
         self.title = title
         self.category_id = category_id
-        self.keyword_list = keyword_list
+        if len(keyword_list) > 32:
+            # too many keywords
+            #self.keyword_list = keyword_list[:8]
+            self.keyword_list = []
+        else:
+            self.keyword_list = keyword_list
         self.description = '' #description
         self.language = language
         self.token_list = None

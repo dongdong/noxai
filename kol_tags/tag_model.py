@@ -176,7 +176,9 @@ class TagModel():
 
         for tag_2_pred_class, tag_2_pred_prob in zip(tag_2_pred_class_list, tag_2_pred_prob_list):
             tag_2_default_prob = self.get_tag_2_default_prob(tag_2_pred_class)
-            tag_2_prob_threshold = tag_2_default_prob * 2
+            #tag_2_prob_threshold = tag_2_default_prob * 2
+            #tag_2_prob_threshold = tag_2_default_prob * 1.5
+            tag_2_prob_threshold = tag_2_default_prob
             if tag_2_pred_prob > tag_2_prob_threshold:
                 tag_2_class_score = (tag_2_pred_prob - tag_2_prob_threshold) / tag_2_default_prob
                 tag_2_class_score_list.append((tag_2_pred_class, tag_2_class_score))
@@ -329,10 +331,11 @@ def load_and_evaluate_model(language):
 
 
 def test_tag_model():
-    language = 'en'
+    #language = 'en'
     #language = 'zh-Hans'
     #language = 'zh-Hant'
     #language = 'ko'
+    language = 'ja'
     train_tag_model(language)
     load_and_evaluate_model(language)
 
@@ -353,6 +356,8 @@ def get_tag_model_features(model, dictionary, max_len):
     for tag_class_index in range(tag_class_range):
         tag_class = model.classes_[tag_class_index]
         feature_value = model.feature_log_prob_[tag_class_index]
+        #print(tag_class_index, feature_value)
+        #break
         top_feature_vocab_index_list = feature_value.argsort()[:-(max_len+1):-1]
         top_feature_word_list = [(dictionary[i], feature_value[i]) 
                 for i in top_feature_vocab_index_list] 
@@ -365,7 +370,9 @@ def get_tag_model_features(model, dictionary, max_len):
 def test_tag_model_features():
     from text_processor import TFIDFModel
     #language = 'zh-Hant'
-    language = 'en'
+    #language = 'en'
+    #language = 'ko'
+    language = 'ja'
     #tfidf_model_path = pm.get_tfidf_inference_model_dir(language)
     #tag_model_path = pm.get_tag_inference_model_dir(language)
     tfidf_model_path = pm.get_tfidf_train_model_dir(language)
@@ -375,13 +382,15 @@ def test_tag_model_features():
     tag_model = TagModel()
     tag_model.load_model(tag_model_path)
 
-    #tag_class_feature_words_map_1 = get_tag_model_features(tag_model.tag_1_model, tfidf_model.dictionary, 200)
-    tag_class_feature_words_map_2 = get_tag_model_features(tag_model.tag_2_model, tfidf_model.dictionary, 64)
+    tag_class_feature_words_map_1 = get_tag_model_features(tag_model.tag_1_model, 
+            tfidf_model.dictionary, 128)
+    tag_class_feature_words_map_2 = get_tag_model_features(tag_model.tag_2_model, 
+            tfidf_model.dictionary, 128)
 
     word_tag_counter = defaultdict(int)    
-    #for k, v_list in tag_class_feature_words_map_1.items():
-    #    for v in v_list:
-    #        word_tag_counter[v] += 1
+    for k, v_list in tag_class_feature_words_map_1.items():
+        for v in v_list:
+            word_tag_counter[v] += 1
     for k, v_list in tag_class_feature_words_map_2.items():
         for v in v_list:
             word_tag_counter[v] += 1
@@ -389,19 +398,15 @@ def test_tag_model_features():
     black_list = set([k for k, v in word_tag_counter.items() if v > 2])
     print('black_list: ', black_list)
 
-    #for k, v_list in tag_class_feature_words_map_1.items():
-    #    #print(k)
-    #    #print(v)
-    #    if k == '': 
-    #        continue
-    #    for v in v_list:
-    #        if v not in black_list:
-    #            print("%s##%s" % (k, v))
-    for k, v_list in tag_class_feature_words_map_2.items():
-        #print(k)
-        #print(v)
+    for k, v_list in tag_class_feature_words_map_1.items():
+        if k == '': 
+            continue
         for v in v_list:
-            #if v not in black_list:
+            print("%s@@%s" % (k, v))
+    for k, v_list in tag_class_feature_words_map_2.items():
+        if k == '': 
+            continue
+        for v in v_list:
             print("%s##%s" % (k, v))
 
     '''

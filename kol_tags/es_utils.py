@@ -193,8 +193,9 @@ def test_video_contents():
 
 def test_channel_contents():
     #channel_id = 'UCO6SoJNF3VY2tnlzypHl-4w'
-    channel_id = 'UCxse2SVhmf5wzi12L6B_Wog'
+    #channel_id = 'UCxse2SVhmf5wzi12L6B_Wog'
     #channel_id = 'UCg4mMShkzgnIWuwTZ5uMahQ'
+    channel_id = 'UCRs1pHnES3QDdh43xbjOmzw'
     channel_contents = get_channel_contents(channel_id)
     print(channel_contents)
 

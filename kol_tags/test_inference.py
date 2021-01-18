@@ -62,7 +62,8 @@ def dump_cache_file(data_path):
 if __name__ == '__main__':
     #test()
     #data_path = 'cache/zh-Hant/video_data/數碼產品_智能手機.json'
-    data_path = 'cache/zh-Hant/video_data_processed/數碼產品_智能手機.json'
+    #data_path = 'cache/zh-Hant/video_data_processed/數碼產品_智能手機.json'
+    data_path = './cache/ja/video_data_processed/_.json'
     dump_cache_file(data_path)
 
 

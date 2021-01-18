@@ -47,10 +47,14 @@ def get_topic_tag_name_map(language):
 def get_tag_name_id_map(language):
     tag_name_id_map = {}
     for item in tag_name_config_list:
-        if 'id' not in item or language not in item:
+        tag_language = language
+        if 'id' not in item: #or language not in item:
             continue
+        if tag_language not in item:
+            tag_language = 'en'
         tag_id = item['id']
-        tag_name = item[language]
+        tag_name = item.get(tag_language, '')
+        #print(language, tag_language, tag_id, tag_name, item)
         if tag_name != '':
             tag_name_id_map[tag_name] = tag_id
     return tag_name_id_map
@@ -135,6 +139,7 @@ class TagIndex():
         structure_tag_info = None
         if tag_name in self.tag_name_id_map:
             tag_id = self.tag_name_id_map[tag_name]
+            #print(tag_name, tag_id)
             if tag_id in self.structure_tag_info_map:
                 structure_tag_info = self.structure_tag_info_map[tag_id] 
         return structure_tag_info 

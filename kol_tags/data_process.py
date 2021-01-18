@@ -332,6 +332,7 @@ def get_feature_data_from_video_info_iter(video_info_iter, tfidf_model, is_train
 
     for video_info in video_info_iter:
         feature_words = video_info.video_data.get_feature_words()
+        #print(feature_words)
         if len(set(feature_words)) < FEATURE_WORD_LENGTH_MIN_THRESHOLD:
             logging.info('drop data, feature too small. %s' % (feature_words))
             continue
@@ -409,11 +410,12 @@ if __name__ == '__main__':
     #language = 'en'
     #language = 'zh-Hans'
     #language = 'zh-Hant'
-    language = 'ko'
-    #dump_video_list_by_tag(language)
-    #dump_video_data_from_video_list(language)
+    #language = 'ko'
+    language = 'ja'
+    dump_video_list_by_tag(language)
+    dump_video_data_from_video_list(language)
     #dump_video_data_from_video_list(language, False)
-    #dump_processed_video_data(language, False)
     dump_processed_video_data(language)
+    #dump_processed_video_data(language, False)
     dump_feature_data(language)
 
