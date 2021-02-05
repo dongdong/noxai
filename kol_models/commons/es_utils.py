@@ -49,7 +49,7 @@ def get_video_contents(video_id):
             'video_id': video_id,
             'title': source_1['title'],
             'category_id': source_1['category'],
-            'keyword_list': source_1['keywords'],
+            'keywords': source_1['keywords'],
             'source': 'es',
         } 
     except:

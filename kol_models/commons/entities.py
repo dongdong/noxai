@@ -5,7 +5,7 @@ class DictWrapper(object):
         self._data_dict = data_dict
 
     def __getattr__(self, name):
-        print('DictWrapper.__getattr__(%s)' % name)
+        #print('DictWrapper.__getattr__(%s)' % name)
         value = None
         if name in self._data_dict:
             value = self._data_dict[name]
@@ -47,11 +47,11 @@ class YoutubeVideo(DictWrapper):
 
     def get_data(self):
         data = {
-            'id': self.video_id,
+            'video_id': self.video_id,
             'title': self.title,
-            'category': self.category_id,
-            'keywords': self.keyword_list,
-            'from': self.source,
+            'category_id': self.category_id,
+            'keywords': self.keywords,
+            'source': self.source,
         }
         return data
 

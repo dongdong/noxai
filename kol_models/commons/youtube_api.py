@@ -51,11 +51,8 @@ def request_youtube_api_obj(request_url):
     return json_obj
 
 
-def search_video_list_by_keyword(keyword, language):
+def search_video_list_by_keyword(keyword, language, page_size=50, pages=6):
     video_id_list = []
-    page_size = 50
-    #pages = int(max_size / page_size)
-    pages = 8
     request_url = (('https://www.googleapis.com/youtube/v3/search?'
             + 'q=%s&relevanceLanguage=%s&maxResults=%d&key=%s&type=video') 
             % (keyword, language, page_size, youtube_key))
@@ -93,7 +90,7 @@ def get_video_contents(video_id):
         'video_id': video_id,
         'title': snippet.get('title', ''),
         'category_id': snippet.get('categoryId', ''),
-        'keyword_list': snippet.get('tags',[]),
+        'keywords': snippet.get('tags', []),
         #'description': snippet.get('description', []),
         'source': 'youtube',
     } 
@@ -172,12 +169,12 @@ def get_youtube_video_topics_batch(video_id_list):
 
 
 if __name__ == "__main__":
-    '''
-    keyword = '美妆'
-    language = 'zh-Hans'
+    #keyword = '美妆'
+    keyword = '遊戲'
+    #language = 'zh-Hans'
+    language = 'zh'
     video_id_list = search_video_list_by_keyword(keyword, language)    
     print(video_id_list)
-    '''
     '''
     #video_id_list = [
     #    "YWn9xIGbZfw", "50Smb_N8V0A", "4llgRFENDs8", "Xiv7TnvqRWw", "EaL4O17cx0k", "Bj6y0tw436c", "WF6cf5sSWwI",
