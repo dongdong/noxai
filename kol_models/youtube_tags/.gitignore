@@ -1,3 +1,4 @@
 bak/
-data/
 train/logs
+data/models.online
+data/train_data
