@@ -9,6 +9,9 @@ from sklearn.model_selection import train_test_split
 
 import kol_models.youtube_tags.commons.path_manager as pm
 from kol_models.youtube_tags.train.feature_data_process import FeatureData 
+from kol_models.youtube_tags.train.feature_data_process import get_tfidf_feature_data_from_tag_data_iter
+from kol_models.youtube_tags.commons.video_data import VideoData
+from kol_models.youtube_tags.commons.text_processor import TFIDFModel
 
 
 class TrainData():
@@ -95,12 +98,15 @@ class TagModel(object):
     def load(self):
         assert self.model_path is not None
         logging.info('load tag model from path: %s' % self.model_path)
+        succ = True
         try:
             with open(self.model_path, 'rb') as f:
                 self.model = pickle.load(f)
         except:
             logging.error('TagModel_NB failed to load model. Exception: ' 
-                    + traceback.fromat_exc()) 
+                    + traceback.format_exc()) 
+            succ = False
+        return succ
 
     def save(self):
         assert self.model_path is not None
@@ -138,14 +144,23 @@ def get_models(language, is_train):
     #from kol_models.youtube_tags.models.tag_model_nb_ensemble import TagModel_NB_Ensemble as TagModelTest
     level_1_tag_model = TagModelTest.Get_model(language, TagLevel.LEVEL_1_TAG, is_train)
     level_2_tag_model = TagModelTest.Get_model(language, TagLevel.LEVEL_2_TAG, is_train)
-    return level_1_tag_model, level_2_tag_model 
+    if is_train:
+        tfidf_model_dir = pm.get_train_tfidf_model_dir(language)
+    else:
+        tfidf_model_dir = pm.get_inference_tfidf_model_dir(language)
+    tfidf_model = TFIDFModel(tfidf_model_dir)        
+    return level_1_tag_model, level_2_tag_model, tfidf_model
 
 
 def load_models(language, is_train):
-    level_1_tag_model, level_2_tag_model = get_models(language, is_train)
-    level_1_tag_model.load()
-    level_2_tag_model.load()
-    return level_1_tag_model, level_2_tag_model 
+    level_1_tag_model, level_2_tag_model, tfidf_model = get_models(language, is_train)
+    if not level_1_tag_model.load():
+        raise Exception('fail to load level 1 model')
+    if not level_2_tag_model.load():
+        raise Exception('fail to load level 2 model')
+    if not tfidf_model.load_model():
+        raise Exception('fail to load tfidf model')
+    return level_1_tag_model, level_2_tag_model, tfidf_model 
 
 
 def _train_tag_model(level_1_tag_model, level_2_tag_model, feature_data):
@@ -189,17 +204,28 @@ def _inference_tags(tag_model, X, data_info_list):
     return tag_prob_dict
        
 
-def inference_tags(tag_model, feature_data):
-    logging.info('inference by tag model. tag model path' % tag_model.model_path)
+def inference_tags(level_1_tag_model, level_2_tag_model, tfidf_model, tag_data_list):
+    logging.info('inference by tag model.')
+    feature_data = get_tfidf_feature_data_from_tag_data_iter(tag_data_list, tfidf_model)
     X = feature_data.X
-    data_info_list = feature_data.y
-    return _inference_tags(X, data_info_list)
+    level_1_tag_prob_list = level_1_tag_model.get_top_prob_tags_batch(X)
+    level_2_tag_prob_list = level_2_tag_model.get_top_prob_tags_batch(X)
+    tag_dict = {}
+    for tag_data, predict_level_1_tags, predict_level_2_tags in zip(tag_data_list, 
+            level_1_tag_prob_list, level_2_tag_prob_list):
+        tag_data.tag_model_level_1_tags = predict_level_1_tags
+        tag_data.tag_model_level_2_tags = predict_level_2_tags
+        tag_dict[tag_data.item_id] = {
+            'level_1': predict_level_1_tags,
+            'level_2': predict_level_2_tags,
+        }
+    return tag_dict
 
 
 def test_inference():
     language = 'zh'
     is_train = True
-    level_1_tag_model, level_2_tag_model = load_models(language, is_train)
+    level_1_tag_model, level_2_tag_model, _ = load_models(language, is_train)
 
     feature_data_path = pm.get_tfidf_tag_feature_data_path(language)
     feature_data = FeatureData.Load(feature_data_path)

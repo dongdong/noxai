@@ -5,7 +5,7 @@ from queue import Queue
 import spacy
 from gensim.models import TfidfModel
 from gensim.corpora import Dictionary
-from konlpy.tag import Kkma
+#from konlpy.tag import Kkma
 import logging
 
 import kol_models.youtube_tags.commons.path_manager as pm
@@ -91,32 +91,28 @@ class TFIDFModel():
 class ParserEn():
     nlp = spacy.load("en_core_web_sm")
 
-    def __init__(self, raw_text):
-        self.raw_text = raw_text
-        self.token_list = []
+    def __init__(self, raw_text_list):
+        self.raw_text_list = raw_text_list
         self.noun_word_list = []
-        self.entity_list = []
 
     def _clean_text(self, text):
+        #print(text)
         text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', ' ', text)
         text = re.sub(r'^[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z]{1,13}\.[com,cn,net]{1,3}$', ' ', text)
-        text = re.sub(r'[^a-zA-Z]', ' ', text).strip() 
-        text = re.sub(' +', ' ', text)
+        text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip() 
         text = text.lower()
-        return text
+        text = re.sub('  +', ', ', text)
+        text_list = text.split(', ')
+        #print(text)
+        #print(text_list)
+        return text_list
 
     def _get_doc(self, clean_text):
         return ParserEn.nlp(clean_text)
 
-    def _get_tokens(self, doc):
-        pos_filter_set = ['PUNCT']
-        return [token.text for token in doc 
-                if token.pos_ not in pos_filter_set 
-                    and not token.is_stop
-                    and len(token.text) > 2]
-
     def _get_noun_chunks(self, doc):
         noun_chunk_list = [chunk.text for chunk in doc.noun_chunks] 
+        #print(noun_chunk_list)
         return noun_chunk_list
 
     def _noun_words_filter(self, words):
@@ -132,34 +128,29 @@ class ParserEn():
         noun_words = self._noun_words_filter(noun_chunk_list)
         return noun_words
         
-    def _get_entities(self, doc):
-        return []
-
     def parse_text(self):
-        clean_text = self._clean_text(self.raw_text)
-        doc = self._get_doc(clean_text)
-        self.token_list = self._get_tokens(doc)
-        self.noun_word_list = self._get_noun_words(doc)
-        self.entity_list = self._get_entities(doc)
+        for raw_text in self.raw_text_list:
+            clean_text_list = self._clean_text(raw_text)
+            for clean_text in clean_text_list:
+                doc = self._get_doc(clean_text)
+                self.noun_word_list += self._get_noun_words(doc)
 
 
 class ParserZh(ParserEn):
     nlp = spacy.load("zh_core_web_sm")
 
     def _clean_text(self, text):
-        text = re.sub(u'(?:[^\u4e00-\u9fa5])', u' ', text).strip()
-        text = re.sub(' +', ' ', text)    
-        return text
+        text = re.sub(u'(?:[^\u4e00-\u9fa5a-zA-Z0-9])', u' ', text.lower()).strip()
+        #text = re.sub(u'(?:[^\u4e00-\u9fa5])', u' ', text).strip()
+        #text = re.sub(' +', ' ', text)    
+        #print(text)
+        #text = re.sub('  +', ', ', text)
+        #text_list = text.split(', ')
+        text_list = [text]
+        return text_list
 
     def _get_doc(self, clean_text):
         return ParserZh.nlp(clean_text)
-
-    def _get_tokens(self, doc):
-        pos_filter_set = set(['PUNCT'])
-        return [token.text for token in doc 
-                if token.pos_ not in pos_filter_set 
-                    and not token.is_stop
-                    and len(token.text) > 1]
 
     def _get_noun_chunks(self, doc):
         noun_chunk_list = []
@@ -167,6 +158,7 @@ class ParserZh(ParserEn):
         for token in doc:
             if token.tag_ in noun_tags and len(token.text) > 1:
                 noun_chunk_list.append(token.text)
+        #print(noun_chunk_list)
         return noun_chunk_list
 
     def _noun_words_filter(self, words):
@@ -179,21 +171,20 @@ class ParserZh(ParserEn):
 
 
 class ParserJa(ParserEn):
-    #nlp = spacy.load("ja_core_news_sm")
-
     def _clean_text(self, text):
-        text = re.sub(u"(?:[^\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff\u4e00-\u9fa5])", u' ', text).strip()
-        text = re.sub(' +', ' ', text)  
-        return text
+        text = re.sub('\W+', ' ', text.lower())
+        text = re.sub(' +', ' ', text).strip()
+        #print(text)
+        text_list = [text]
+        #print(text_list)
+        return text_list
 
     def _get_doc(self, clean_text):
         return clean_text        
 
-    def _get_tokens(self, doc):
-        return []
-
     def _get_noun_chunks(self, doc):
         noun_chunk_list = doc.split(' ')
+        #print(noun_chunk_list)
         return noun_chunk_list
 
     def _noun_words_filter(self, words):
@@ -205,81 +196,93 @@ class ParserJa(ParserEn):
         return words
 
 
-class ParserKo(ParserEn):
-    nlp = Kkma(max_heap_size=2048)
+class ParserKo(ParserJa):
     def _clean_text(self, text):
-        text = re.sub(u"(?:[^\uac00-\ud7ff])", u' ', text).strip()
-        text = (' '.join([word for word in text.split(' ') 
-            if len(word) < 16])).strip()
-        return text
+        #print(text)
+        #text = re.sub('\W+', ' ', text.lower())
+        text = re.sub(u"(?:[^\uac00-\ud7ffa-z0-9])", u' ', text.lower()).strip()
+        text = re.sub('  +', ', ', text)
+        #print(text)
+        text_list = text.split(', ')
+        #print(text_list)
+        return text_list
 
     def _get_doc(self, clean_text):
-        return clean_text 
-
-    def _get_tokens(self, doc):
-        pos_filter_set = set(['SP'])
-        token_list = [word.strip() for (word, tag) in ParserKo.nlp.pos(doc) 
-            if tag not in pos_filter_set and len(word.strip()) > 1]
-        return token_list
+        return clean_text        
 
     def _get_noun_chunks(self, doc):
-        noun_chunk_list = [word.strip() for word in ParserKo.nlp.nouns(doc)
-                if len(word.strip()) > 1]
+        noun_chunk_list = [doc]
+        #print(noun_chunk_list)
         return noun_chunk_list
 
     def _noun_words_filter(self, words):
         min_length = 2
-        max_length = 10
+        max_word_num = 6
         words = [word for word in words 
-                    if len(word) >= min_length 
-                    and len(word) <= max_length]
+                if len(word) > min_length 
+                and len(word.split(' ')) <= max_word_num]
         return words
 
 
+class ParserDefault(ParserEn):
+    def _clean_text(self, text):
+        text_list = [text]
+        return text_list
+
+    def _get_doc(self, clean_text):
+        return clean_text        
+
+    def _get_noun_chunks(self, doc):
+        noun_chunk_list = []
+        return noun_chunk_list
+
+    def _noun_words_filter(self, words):
+        return words
+
+   
 class TextParser():
     def __init__(self, raw_text, language):
         #self.language = language
         self._init_parser_list(raw_text, language)
-        self.token_list = []
         self.noun_word_list = []
-        self.entity_list = []
     def _init_parser_list(self, raw_text, language):
-        self.parser_list = [ParserEn(raw_text)]
-        if language == 'zh' or language == 'zh-Hans' or language == 'zh-Hant':
+        self.parser_list = []
+        if language is None:
+            self.parser_list.append(ParserDefault(raw_text))
+        elif language == 'en':
+            self.parser_list.append(ParserEn(raw_text))
+        elif language == 'zh' or language == 'zh-Hant' or language == 'zh-Hans':
+            self.parser_list.append(ParserEn(raw_text))
             self.parser_list.append(ParserZh(raw_text))
         elif language == 'ko':
+            self.parser_list.append(ParserEn(raw_text))
             self.parser_list.append(ParserKo(raw_text))
         elif language == 'ja':
+            self.parser_list.append(ParserEn(raw_text))
             self.parser_list.append(ParserJa(raw_text))
         else:
-            pass
+            self.parser_list.append(ParserDefault(raw_text))
     def parse_text(self):
         for parser in self.parser_list:
             parser.parse_text()
-            self.token_list += parser.token_list
             self.noun_word_list += parser.noun_word_list
-            self.entity_list += parser.entity_list
 
 
-def test_parser_ja():
-    language = 'ja'
-    test_file = 'ja_test.json'
-    with open(test_file, 'r') as f:
-        for line in f:
-            json_obj = json.loads(line)
-            title = json_obj['title']
-            keyword_list = [word.lower() for word in json_obj['keywords'] if len(word) > 1]
-            text = title + ' ' + ' '.join(keyword_list)
-            print(text)
-            #parser = ParserJa(title)
-            parser = Parser(text, language)
-            parser.parse_text()
-            print(parser.token_list + parser.noun_word_list + keyword_list)
-
-
+def test_parser():
+    raw_text = [
+        'Serial Season 3 Episode 04: A Bird in Jail Is Worth Two on the Street',
+        'The Generation Why #311 - Who Kil.l.ed  Jerry Tobias',
+        'Bollywood bikini',
+        'Indian actress bikini',
+        'Savdhaan India 5th February 2019 full episode',
+        'INTERNET GRATIS MOVISAR,TUENTI Y BITEL PARA JUEGOS ONLINE',
+    ]
+    parser = ParserEn(raw_text)
+    parser.parse_text()
+    print(parser.noun_word_list)
 
 if __name__ == '__main__':
-    test_parser_ja()
+    test_parser()
 
 
 

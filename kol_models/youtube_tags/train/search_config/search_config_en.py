@@ -10,10 +10,6 @@ _gaming_list = [
             'gaming racing game',
             'simulation game',
             'gameplay',
-            'minecraft',
-            'pubg',
-            'fortnite',
-            'call of duty',
         ] 
     },
     { 
@@ -24,6 +20,17 @@ _gaming_list = [
             'rts warcraft', 
             'rts starcraft', 
             'rts command & conquer',
+        ] 
+    },
+    { 
+        'level_1': 'Gaming',  'level_2': 'Hot game',  
+        'search_keywords': [
+            'minecraft',
+            'pubg',
+            'fortnite',
+            'call of duty',
+            'league of legends',
+            'apex legends',
         ] 
     },
 ]
@@ -110,16 +117,16 @@ _fashion_list = [
             'bags chanel gucci coach',
         ] 
     },
-    { 
-        'level_1': 'Fashion',  'level_2': 'Hats',  
-        'search_keywords': [
-            'fashion hats', 
-            'fashion hats collection',
-            'hats headwear',
-            'hats women',
-            'hats beanies fedoras',
-        ] 
-    },
+    #{ 
+    #    'level_1': 'Fashion',  'level_2': 'Hats',  
+    #    'search_keywords': [
+    #        'fashion hats', 
+    #        'fashion hats collection',
+    #        'hats headwear',
+    #        'hats women',
+    #        'hats beanies fedoras',
+    #    ] 
+    #},
     { 
         'level_1': 'Fashion',  'level_2': 'Jewelry',  
         'search_keywords': [
@@ -157,16 +164,6 @@ _electronic_list = [
         ] 
     },
     { 
-        'level_1': 'Consumer Electronic',  'level_2': 'Camera',  
-        'search_keywords': [
-            'camera unboxing review',
-            'camera nikon',
-            'camera canon', 
-            'camera sony',
-            'camera lens',
-        ] 
-    },
-    { 
         'level_1': 'Consumer Electronic',  'level_2': 'Computer',  
         'search_keywords': [
             'computer unboxing review',
@@ -176,6 +173,16 @@ _electronic_list = [
             'tablet pad',
             #'computer accessories keyboad mouse',
             'computer accessories keyboad',
+        ] 
+    },
+    { 
+        'level_1': 'Consumer Electronic',  'level_2': 'Camera',  
+        'search_keywords': [
+            'camera unboxing review',
+            'camera nikon',
+            'camera canon', 
+            'camera sony',
+            'camera lens',
         ] 
     },
     { 
@@ -228,6 +235,19 @@ _lifestyle_list = [
         ] 
     },
     { 
+        'level_1': 'Life Style',  'level_2': 'Health',  
+        'search_keywords': [
+            'health',
+            'healthy life tips habits', 
+            'health nutrition eating diet', 
+            'health body age aging',
+            'health heart brain diseases diabetes',
+            'health health obesity',
+            'health medicine medical care',
+            'health doctor disease illness treatment',
+        ], 
+    },
+    { 
         'level_1': 'Life Style',  'level_2': 'Food',  
         'search_keywords': [
             'food pizza burger hot dog salad', 
@@ -253,19 +273,6 @@ _lifestyle_list = [
         ] 
     },
     { 
-        'level_1': 'Life Style',  'level_2': 'Health',  
-        'search_keywords': [
-            'health',
-            'healthy life tips habits', 
-            'health nutrition eating diet', 
-            'health body age aging',
-            'health heart brain diseases diabetes',
-            'health health obesity',
-            'health medicine medical care',
-            'health doctor disease illness treatment',
-        ], 
-    },
-    { 
         'level_1': 'Life Style',  'level_2': 'Fitness',  
         'search_keywords': [
             'fitness', 
@@ -277,7 +284,7 @@ _lifestyle_list = [
         ] 
     },
     { 
-        'level_1': '',  'level_2': 'Yoga',  
+        'level_1': 'Life Style',  'level_2': 'Yoga',  
         'search_keywords': [
             'yoga meditation',
             'yoga flow vinyasa',
@@ -347,7 +354,6 @@ _entertainment_list = [
             'marvel dc comics',
         ] 
     },
- 
     { 
         'level_1': 'Entertainment',  'level_2': 'Humor',  
         'search_keywords': [
@@ -402,6 +408,7 @@ _entertainment_list = [
     },
 ]
 
+
 _level_2_list = [
 
     { 
@@ -432,6 +439,16 @@ _level_2_list = [
             'science technology robot',
         ] 
     },
+    #{ 
+    #    'level_1': '',  'level_2': 'Finance & Economics',  
+    #    'search_keywords': [
+    #        'finance',
+    #        'economics',
+    #        'business',
+    #        'investments',
+    #        'stocks',
+    #    ] 
+    #},
     { 
         'level_1': '',  'level_2': 'Education',  
         'search_keywords': [
@@ -508,18 +525,22 @@ _level_2_list = [
         'level_1': '',  'level_2': 'Painting',  
         'search_keywords': [
             'art painting',  
-            'painting idea artwork canvas',
-            'painting acrylic watercolor',
+            'painting idea artwork',
+            'painting acrylic',
+            'painting watercolor',
             'art drawing',  
             'draw sketch',
             'drawing pastel',
         ] 
     },
     {
-        'level_1': '',  'level_2': 'Designs',  
+        'level_1': '',  'level_2': 'Design',  
         'search_keywords': [
-            'mehndi henna',
-            'rangoli muggulu kolam',
+            'mehndi',
+            'henna',
+            'rangoli',
+            'muggulu',
+            'kolam',
         ] 
     }
 ]

@@ -19,7 +19,7 @@ _gamming_list = [
         ] 
     },
     { 
-        'level_1': '遊戲',  'level_2': '即時戰略遊戲',  
+        'level_1': '遊戲',  'level_2': 'RTS',  
         'search_keywords': [
             '遊戲 即時戰略 rts games',
             'rts 星際爭霸 starcraft',
@@ -70,18 +70,6 @@ _beauty_list = [
         ] 
     },
     { 
-        'level_1': '美容',  'level_2': '美髮',  
-         'search_keywords': [
-            '美髮 髮型', 
-            '髮型 設計',
-            '髮型 造型',
-            '美髮 剪髮 染髮', 
-            '美发 染发 发型',
-            'hairstyle',
-            'haircut hairdo',
-        ] 
-    },
-    { 
         'level_1': '美容',  'level_2': '護膚',  
         'search_keywords': [
             '護膚 教程', 
@@ -93,6 +81,18 @@ _beauty_list = [
             '美白 保湿 抗皱',
             'beauty skincare',
             'skincare tips',
+        ] 
+    },
+    { 
+        'level_1': '美容',  'level_2': '美髮',  
+         'search_keywords': [
+            '美髮 髮型', 
+            '髮型 設計',
+            '髮型 造型',
+            '美髮 剪髮 染髮', 
+            '美发 染发 发型',
+            'hairstyle',
+            'haircut hairdo',
         ] 
     },
     {  
@@ -206,19 +206,6 @@ _electronic_list = [
         ] 
     },
     { 
-        'level_1': '數碼產品',  'level_2': '耳機',  
-        'search_keywords': [
-            '耳機 耳机', 
-            '耳機 開箱 評測',
-            '耳機 無線 藍牙',
-            '耳機 降噪',
-            '耳机 音质',
-            '耳机 bose sony sennheiser',
-            '耳机 jbl beats airpods',
-            'headset unboxing review',
-        ] 
-    },
-    { 
         'level_1': '數碼產品',  'level_2': '相機',  
         'search_keywords': [
             '照相機 開箱 評測',
@@ -241,6 +228,19 @@ _electronic_list = [
             'playstation',
             '游戏机 switch xbox playstation',
             'game console unboxing review',
+        ] 
+    },
+    { 
+        'level_1': '數碼產品',  'level_2': '耳機',  
+        'search_keywords': [
+            '耳機 耳机', 
+            '耳機 開箱 評測',
+            '耳機 無線 藍牙',
+            '耳機 降噪',
+            '耳机 音质',
+            '耳机 bose sony sennheiser',
+            '耳机 jbl beats airpods',
+            'headset unboxing review',
         ] 
     },
 ]
@@ -289,26 +289,18 @@ _lifestyle_list = [
         ] 
     },
     { 
-        'level_1': '生活',  'level_2': '瑜伽',  
+        'level_1': '生活',  'level_2': '美食',  
         'search_keywords': [
-            '瑜伽 yoga',
-            '瑜伽 教學',
-            '瑜伽 冥想',
-            '瑜伽 呼吸 拉伸',
-            'yoga class tutorial',
-        ] 
-    },
-    { 
-        'level_1': '生活',  'level_2': '健身',  
-        'search_keywords': [
-            '健身 fitness',
-            '健身 增肌 力量 bodybuild muscle',
-            '健身 減脂 減肥 瘦身',
-            '健身 有氧運動 cardio',
-            '健身 居家训练',
-            '健身 女生',
-            '健身 hiit tabata crossfit',
-            'fitness workout', 
+            '美食 料理',
+            '美食 小吃 街头美食',
+            '美食 火鍋 燒烤 海鮮',
+            '美食 甜點 蛋糕 烘焙',
+            '美食 食譜 菜譜 做法',
+            '美食 探店',
+            '美食 试吃 必吃',
+            '吃播 大胃王',
+            'food recipe cooking',
+            'food asmr',
         ] 
     },
     { 
@@ -326,18 +318,26 @@ _lifestyle_list = [
         ] 
     },
     { 
-        'level_1': '生活',  'level_2': '美食',  
+        'level_1': '生活',  'level_2': '健身',  
         'search_keywords': [
-            '美食 料理',
-            '美食 小吃 街头美食',
-            '美食 火鍋 燒烤 海鮮',
-            '美食 甜點 蛋糕 烘焙',
-            '美食 食譜 菜譜 做法',
-            '美食 探店',
-            '美食 试吃 必吃',
-            '吃播 大胃王',
-            'food recipe cooking',
-            'food asmr',
+            '健身 fitness',
+            '健身 增肌 力量 bodybuild muscle',
+            '健身 減脂 減肥 瘦身',
+            '健身 有氧運動 cardio',
+            '健身 居家训练',
+            '健身 女生',
+            '健身 hiit tabata crossfit',
+            'fitness workout', 
+        ] 
+    },
+    { 
+        'level_1': '生活',  'level_2': '瑜伽',  
+        'search_keywords': [
+            '瑜伽 yoga',
+            '瑜伽 教學',
+            '瑜伽 冥想',
+            '瑜伽 呼吸 拉伸',
+            'yoga class tutorial',
         ] 
     },
 ]
@@ -589,20 +589,6 @@ _level_2_list = [
             'education',
         ] 
     },
-    {   
-        'level_1': '',  'level_2': '汽車',  
-        'search_keywords': [
-            '汽車 評論',
-            '買車 養車 攻略',
-            '汽车 试驾',
-            '汽車 suv mpv',
-            '房车 房車',
-            '跑车 超跑',
-            '汽車 电动汽车',
-            '車展',
-            'cars review test drive',
-        ] 
-    },
     { 
         'level_1': '',  'level_2': '兒童',  
         'search_keywords': [
@@ -628,6 +614,20 @@ _level_2_list = [
             '益智玩具',
             '夾娃娃 娃娃機',
             'kids toys',
+        ] 
+    },
+    {   
+        'level_1': '',  'level_2': '汽車',  
+        'search_keywords': [
+            '汽車 評論',
+            '買車 養車 攻略',
+            '汽车 试驾',
+            '汽車 suv mpv',
+            '房车 房車',
+            '跑车 超跑',
+            '汽車 电动汽车',
+            '車展',
+            'cars review test drive',
         ] 
     },
     { 

@@ -7,7 +7,8 @@ from scipy.sparse import coo_matrix
 import numpy as np
 
 import kol_models.youtube_tags.commons.path_manager as pm
-from kol_models.youtube_tags.commons.video_data import VideoData, VideoTag
+from kol_models.youtube_tags.commons.video_data import VideoData
+from kol_models.youtube_tags.commons.tag_data import TrainTagData
 from kol_models.youtube_tags.commons.text_processor import TFIDFModel
 from kol_models.youtube_tags.train.video_data_process import iter_video_data_from_file
 from kol_models.youtube_tags.train.tag_video_config import TagVideoConfig
@@ -79,31 +80,27 @@ class TFIDF_FeatureProcessor(FeatureProcessor):
         return self.tfidf_model.get_vector(feature_words)
 
 
-def _get_feature_data_from_video_tag_iter(video_tag_iter, feature_processor, is_train):
+def _get_feature_data_from_tag_data_iter(tag_data_iter, feature_processor):
     i = 0
     num_pos = feature_processor.get_feature_size()
     data = []
     row = []
     col = []
     tag_list = []
-    for video_tag in video_tag_iter:
-        feature_words = video_tag.video_data.feature_words
-        video_id = video_tag.video_data.video_id
+    for tag_data in tag_data_iter:
+        feature_words = tag_data.feature_words
+        item_id = tag_data.item_id
         if not feature_processor.is_valid_feature(feature_words):
-            logging.info('Invalid feature, drop data! %s' % (video_id))
+            logging.info('Invalid feature, drop data! %s' % (item_id))
             continue
         feature_vec = feature_processor.get_feature_vec(feature_words)
         for pos, score in feature_vec:
             data.append(score)
             row.append(i)
             col.append(pos)
-        if is_train:
-            level_1 = video_tag.level_1_tag
-            level_2 = video_tag.level_2_tag
-        else:
-            level_1 = None
-            level_2 = None
-        tag_list.append((level_1, level_2, video_id, feature_words))
+            level_1 = tag_data.level_1_tag
+            level_2 = tag_data.level_2_tag
+        tag_list.append((level_1, level_2, item_id, feature_words))
         i += 1
     logging.info(('process feature data finish. X data size: %d, ' 
             + 'X data shape: (%d, %d), y data size: %d') 
@@ -112,12 +109,12 @@ def _get_feature_data_from_video_tag_iter(video_tag_iter, feature_processor, is_
     return feature_data
 
 
-def get_tfdif_feature_data_from_video_tag_iter(video_tag_iter, tfidf_model, is_train=False):
+def get_tfidf_feature_data_from_tag_data_iter(tag_data_iter, tfidf_model):
     tfidf_feature_processor = TFIDF_FeatureProcessor(tfidf_model)
-    return _get_feature_data_from_video_tag_iter(video_tag_iter, tfdif_feature_processor, is_train)
+    return _get_feature_data_from_tag_data_iter(tag_data_iter, tfidf_feature_processor)
 
 
-def _iter_tag_video_from_processed_data_dir(processed_video_data_dir, tag_video_config):
+def _iter_video_tag_data_from_processed_data_dir(processed_video_data_dir, tag_video_config):
     logging.info("iter video info from processed video data dir: %s." % processed_video_data_dir)
     for level_1_tag, level_2_tag in tag_video_config.iter_tags():
         file_name = pm.get_video_data_file_name(level_1_tag, level_2_tag)
@@ -125,16 +122,17 @@ def _iter_tag_video_from_processed_data_dir(processed_video_data_dir, tag_video_
         logging.info("read train data from path: %s." % processed_video_data_path)
         assert os.path.exists(processed_video_data_path)
         for video_data in iter_video_data_from_file(processed_video_data_path):
-            video_tag = VideoTag(video_data, level_1_tag, level_2_tag)
-            yield video_tag
+            tag_data = TrainTagData.From_video_data(video_data, level_1_tag, level_2_tag)
+            yield tag_data
 
 
 def _get_feature_data_from_processed_data(language, feature_processor):
     tag_video_config = TagVideoConfig.Load(language)
     processed_video_data_dir = pm.get_tag_processed_data_dir(language)
     logging.info("process train data, from dir: %s." % processed_video_data_dir)
-    tag_video_iter = _iter_tag_video_from_processed_data_dir(processed_video_data_dir, tag_video_config)
-    feature_data = _get_feature_data_from_video_tag_iter(tag_video_iter, feature_processor, True)
+    video_tag_data_iter = _iter_video_tag_data_from_processed_data_dir(
+            processed_video_data_dir, tag_video_config)
+    feature_data = _get_feature_data_from_tag_data_iter(video_tag_data_iter, feature_processor)
     return feature_data
 
 

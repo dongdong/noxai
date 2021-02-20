@@ -1,4 +1,6 @@
 bak/
+tmp/
 train/logs
-data/models.online
-data/train_data
+data/
+inference/logs
+inference/pipe_record_logs

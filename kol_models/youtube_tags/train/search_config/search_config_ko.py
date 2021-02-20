@@ -140,16 +140,16 @@ _fashion_list = [
                 'fashion bags handbag wallet collection'
         ] 
     },
-    { 
-        'level_1': '패션',  'level_2': '모자',  
-        #fashion，Hats
-        'search_keywords': [
-                '모자 추천', 
-                '모자 스타일링 캡모자', 
-                '모자 코디',
-                'fashion hats headwear',
-        ] 
-    },
+    #{ 
+    #    'level_1': '패션',  'level_2': '모자',  
+    #    #fashion，Hats
+    #    'search_keywords': [
+    #            '모자 추천', 
+    #            '모자 스타일링 캡모자', 
+    #            '모자 코디',
+    #            'fashion hats headwear',
+    #    ] 
+    ##},
 ]
 
 _electronic_list = [
@@ -162,14 +162,6 @@ _electronic_list = [
             '아이폰 개봉기',        
             '갤럭시 개봉기 리뷰',
             'smartphone unboxing review'
-        ] 
-    },
-    { 
-        'level_1': '전자제품',  'level_2': '태블릿',  
-        #Consumer Electronic, Tablet
-        'search_keywords': [
-            '태블릿', 
-            '아이패드'
         ] 
     },
     { 
@@ -190,6 +182,8 @@ _electronic_list = [
             '컴퓨터 조립 견적'
             '노트북 추천',
             '노트북 언박싱 리뷰', 
+            '태블릿', 
+            '아이패드'
             'computer pc desktop laptop notebook',
         ] 
     },
@@ -269,16 +263,6 @@ _lifestyle_list = [
         ] 
     },
     { 
-        'level_1': '라이프스타일',  'level_2': '스포츠',  
-        #Life Style, Sports
-        'search_keywords': [
-            '스포츠', 
-            '스포츠 운동',
-            '스포츠 경기',
-            'sports',
-        ] 
-    },
-    { 
         'level_1': '라이프스타일',  'level_2': '애완동물',  
         #Life Style, Pets
         'search_keywords': [
@@ -325,66 +309,6 @@ _lifestyle_list = [
             '캠핑',
             '취미생활',
             'lifestyle',
-        ] 
-    },
-]
-
-
-_music_list = [
-    { 
-        'level_1': '음악',  'level_2': 'Rock',  
-        #Music, rock
-        'search_keywords': [
-            '락 음악', 
-            '음악 rock', 
-            '록 밴드 rock', 
-        ] 
-    },
-    { 
-        'level_1': '음악',  'level_2': '클래식',  
-        #Music, Classical
-        'search_keywords': [
-            '클래식 명곡', 
-            '클래식 음악', 
-            '클래식 피아노', 
-        ] 
-    },
-    { 
-        'level_1': '음악',  'level_2': '일렉트로닉',  
-        #Music, Electronic
-        'search_keywords': [
-            '일렉트로닉 브금', 
-            '일렉트로닉 음악', 
-            '일렉트로닉 리믹스', 
-            'EDM 리믹스 MIX'
-        ] 
-    },
-    { 
-        'level_1': '음악',  'level_2': '힙합',  
-        #Music, Hip Hop
-        'search_keywords': [
-            #'힙합', 
-            '힙합 추천', 
-            '힙합 노래',
-        ] 
-    },
-    { 
-        'level_1': '음악',  'level_2': '팝송',  
-        #Music, Pop music
-        'search_keywords': [
-            #'팝송', 
-            '팝송 추천 모음', 
-            '팝송 해석',
-        ] 
-    },
-    { 
-        'level_1': '음악',  'level_2': 'KPOP',  
-        #Music, KPOP
-        'search_keywords': [
-            'KPOP 케이팝', 
-            '케이팝 아이돌', 
-            '아이돌 걸그룹 노래',
-            '트로트'
         ] 
     },
 ]
@@ -442,6 +366,58 @@ _entertainment_list = [
             '본방사수 방송생중계 방송사',
         ] 
     },
+    { 
+        'level_1': '엔터테인먼트',  'level_2': '댄스',  
+        # Dance
+        'search_keywords': [
+            '댄스 커버',
+            '댄스 안무', 
+            '댄스 배우기', 
+            'dance dancer ballet hippop belllydance chacha',
+        ] 
+    },
+    { 
+        'level_1': '엔터테인먼트',  'level_2': '운세',  
+        #运势
+        'search_keywords': [
+            '운세',
+            '타로',
+            '사주 띠 별자리',
+        ] 
+    },
+    { 
+        'level_1': '엔터테인먼트',  'level_2': '병맛',  
+        #鬼畜
+        'search_keywords': [
+            '병맛 노래 만화',
+            '더빙 만화 병맛 더빙',
+            '장삐쭈 짤툰',
+        ] 
+    },
+    { 
+        'level_1': '엔터테인먼트',  'level_2': '음악',  
+        # Music
+        'search_keywords': [
+            '락 음악', 
+            '음악 rock', 
+            '록 밴드 rock', 
+            '클래식 명곡', 
+            '클래식 음악', 
+            '클래식 피아노', 
+            '일렉트로닉 브금', 
+            '일렉트로닉 음악', 
+            '일렉트로닉 리믹스', 
+            'EDM 리믹스 MIX'
+            '힙합 추천', 
+            '힙합 노래',
+            '팝송 추천 모음', 
+            '팝송 해석',
+            'KPOP 케이팝', 
+            '케이팝 아이돌', 
+            '아이돌 걸그룹 노래',
+            '트로트'
+        ] 
+    },
 ] 
 
 _other_list = [
@@ -481,16 +457,6 @@ _other_list = [
         ] 
     },    
     { 
-        'level_1': '',  'level_2': '댄스',  
-        # Dance
-        'search_keywords': [
-            '댄스 커버',
-            '댄스 안무', 
-            '댄스 배우기', 
-            'dance dancer ballet hippop belllydance chacha',
-        ] 
-    },
-    { 
         'level_1': '',  'level_2': '종교',  
         #宗教
         'search_keywords': [
@@ -498,15 +464,6 @@ _other_list = [
             '불경 불교', 
             '법륜스님 스님 불교',
             '스님 불교'
-        ] 
-    },
-    { 
-        'level_1': '',  'level_2': '운세',  
-        #运势
-        'search_keywords': [
-            '운세',
-            '타로',
-            '사주 띠 별자리',
         ] 
     },
     { 
@@ -528,15 +485,6 @@ _other_list = [
             '부동산 투자', 
             '부자 되는법 투자하는법 돈공부',
             '경제 종잣돈 시드머니',
-        ] 
-    },
-    { 
-        'level_1': '',  'level_2': '병맛',  
-        #鬼畜
-        'search_keywords': [
-            '병맛 노래 만화',
-            '더빙 만화 병맛 더빙',
-            '장삐쭈 짤툰',
         ] 
     },
     { 
@@ -565,7 +513,16 @@ _other_list = [
             '용감한세정씨',
         ] 
     },
-    
+    { 
+        'level_1': '',  'level_2': '스포츠',  
+        #Life Style, Sports
+        'search_keywords': [
+            '스포츠', 
+            '스포츠 운동',
+            '스포츠 경기',
+            'sports',
+        ] 
+    },
 ] 
 
 
@@ -576,7 +533,6 @@ ko_search_keywords_list = (
         + _fashion_list
         + _electronic_list
         + _lifestyle_list
-        + _music_list
         + _entertainment_list
 )
 

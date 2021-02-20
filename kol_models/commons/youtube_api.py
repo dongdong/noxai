@@ -144,6 +144,9 @@ def get_youtube_channel_topics(channel_id):
     return data
 
 
+_topic_category_prefix = 'https://en.wikipedia.org/wiki/'
+_topic_category_prefix_len = len(_topic_category_prefix)
+
 def get_youtube_video_topics_batch(video_id_list):
     ret = {}
     video_ids = ','.join([video_id for video_id in video_id_list if video_id is not None])
@@ -160,12 +163,43 @@ def get_youtube_video_topics_batch(video_id_list):
         if 'id' in item and 'topicDetails' in item:
             video_id = item['id']
             topic_details = item['topicDetails']
-            if 'relevantTopicIds' in topic_details:
-                topic_id_list = list(set(topic_details['relevantTopicIds']))
-                ret[video_id] = topic_id_list
+            #if 'relevantTopicIds' in topic_details:
+            #    topic_id_list = list(set(topic_details['relevantTopicIds']))
+            #    ret[video_id] = topic_id_list
+            topic_category_list = topic_details.get('topicCategories', [])
+            if topic_category_list:
+                topic_name_list = list(set([topic_category[_topic_category_prefix_len:] 
+                    for topic_category in topic_category_list]))
+                ret[video_id] = topic_name_list
     return ret
 
 
+def get_youtube_channel_topics_batch(channel_id_list):
+    ret = {}
+    channel_ids = ','.join([channel_id for channel_id in channel_id_list 
+            if channel_id is not None])
+    request_url = ('https://www.googleapis.com/youtube/v3/channels?id=%s&key=%s&part=topicDetails' 
+            % (channel_ids, youtube_key))
+    json_obj = request_youtube_api_obj(request_url)
+    #print(json_obj)
+    items = json_obj.get('items') 
+    if items is None or len(items) <= 0:
+        logging.error('items is None => %s' % youtube_key)
+        logging.error(json_obj)
+        return ret
+    for item in items:
+        if 'id' in item and 'topicDetails' in item:
+            video_id = item['id']
+            topic_details = item['topicDetails']
+            #if 'relevantTopicIds' in topic_details:
+            #    topic_id_list = list(set(topic_details['relevantTopicIds']))
+            #    ret[video_id] = topic_id_list
+            topic_category_list = topic_details.get('topicCategories', [])
+            if topic_category_list:
+                topic_name_list = list(set([topic_category[_topic_category_prefix_len:] 
+                    for topic_category in topic_category_list]))
+                ret[video_id] = topic_name_list
+    return ret
 
 
 if __name__ == "__main__":

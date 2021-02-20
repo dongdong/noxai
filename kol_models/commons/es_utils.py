@@ -34,24 +34,23 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(filename)s[line:%(
 #channel_index = 'kol_v9'
 channel_index = 'kol_v8'
 
-VIDEO_PUB_DAYS_THRESHOLD = 365 * 3
-now = datetime.datetime.now()
-pub_datatime_threshold = now - datetime.timedelta(days=VIDEO_PUB_DAYS_THRESHOLD)
-pub_time_threshold = pub_datatime_threshold.timestamp()
-pub_date_threshold = pub_datatime_threshold.strftime("%Y-%m-%d")
 
+def _get_video_contents(video_id, source):
+    data = {
+        'video_id': video_id,
+        'title': source['title'],
+        'category_id': source['category'],
+        'keywords': source.get('keywords', []),
+        'source': 'es',
+    }
+    return data
+ 
 
 def get_video_contents(video_id):
     data = None
     try:
-        source_1 = es_video.get_source(index='kol_video', id=video_id)
-        data = {
-            'video_id': video_id,
-            'title': source_1['title'],
-            'category_id': source_1['category'],
-            'keywords': source_1['keywords'],
-            'source': 'es',
-        } 
+        source = es_video.get_source(index='kol_video', id=video_id)
+        data = _get_video_contents(video_id, source)
     except:
         logging.warn('fail to get video contents. video id: ' + video_id)
     return data
@@ -91,15 +90,13 @@ def get_video_description_batch(video_id_list):
     return ret
 
 
-def get_channel_video_list(channel_id, size):
+def get_channel_video_list(channel_id, size, pub_date_threshold=None):
     video_list = []
     try:
         param_dic = {
             "size": size,
             "query": {"bool": {"must": [
                 {"term": {"channel_id": {"value": channel_id}}},
-                #{"range": {"pub_time": {"gt": pub_time_threshold}}},
-                {"range": {"pub_date": {"gt": pub_date_threshold}}},
             ]}},
             "_source": [
                 'title', 'category', 'language', 'description', 'keywords',
@@ -109,16 +106,23 @@ def get_channel_video_list(channel_id, size):
                "pub_date": {"order": "desc"},
             }],
         }
+        if pub_date_threshold:
+            pub_date_condition = {"range": {"pub_date": {"gt": pub_date_threshold}}}
+            param_dic['query']['bool']['must'].append(pub_date_condition)
+        #print(param_dic)
         json_obj = es_video.search(index='kol_video', body=param_dic, timeout='1m')
         hits = json_obj['hits']['hits']
         for hit in hits:
-            video_info = hit['_source'].copy()
-            video_info['id'] = hit['_id']
-            video_list.append(video_info)
+            #video_info = hit['_source'].copy()
+            #video_info['id'] = hit['_id']
+            #video_list.append(video_info)
             #print(video_info)
+            video_id = hit['_id']
+            source = hit['_source']
+            video_contents = _get_video_contents(video_id, source)
+            video_list.append(video_contents)
     except:
         logging.error(traceback.format_exc())
-
     return video_list
 
 

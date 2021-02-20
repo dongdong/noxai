@@ -7,7 +7,7 @@ from kol_models.youtube_tags.models.tag_model_nb import TagModel_NB2
 from kol_models.youtube_tags.models.tag_model_lm import TagModel_LM
 from kol_models.youtube_tags.models.tag_model_lm import TagModel_LM1
 from kol_models.youtube_tags.models.tag_model_lm import TagModel_LM2
-from kol_models.youtube_tags.models.tag_model_knn import TagModel_KNN
+#from kol_models.youtube_tags.models.tag_model_knn import TagModel_KNN
 
 
 class PredictTag():
@@ -76,8 +76,12 @@ class TagModel_Ensemble(TagModel):
 
     def load(self):
         logging.info('load ensemble tag models.')
+        succ = True
         for tag_model in self.tag_model_list:
-            tag_model.load()
+            if not tag_model.load():
+                succ = False
+                break
+        return succ
 
     def save(self):
         logging.info('save ensemble tag models.')
