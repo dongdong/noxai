@@ -1,6 +1,6 @@
 import datetime
 import logging
-from collections import Counter
+from collections import Counter, defaultdict
 
 from kol_models.commons.entities import YoutubeChannel
 from kol_models.commons.es_utils import get_channel_contents, get_channel_video_list
@@ -60,8 +60,10 @@ class ChannelData(YoutubeChannel):
         super().__init__(channel_data_dict)
         self.video_data_list = None
         self._clean_keywords = None
+        self._feature_word_score_list = None
         self._feature_words = None
         self._tag_data_list = None
+        self._tag_score_list = None
 
     @property
     def language(self):
@@ -82,20 +84,30 @@ class ChannelData(YoutubeChannel):
             self._clean_keywords = self._get_clean_keywords()
         return self._clean_keywords
 
-    def _get_feature_words(self):
+    def _get_feature_word_score_list(self):
         word_counter = Counter()
         word_counter.update(self.clean_keywords)
         for video_data in self.video_data_list:
             #word_counter.update(video_data.feature_words)
             word_counter.update(video_data.clean_keywords)
-        feature_words = [word for word, count in word_counter.items() 
-                if count > CHANNEL_FEATURE_WORD_COUNT_MIN] 
-        return feature_words
+        total_count = len(self.video_data_list) + 1
+        feature_word_score_list = sorted([(word, count / total_count) 
+                    for word, count in word_counter.items() 
+                    if count > CHANNEL_FEATURE_WORD_COUNT_MIN], 
+                key=lambda x: x[1], reverse=True)
+        return feature_word_score_list
+
+    @property
+    def feature_word_list(self):
+        if self._feature_word_score_list is None:
+            self._feature_word_score_list = self._get_feature_word_score_list()
+        return self._feature_word_score_list
 
     @property
     def feature_words(self):
         if self._feature_words is None:
-            self._feature_words = self._get_feature_words()
+            self._feature_words = [feature_word 
+                    for feature_word, score in self.feature_word_list]
         return self._feature_words
 
     def _get_tag_data_list(self):
@@ -111,14 +123,46 @@ class ChannelData(YoutubeChannel):
             self._tag_data_list = self._get_tag_data_list()
         return self._tag_data_list
 
+    def _get_tag_score_list(self):
+        if self._tag_data_list is None:
+            return None
+        total_count = len(self._tag_data_list)
+        tag_counter = {}
+        for tag_data in self._tag_data_list:
+            for tag, score in tag_data.all_tags:
+                if tag not in tag_counter:
+                    tag_counter[tag] = {
+                        'count': 0, 
+                        'score': 0.0,
+                }
+                tag_counter[tag]['count'] += 1
+                tag_counter[tag]['score'] += score
+        tag_list = []
+        for tag, counter in tag_counter.items():
+            tag_total_count = counter['count']
+            tag_total_score = counter['score']
+            tag_score = (tag_total_score/tag_total_count) * (tag_total_count / total_count)
+            tag_list.append((tag, tag_score))
+        tag_list = sorted(tag_list, key=lambda x: x[1], reverse=True)
+        return tag_list
+
+    @property
+    def tag_list(self):
+        if self._tag_score_list is None:
+            self._tag_score_list = self._get_tag_score_list()
+        return self._tag_score_list 
+
+
     def get_data(self):
         data = super().get_data()
-        if self._clean_keywords:
-            data['clean_keywrods'] = self._clean_keywords
-        if self._feature_words:
-            data['feature_words'] = self._feature_words
-        if self._tag_data_list:
-            data['tag_data_list'] = self._tag_data_list
+        #if self._clean_keywords:
+        #    data['clean_keywrods'] = self._clean_keywords
+        #if self._tag_data_list:
+        #    data['tag_data_list'] = self._tag_data_list
+        if self.feature_word_list:
+            data['feature_word_list'] = self.feature_word_list
+        if self.tag_list:
+            data['tag_list'] = self.tag_list
         return data
 
     @staticmethod
@@ -128,8 +172,9 @@ class ChannelData(YoutubeChannel):
             channel_contents = get_channel_contents(channel_id) 
             if _is_valid_channel_contents(channel_id, channel_contents):
                 channel_data = ChannelData(channel_contents)
-                channel_data.video_data_list = _get_channel_video_list(channel_contents, 
-                        video_list_size)
+                if video_list_size > 0:
+                    channel_data.video_data_list = _get_channel_video_list(
+                            channel_contents, video_list_size)
         except:
             logging.warn('failed to load channel data! channel id: %s' % channel_id)
         return channel_data

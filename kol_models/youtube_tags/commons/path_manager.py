@@ -13,11 +13,11 @@ _unstructure_tag_dir = os.path.join(_config_dir, 'unstructure_tag')
 def get_search_video_list_path(language):
     return os.path.join(_train_data_dir, language, 'search_tag_video_id_list.json')
 
-def get_tag_video_dir(language):
+def get_train_video_data_dir(language):
     return os.path.join(_train_data_dir, language, 'video_data')
 
-def get_tag_processed_data_dir(language):
-    return os.path.join(_train_data_dir, language, 'video_data_processed')
+def get_train_tag_data_path(language):
+    return os.path.join(_train_data_dir, language, 'train_tag_data.txt')
 
 def get_tfidf_tag_feature_data_path(language):
     return os.path.join(_train_data_dir, language, 'tfidf_tag_feature_data.json')

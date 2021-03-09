@@ -10,8 +10,8 @@ import kol_models.youtube_tags.commons.path_manager as pm
 from kol_models.youtube_tags.commons.video_data import VideoData
 from kol_models.youtube_tags.commons.tag_data import TrainTagData
 from kol_models.youtube_tags.commons.text_processor import TFIDFModel
-from kol_models.youtube_tags.train.video_data_process import iter_video_data_from_file
 from kol_models.youtube_tags.train.tag_video_config import TagVideoConfig
+from kol_models.youtube_tags.train.video_data_process import get_train_tag_data_dict_from_file
 
 FEATURE_WORD_COUNT_MIN_THRESHOLD = 3 #4 #5 #8
 
@@ -114,25 +114,11 @@ def get_tfidf_feature_data_from_tag_data_iter(tag_data_iter, tfidf_model):
     return _get_feature_data_from_tag_data_iter(tag_data_iter, tfidf_feature_processor)
 
 
-def _iter_video_tag_data_from_processed_data_dir(processed_video_data_dir, tag_video_config):
-    logging.info("iter video info from processed video data dir: %s." % processed_video_data_dir)
-    for level_1_tag, level_2_tag in tag_video_config.iter_tags():
-        file_name = pm.get_video_data_file_name(level_1_tag, level_2_tag)
-        processed_video_data_path = os.path.join(processed_video_data_dir, file_name)
-        logging.info("read train data from path: %s." % processed_video_data_path)
-        assert os.path.exists(processed_video_data_path)
-        for video_data in iter_video_data_from_file(processed_video_data_path):
-            tag_data = TrainTagData.From_video_data(video_data, level_1_tag, level_2_tag)
-            yield tag_data
-
-
-def _get_feature_data_from_processed_data(language, feature_processor):
-    tag_video_config = TagVideoConfig.Load(language)
-    processed_video_data_dir = pm.get_tag_processed_data_dir(language)
-    logging.info("process train data, from dir: %s." % processed_video_data_dir)
-    video_tag_data_iter = _iter_video_tag_data_from_processed_data_dir(
-            processed_video_data_dir, tag_video_config)
-    feature_data = _get_feature_data_from_tag_data_iter(video_tag_data_iter, feature_processor)
+def _get_feature_data_from_train_tag_data(language, feature_processor):
+    train_tag_data_path = pm.get_train_tag_data_path(language)
+    train_tag_data_dict = get_train_tag_data_dict_from_file(train_tag_data_path)
+    train_tag_data_iter = train_tag_data_dict.values()
+    feature_data = _get_feature_data_from_tag_data_iter(train_tag_data_iter, feature_processor)
     return feature_data
 
 
@@ -145,7 +131,7 @@ def dump_tfidf_feature_data(language):
         return
     feature_processor = TFIDF_FeatureProcessor(tfidf_model)
     feature_data_path = pm.get_tfidf_tag_feature_data_path(language)
-    feature_data = _get_feature_data_from_processed_data(language, feature_processor)
+    feature_data = _get_feature_data_from_train_tag_data(language, feature_processor)
     feature_data.save(feature_data_path)
 
 

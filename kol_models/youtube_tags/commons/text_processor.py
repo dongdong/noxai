@@ -10,6 +10,7 @@ import logging
 
 import kol_models.youtube_tags.commons.path_manager as pm
 
+TFIDF_WORD_COUNT_NO_BELOW = 3
 
 def _load_stop_words():
     stop_words_file_path = pm.get_stop_words_file_path()
@@ -38,7 +39,7 @@ class TFIDFModel():
     def train(self, dataset):
         dataset_uniq = [list(set(doc)) for doc in dataset]
         self.dictionary = Dictionary(dataset_uniq)
-        self.dictionary.filter_extremes(no_below=5)
+        self.dictionary.filter_extremes(no_below=TFIDF_WORD_COUNT_NO_BELOW)
         corpus = [self.dictionary.doc2bow(doc) for doc in dataset]
         self.model = TfidfModel(corpus)
    
@@ -89,11 +90,16 @@ class TFIDFModel():
     
 
 class ParserEn():
-    nlp = spacy.load("en_core_web_sm")
+    nlp = None
+    
+    def _load_nlp(self):
+        if ParserEN.nlp is None:
+            ParserEN.nlp = spacy.load("en_core_web_sm")
 
     def __init__(self, raw_text_list):
         self.raw_text_list = raw_text_list
         self.noun_word_list = []
+        self._load_nlp()
 
     def _clean_text(self, text):
         #print(text)
@@ -137,7 +143,11 @@ class ParserEn():
 
 
 class ParserZh(ParserEn):
-    nlp = spacy.load("zh_core_web_sm")
+
+    def _load_nlp(self):
+        if ParserEN.nlp is None:
+            #ParserEN.nlp = spacy.load("en_core_web_sm")
+            ParserZh.nlp = spacy.load("zh_core_web_sm")
 
     def _clean_text(self, text):
         text = re.sub(u'(?:[^\u4e00-\u9fa5a-zA-Z0-9])', u' ', text.lower()).strip()

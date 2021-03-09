@@ -20,6 +20,7 @@ class PredictTag():
             self.tag_dict[tag_name] = []
         self.tag_dict[tag_name].append(score)
     def add_tag_list(self, tag_prob_list):
+        print(tag_prob_list)
         for tag_name, prob in tag_prob_list:
             self.add_tag(tag_name, prob)
     def get_tag_list(self):
@@ -28,7 +29,7 @@ class PredictTag():
             tag_size = len(tag_score_list)
             if tag_size < self.min_count_threshold:
                 continue
-            score = tag_size / self.model_count
+            score = tag_size / self.model_count #* 0.8
             tag_list.append((tag_name, score))
         return tag_list
 
@@ -105,8 +106,8 @@ class TagModel_Ensemble(TagModel):
         model.tag_model_list.append(tag_model_lm)
         tag_model_lm1 = TagModel_LM1.Get_model(language, tag_level, is_train)
         model.tag_model_list.append(tag_model_lm1)
-        tag_model_lm2 = TagModel_LM2.Get_model(language, tag_level, is_train)
-        model.tag_model_list.append(tag_model_lm2)
+        ##tag_model_lm2 = TagModel_LM2.Get_model(language, tag_level, is_train)
+        ##model.tag_model_list.append(tag_model_lm2)
         #tag_model_knn = TagModel_KNN.Get_model(language, tag_level, is_train)
         #model.tag_model_list.append(tag_model_knn)
         return model

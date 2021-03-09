@@ -3,7 +3,6 @@ import re
 from kol_models.commons.entities import YoutubeVideo
 from kol_models.commons.es_utils import get_video_contents
 from kol_models.youtube_tags.commons.text_processor import TextParser
-from kol_models.youtube_tags.commons.text_processor import TFIDFModel
 from kol_models.youtube_tags.commons.text_processor import stop_word_set
 
 VALID_KEYWORDS_MAX_COUNT = 16 #24

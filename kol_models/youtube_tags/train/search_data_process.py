@@ -7,10 +7,10 @@ import time
 from kol_models.commons.youtube_api import search_video_list_by_keyword
 from kol_models.youtube_tags.commons.path_manager import get_search_video_list_path 
 
-from kol_models.youtube_tags.train.search_config.search_config_en import en_search_keywords_list 
-from kol_models.youtube_tags.train.search_config.search_config_zh import zh_search_keywords_list 
-from kol_models.youtube_tags.train.search_config.search_config_ko import ko_search_keywords_list 
-from kol_models.youtube_tags.train.search_config.search_config_ja import ja_search_keywords_list 
+from kol_models.youtube_tags.config.search_config.search_config_en import en_search_keywords_list 
+from kol_models.youtube_tags.config.search_config.search_config_zh import zh_search_keywords_list 
+from kol_models.youtube_tags.config.search_config.search_config_ko import ko_search_keywords_list 
+from kol_models.youtube_tags.config.search_config.search_config_ja import ja_search_keywords_list 
 
 _search_keywords_config = {
     'en': en_search_keywords_list,

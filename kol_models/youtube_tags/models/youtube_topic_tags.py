@@ -2,6 +2,7 @@ import logging
 from kol_models.commons.youtube_api import get_youtube_video_topics_batch
 from kol_models.commons.youtube_api import get_youtube_channel_topics_batch
 from kol_models.youtube_tags.commons.tag_data import ItemType
+from kol_models.youtube_tags.config.tag_config import get_tag_local_name_map 
 
 _tag_score = 0.8
 
@@ -79,13 +80,13 @@ _topic_category_tag_map = {
     'Entertainment': 'Entertainment',
     'Television_program':  'TV shows', #
     'Film': 'Movie', #
-    'Humour': 'Humour',
+    'Humour': 'Humor',
     'Performing_arts': 'Performing arts',
     #'Animated cartoon': 'Animated cartoon',
 
     'Music': 'Music',
     'Electronic_music': 'Electronic music',
-    'Hip_hop_music': 'Hip hop', #
+    'Hip_hop_music': 'Hip Hop', #
     'Pop_music': 'Pop music',
     'Soul_music': 'Soul music',
     'Music_of_Latin_America': 'Music of Latin America',
@@ -129,9 +130,9 @@ _topic_category_tag_map = {
 
     'Hobby': 'Hobby',
     'Tourism': 'Tourism',
-    'Vehicle': 'Vehicle',
+    'Vehicle': 'Vehicles',
     'Food': 'Food',
-    'Pet': 'Pet',
+    'Pet': 'Pets',
     'Health': 'Health',
     'Fashion': 'Fashion',
     'Physical_fitness': 'Fitness',
@@ -151,10 +152,11 @@ _topic_category_tag_map = {
 
 
 def get_all_tag_names():
-    return _id_tag_map.values() 
+    return _topic_category_tag_map.values() 
 
 
-def inference_tags(tag_data_list):
+def inference_tags(language, tag_data_list):
+    tag_local_name_map = get_tag_local_name_map(language)
     video_id_list = [tag_data.item_id for tag_data in tag_data_list
             if tag_data.item_type == ItemType.VIDEO]
     ytb_topic_dict = get_youtube_video_topics_batch(video_id_list)
@@ -170,7 +172,11 @@ def inference_tags(tag_data_list):
             for ytb_topic in ytb_topic_list:
                 if ytb_topic in _topic_category_tag_map:
                     tag_name = _topic_category_tag_map[ytb_topic]
-                    tag_list.append(tag_name)
+                    if tag_name in tag_local_name_map:
+                        tag_local_name = tag_local_name_map[tag_name]
+                        tag_list.append((tag_local_name, _tag_score))
+                    else:
+                        logging.warn('Unknown tag name: %s' % tag_name)
                 else:
                     logging.warn('Unknown youtube topic: %s' % ytb_topic)
             tag_data.ytb_topic_tags = tag_list
